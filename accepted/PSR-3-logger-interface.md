@@ -1,68 +1,68 @@
-Logger Interface
-================
+Vmesnik dnevnika - Logger Interface
+===================================
 
-This document describes a common interface for logging libraries.
+Ta dokument opisuje skupne vmesnike za knjižnice dnevnika.
 
-The main goal is to allow libraries to receive a `Psr\Log\LoggerInterface`
-object and write logs to it in a simple and universal way. Frameworks
-and CMSs that have custom needs MAY extend the interface for their own
-purpose, but SHOULD remain compatible with this document. This ensures
-that the third-party libraries an application uses can write to the
-centralized application logs.
+Glavni cilj je omogočati knjižnicam, da dobijo `Psr\Log\LoggerInterface`
+objekt in pišejo vanj dnevnike na enostaven in univerzalen način. Ogrodja
+in CMS-i, ki imajo zahteve po meri LAHKO razširjajo vmesnik za njihove lastne
+namene, vendar BI MORALI ostati kompatibilni s tem dokumentom. To zagotavlja,
+da uporabe tretje-osebnih knjižnic aplikacije lahko pišejo v
+centralen dnevnik aplikacije.
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-interpreted as described in [RFC 2119][].
+Ključne besede "MORA", "NE SME", "ZAHTEVA", "PRIPOROČA", "LAHKO" in "NEOBVEZNO"
+v tem dokumentu se tolmačijo, kot je navedeno v
+[RFC 2119][].
 
-The word `implementor` in this document is to be interpreted as someone
-implementing the `LoggerInterface` in a log-related library or framework.
-Users of loggers are referred to as `user`.
+Besedo `implementator` se v tem dokumentu razlaga kot nekoga, ki
+impementira `LoggerInterface` v knjižnico, ki se tiče dnevnika ali ogrodja.
+Uporabniki dnevnikov so navedeni kot `uporabnik`.
 
 [RFC 2119]: http://tools.ietf.org/html/rfc2119
 
-1. Specification
------------------
+1. Specifikacija
+----------------
 
-### 1.1 Basics
+### 1.1 Osnove
 
-- The `LoggerInterface` exposes eight methods to write logs to the eight
-  [RFC 5424][] levels (debug, info, notice, warning, error, critical, alert,
+- `LoggerInterface` izpostavlja osem metod za pisanje dnevnikov na osem
+  [RFC 5424][] nivojev (debug, info, notice, warning, error, critical, alert,
   emergency).
 
-- A ninth method, `log`, accepts a log level as first argument. Calling this
-  method with one of the log level constants MUST have the same result as
-  calling the level-specific method. Calling this method with a level not
-  defined by this specification MUST throw a `Psr\Log\InvalidArgumentException`
-  if the implementation does not know about the level. Users SHOULD NOT use a
-  custom level without knowing for sure the current implementation supports it.
+- Deveta metoda, `log`, sprejema nivo dnevnika kot prvi argument. Klicanje te
+  metode z eno izmed konstant nivoja dnevnika MORA imeti enak rezultat kot
+  klicanje metoda določenega nivoja. Klicanje te metode z nivojem, ki ni definiran
+  v tej implementaciji MORA vreči `Psr\Log\InvalidArgumentException`,
+  če implementacija ne pozna nivoja. Uporabniki NE BI SMELI uporabljati
+  nivojev po meri brez, da bi zagotovo vedeli, da ga trenutna implementacija podpira.
 
 [RFC 5424]: http://tools.ietf.org/html/rfc5424
 
-### 1.2 Message
+### 1.2 Sporočilo
 
-- Every method accepts a string as the message, or an object with a
-  `__toString()` method. Implementors MAY have special handling for the passed
-  objects. If that is not the case, implementors MUST cast it to a string.
+- Vsaka metoda sprejema niz kot sporočilo ali objekt z
+  metodo `__toString()`. Implementatorji LAHKO imajo posebno ravnanje za poslane
+  objekte. Če to ni primer, implementors MORAJO vezati na niz.
 
-- The message MAY contain placeholders which implementors MAY replace with
-  values from the context array.
+- Sporočilo LAHKO vsebuje ograde, ki jih implementatorji LAHKO zamenjajo z
+  vrednostmi iz kontekstnega polja.
 
-  Placeholder names MUST correspond to keys in the context array.
+  Imena ograd MORAJO biti v korespondenci s ključi konteksnega polja.
 
-  Placeholder names MUST be delimited with a single opening brace `{` and
-  a single closing brace `}`. There MUST NOT be any whitespace between the
-  delimiters and the placeholder name.
+  Imena ograd MORAJO biti ločena z enim odpirajočim zavitim oklepajem `{` in
+  enim zavitim zaklepajem `}`. NE SME BITI kakršnih koli praznih prostorov med
+  ločili in imenom ograde.
 
-  Placeholder names SHOULD be composed only of the characters `A-Z`, `a-z`,
-  `0-9`, underscore `_`, and period `.`. The use of other characters is
-  reserved for future modifications of the placeholders specification.
+  Imena ograd MORAJO biti sestavljena samo iz znakov `A-Z`, `a-z`,
+  `0-9`, podčrtajev `_` in pike `.`. Uporaba ostalih znakov je
+  rezervirana za prihajajoče spremembe specifikacij ograd.
 
-  Implementors MAY use placeholders to implement various escaping strategies
-  and translate logs for display. Users SHOULD NOT pre-escape placeholder
-  values since they can not know in which context the data will be displayed.
+  Implementatorji LAHKO uporabljajo ograde za implementacijo različnih strategij zatekanja
+  in prevajanja dnevnikov za prikaz. Uporabniki NE BI SMELI vnaprej zatekati vrednosti
+  ograd, saj morda ne vejo v katerem kontekstu bodo podatki prikazani.
 
-  The following is an example implementation of placeholder interpolation
-  provided for reference purposes only:
+  Sledi primer implementacije ogradne interpolacije
+  ponujen samo za namene sklicevanja:
 
   ```php
   /**
@@ -90,51 +90,51 @@ Users of loggers are referred to as `user`.
   echo interpolate($message, $context);
   ```
 
-### 1.3 Context
+### 1.3 Kontekst
 
-- Every method accepts an array as context data. This is meant to hold any
-  extraneous information that does not fit well in a string. The array can
-  contain anything. Implementors MUST ensure they treat context data with
-  as much lenience as possible. A given value in the context MUST NOT throw
-  an exception nor raise any php error, warning or notice.
+- Vsaka metoda sprejema polje podatkov konteksta. To je namenjeno držanju katerihkoli
+  tujih informacij, ki se ne ujemajo dobro v nizu. Polje lahko
+  vključuje karkoli. Implementatorji MORAJO zagotoviti, da obravnavajo podatke konteksta s
+  kakorkoli zanesljivosti je možno. Dana vrednost v kontekstu NE SME vreči
+  izjeme ali dvigniti katerekoli php napake, opozorila ali obvestila.
 
-- If an `Exception` object is passed in the context data, it MUST be in the
-  `'exception'` key. Logging exceptions is a common pattern and this allows
-  implementors to extract a stack trace from the exception when the log
-  backend supports it. Implementors MUST still verify that the `'exception'`
-  key is actually an `Exception` before using it as such, as it MAY contain
-  anything.
+- Če je podan objekt `Exception` v kontekst podatkov, MORA biti v
+  ključu `'exception'`. Beleženje izjem v dnevnikih je pogosti vzorec in to omogoča
+  implementatorjem, da ekstraktirajo snop sledi iz izjeme, ko to
+  ozadnje dnevnika omogoča. Implementatorji MORAJO še vedno zagotavljati, da ključ `'exception'`
+  je dejansko `Exception` preden se ga uporablja kot takega, saj lahko vključuje
+  karkoli.
 
-### 1.4 Helper classes and interfaces
+### 1.4 Pomočniški razredi in vmesniki
 
-- The `Psr\Log\AbstractLogger` class lets you implement the `LoggerInterface`
-  very easily by extending it and implementing the generic `log` method.
-  The other eight methods are forwarding the message and context to it.
+- Razred `Psr\Log\AbstractLogger` vam omogoča, da implementirate `LoggerInterface`
+  zelo enostavno z razširitvijo in implementacijo generične `log` metode.
+  Drugih osem metod mu posreduje sporočilo in kontekst.
 
-- Similarly, using the `Psr\Log\LoggerTrait` only requires you to
-  implement the generic `log` method. Note that since traits can not implement
-  interfaces, in this case you still have to implement `LoggerInterface`.
+- Podbno z uporabo `Psr\Log\LoggerTrait` od vas samo zahteva
+  implementacijo generične `log` metode. Bodite pozorni, da odkar lastnosti - traits ne morejo implementirati
+  vmesnikov, morate v tem primeru še vedno narediti implementirati `LoggerInterface`.
 
-- The `Psr\Log\NullLogger` is provided together with the interface. It MAY be
-  used by users of the interface to provide a fall-back "black hole"
-  implementation if no logger is given to them. However conditional logging
-  may be a better approach if context data creation is expensive.
+- `Psr\Log\NullLogger` je ponujen skupaj z vmesnikom. LAHKO
+  ga uporabljajo uporabniki vmesnika, da podajo fall-back "črno luknjo"
+  implementacije, če noben dnevnik ni podan njim. Vendar pogojno beleženje dnevnika
+  je lahko boljši pristop, če je izdelava podatkov konteksta draga.
 
-- The `Psr\Log\LoggerAwareInterface` only contains a
-  `setLogger(LoggerInterface $logger)` method and can be used by frameworks to
-  auto-wire arbitrary instances with a logger.
+- `Psr\Log\LoggerAwareInterface` samo vključuje
+  `setLogger(LoggerInterface $logger)` metodo in jo ogrodja lahko uporabljajo za
+  avtomatsko povezovanje samovoljne instance z dnevnikom.
 
-- The `Psr\Log\LoggerAwareTrait` trait can be used to implement the equivalent
-  interface easily in any class. It gives you access to `$this->logger`.
+- `Psr\Log\LoggerAwareTrait` lastnost je lahko uporabljena za implementacijo ekvivalentnega
+  vmesnika enostavno v kateremkoli razredu. Da vam dostop do `$this->logger`.
 
-- The `Psr\Log\LogLevel` class holds constants for the eight log levels.
+- `Psr\Log\LogLevel` razred zadržuje konstante za osem nivojev dnevnika.
 
-2. Package
-----------
+2. Paket
+--------
 
-The interfaces and classes described as well as relevant exception classes
-and a test suite to verify your implementation is provided as part of the
-[psr/log](https://packagist.org/packages/psr/log) package.
+Vmesniki in razredi opisani in tudi pomembni razredi izjem
+in komplet testov za pregledovanje vaše implementacije so ponujeni kot del
+paketa [psr/log](https://packagist.org/packages/psr/log).
 
 3. `Psr\Log\LoggerInterface`
 ----------------------------

@@ -1,249 +1,249 @@
-PSR Review Workflow
-===================
+Pregled poteka dela PSR
+=======================
 
-This document describes the workflow for proposing a PSR and having it published by the PHP-FIG.
+Ta dokument opisuje potek dela za predlog PSR-ja in njegove objave s strani PHP-FIG.
 
-**Note:** Throughout this article when you see "PSR-N", "N" refers to whatever number has been
-assigned to the PSR in question.
+**Opomba:** Skozi ta članek, ko vidite "PSR-N", se "N" sklicuje na katerokoli številko, ki je bila
+dodeljena PSR-ju v vprašanju.
 
-## 1. Roles
+## 1. Vloge
 
-**Editor:** The Editor of a PSR is actively involved in managing and tracking a PSR as it is written.
-A proposal may have no more than two Editors at a time, and a single Editor is preferred. The Editor
-is responsible for managing the development of a PSR; for representing the PSR in discussions on
-the PHP-FIG Mailing List; for coordinating other Contributors; and for working with the Coordinator
-to see the PSR through the review process. The Editor(s) are not required to be voting members of
-PHP-FIG. If the Editor(s) of a proposal are missing for more than 60 days without notice then
-the Sponsors may agree upon a new Editor. An Editor is assumed to also be a Contributor to a PSR.
+**Urednik:** Urednik PSR-ja je aktivno vključen in upravlja in sledi PSR-ju, ko se ga piše.
+Predlog lahko nima več kot dva urednika sočasno in en urednik je v prednosti. Urednik
+je odgovoren za upravljanje in razvoj PSR; za predstavljanje PSR-ja in razprave na
+PHP-FIG e-poštnem seznamu; za koordinacijo ostalih, ki prispevajo; in za delo s koordinatorjem,
+da vidi PSR tekom procesa pregledovanja. Za urednika ni obvezno, da je član glasovanja
+PHP-FIG. Če urednik predloga manjka za več kot 60 dni brez obvestila potem
+se lahko sponzorji strinjajo o novem uredniku. Za urednika se predvideva, da tudi prispeva PSR-ju.
 
-**Sponsor:** Any one of two voting members who have agreed to Sponsor a proposed PSR.
-Each PSR must have two Sponsors. A Sponsor may not be an Editor but may otherwise contribute
-in the normal way to a PSR. A Sponsor may step down to become an Editor for a PSR by posting a
-message to the Mailing List. In this case, a new replacement Sponsor must be found for the PSR
-to continue. Should a vote be underway, and a recorded Sponsor for that PSR objects on the basis
-that they are inactive or not a valid Sponsor, this objection SHOULD be made on the Mailing List
-and voting for that PSR WILL immediately be invalidated until such time as a replacement Sponsor
-has been put in place. A proposal can never progress unless there are two Sponsors actively
-Sponsoring the proposed PSR. Each Sponsor must confirm their Sponsorship of a PSR via individual
-email to the Mailing List and a PSR will not be deemed Sponsored until those emails are delivered.
+**Sponzor:** Katerikoli od enega ali dveh članov glasovanja, ki sta se strinjala, da sponzorirata predlagani PSR.
+Vsak PSR mora imeti dva sponzorja. Sponzor lahko ni urednik, vendar lahko drugače prispeva
+na običajen način PSR-ju. Sponzor lahko odstopi, da postane urednik za PSR z objavo
+sporočila e-poštnem seznamu. V tem primeru mora biti najden novi zamenjani sponzor, da se PSR
+nadaljuje. Glasovanje bi moralo biti na poti in posneti sponzor za te PSR objekte na osnovi,
+da ni aktiven ali ni veljaven sponzor, BI MORAL biti ta ugovor narejen na e-poštnem seznamu
+in glasovanje za ta PSR BO takoj preklicano dokler ni podan zamenjani
+sponzor. Predlog ni nikoli napredek, razen če nista dva sponzorja, ki aktivno
+sponzorirata predlagani PSR. Vsak sponzor mora potrditi svojo sponzorstvo PSR-ja preko individualne
+e-pošte na e-poštni seznam in PSR se ne šteje za sponzorja dokler niso te e-pošte dostavljene.
 
-A Sponsor may not be the Editor or be listed as a Contributor, but there is of course nothing stopping
-a Sponsor from contributing. A Sponsor may step down to become the Editor or a Contributor for a PSR
-by posting a message to the Mailing List. In this case, a new Sponsor must be found. Should a vote
-be underway with a Sponsor who does not consider themselves active listed in the meta document, they
-should raise an objection on the Mailing List. The vote will then be invalidated until a new Sponsor
-has been put in place.
+Sponzor lahko ni urednik ali napisan na seznamu ljudi, ki prispevajo, vendar seveda sponzorja nič ne ustavlja,
+da ne prispeva. Sponzor lahko odstopi, da postane urednik ali nekdo, ki prispeva za PSR
+z oddanim sporočilom na e-poštni seznam. V tem primeru mora biti najden novi sponzor. Če bi moralo biti glasovanje
+v teku s sponzorjem, za katerega se ne smatra, da je aktivno napisan v meta dokumentu, potem
+bi morali ugovarjati na e-poštnem seznamu. Glas bo potem neveljaven dokler ni določen novi
+sponzor.
 
-> Requiring two Sponsors instead of just one prevents a single Sponsor from making important
-> decisions alone.
+> Zahteva po dveh sponzorjih namesto samo enem preprečuje posameznemu sponzorju, da dela pomembne
+> odločitve sam.
 
-**Coordinator:** One of the two required Sponsors is the Coordinator, and this must be decided between
-the Sponsors early on. The Coordinator is in charge of the voting process. They note the starting and
-ending dates, the number of voting members at the start of the vote, and the quorum count needed. They
-send out reminders by whatever means they feel appropriate to drive the vote. At the end of the voting
-period, they tally the votes, note if quorum was established, and whether or not the application was
-accepted. They must coordinate and share responsibility for vote counting with the PHP FIG Secretary.
+**Koordinator:** Eden izmed dveh zahtevanih sponzorjev je koordinator in to mora biti določeno med
+sponzorji pred tem. Koordinator je odgovoren za proces glasovanja. Zabeleži začetne in
+končne datume, število članov glasovanja na začetku glasovanja in potrebno število za sklepčnost.
+Odpošilja opomnike, če misli, da je to ustrezno, da vodi glasovanje. Na koncu glasovalnega
+obdobja, ujema glasove, opombe, če je bila sklepčnost ustvarjena in če je bila aplikacija
+sprejeta.
 
-> **Note:** Copied from [Paul M. Jones' mail](https://groups.google.com/d/msg/php-fig/I0urcaIsEpk/uqQMb4bqlGwJ)
+> **Opomba:** Kopirano iz [Paul M. Jonesove e-pošte](https://groups.google.com/d/msg/php-fig/I0urcaIsEpk/uqQMb4bqlGwJ)
 
-**Contributor:** Anyone who has contributed significantly to the PSR. That may include sending in a pull
-request during the Pre-Draft or Draft stages, offered significant and meaningful reviews, former Editors,
-etc. In case of dispute, the Editor and Coordinator are responsible for determining whether a particular
-individual qualifies as a Contributor. The significance is at the discretion of the Editor(s) and
-Sponsors. If somebody feels their contributions are being performed without attribution they should
-contact the Editor(s), or a Sponsor, and failing that as a last resort post a thread on the Mailing List
-saying so.
+**Kdor prispeva:** Kdorkoli, ki je bistveno prispeval PSR-ju. To lahko vključuje pošiljanje v zahtevku
+potegov (pull request) med fazo pred-osnutka ali osnutka, ponudil bistvene in smiselne preglede, bivši uredniki
+itd. V primeru sporov, sta urednik in koordinator odgovorna za določanje ali je določen
+posameznik kvalificiran kot nekdo, ki prispeva. Pomembna je diskretnost urednika in
+sponzorjev. Če se nekdo počuti, da so njegovi prispevki izvedeni brez pripisovanja, bi morali
+kontaktirati urednik(e) ali sponzorja in to opustiti kot zadnjo možnost poslati temo na e-poštnem seznamu,
+ki to pravi.
 
-## 2. Stages
+## 2. Faze
 
-### 2.1 Pre-Draft
+### 2.1 Pred-osnutek
 
-The goal of the Pre-Draft stage is to determine whether a majority of the PHP-FIG is interested in
-publishing a PSR for a proposed concept.
+Cilj faze pred-osnutka je določitev ali je glavnina PHP-FIG zainteresirana v
+objavi PSR za predlagani koncept.
 
-Interested parties may discuss a possible proposal, including possible implementations, by
-whatever means they feel is appropriate. That includes informal discussion on the PHP-FIG
-Mailing List or IRC channel of whether or not the idea has merit and is within the scope
-of PHP-FIG's goals.
+Zainteresirane strani lahko razpravljajo o možnih predlogih, kar vključuje možne implementacije, s
+katerimikoli sredstvi mislijo, da je ustrezno. To vključuje neformalne razprave na PHP-FIG
+e-poštnem seznamu ali IRC kanalu, če ideja ima ali nima prednosti in je znotraj obsega
+ciljev PHP-FIG.
 
-Once those parties have determined to move forward, they must select an Editor and prepare a proposal
-document. The proposal must be published in a fork of the [official PHP-FIG "fig-standards" repo][repo].
-The content of the proposal must be placed inside the `/proposed` folder with a simple filename such as
-"autoload.md". Along with this document must be a meta document with a suffix of "-meta" before the
-extension (e.g. "autoload-meta.md"). GitHub Markdown formatting must be used for both documents.
-No PSR number is assigned to the proposal at this point.
+Enkrat, ko so se te strani odločite premakniti naprej, morajo izbrati urednika in pripraviti dokument
+predloga. Predlog mora biti objavljen kot t.i. "fork" [uradnega PHP-FIG "fig-standards" repozitorija][repo].
+Vsebina predloga mora biti postavljena znotraj direktorija `/proposed` z enostavnim imenom datoteke, kot je
+"autoload.md". Skupaj s tem dokumentom mora biti meta dokument s pripono "-meta" pred
+končnico (npr. "autoload-meta.md"). Uporabljeno mora biti GitHub Markdown oblikovanje za oba dokumenta.
+Nobena PSR številka ni določena predlogu na tej točki.
 
-The Editor must then locate two voting members to Sponsor the proposal, one of whom agrees to be the
-Coordinator. The Editor, Sponsors, and existing additional Contributors if any form the working group
-for the proposal.
+Urednik mora potem locirati dva člana glasovanja, da sponzorirata predlog, in kdor se od njiju strinja, da bo
+koordinator. Urednik, sponzorji in obstoječi dodatni uporabniki, ki prispevajo, če katerikoli formirajo delujočo skupino
+za predlog.
 
-The proposal is not required to be fully developed at this point, although that is permitted. At
-minimum, it must include a statement of the problem to be solved and basic information on the
-general approach to be taken. Further revision and expansion is expected during the Draft phase.
+Za predlog se ne zahteva, da je v celoti razvit na tej točki, čeprav je to dovoljeno. Vključevati
+mora vsaj izjavo problema, ki ga rešuje in osnovne informacije na
+splošnem pristopu, ki se ga bo uporabilo. Nadaljnje revizije in razširitve so pričakovane med fazo osnutka.
 
-The Coordinator must initiate an entrance vote to enquire whether the members of PHP-FIG are generally
-interested in publishing a PSR for the proposed subject, even if they disagree with the details of
-the proposal. The Coordinator must announce the vote on the Mailing List in a thread titled
-"[VOTE][Entrance] Title of the proposal". The vote must adhere to [the voting protocol][voting].
+Koordinator mora sprožiti vstopni glas, da pridobi ali člani PHP-FIG so splošno
+zainteresirani v objavi PSR-ja za predlagani predmet, tudi če se ne strinjajo s podrobnostmi
+predloga. Koordinator mora objaviti glasovanje na e-poštnem seznamu v temi z naslovom
+"[VOTE][Entrance] Title of the proposal". Glasovanje se mora držati [glasovalnega protokola][voting].
 
-If the vote passes, the proposal officially enters Draft stage. The proposal receives a PSR number
-incremented from the highest numbered PSR which has passed the Entrance Vote, regardless of the status of
-that PSR. A list of PSRs will be maintained in `index.md` file of the `fig-standards` repo. This
-will be included on the PHP-FIG website, on a page called
-[Index of PHP Standard Recommendations][psrindex], where the PSR entry is to be maintained by
-the Coordinator.
+Če gre glasovanje skozi, predlog uradno vstopi v fazo osnutka. Predlog dobi PSR številko
+povečano od najvišje številke PSR-ja, ki je šel skozi vstopno glasovanje, ne glede na status
+tega PSR-ja. Seznam PSR-jev bo vdrževan v datoteki `index.md` repozitorija `fig-standards`. To bo
+vključeno na PHP-FIG spletni strani na strani imenovani
+[Index of PHP Standard Recommendations][psrindex], kjer bo vpis PSR vnos vzdrževan s strani
+koordinatorja.
 
-The working group may continue to work on the proposal during the complete voting period.
+Delujoča skupina lahko nadaljuje delo na predlogu med celotnim obdobjem glasovanja.
 
-### 2.2 Draft
+### 2.2 Osnutek
 
-The goal of the Draft stage is to discuss and polish a PSR proposal up to the point that it can be
-considered for review by the PHP-FIG voting members.
+Cilj faze osnutka je razprava in poliranje predloga PSR do točke, da je lahko
+smatran za pregled s strani glasovalnih članov PHP-FIG.
 
-In Draft stage, the Editor(s) and any Contributors may make any changes they see fit via pull requests,
-comments on GitHub, Mailing List threads, IRC and similar tools. Change here is not limited by any strict
-rules, and fundamental rewrites are possible if supported by the Editor(s). Alternative approaches may be
-proposed and discussed at any time. If the Editor and Coordinator are convinced that an alternative proposal
-is superior to the original proposal, then the alternative may replace the original. If the alternative builds
-upon the original, the Editor(s) of the original proposal and the new alternative will be listed as
-Contributors. Otherwise, the Editor(s) of the alternative proposal should be listed as Contributors.
+V fazi osnutka uredniki in morebitni uporabniki, ki prispevajo lahko naredijo katerekoli spremembe, kjer vidijo, da ustrezajo preko zahtevkov potegov,
+komentarjev na GitHub-u, temah e-poštnega seznama, IRC-u in podobnih orodjih. Spremembe tu niso omejene na kakršnakoli striktna
+pravila in fundamentalni prepisi so možni, če so podprti s strani urednikov. Alternativni pristopi so lahko
+predlagani in predebatirani kadarkoli. Če sta urednik in koordinator prepričana, da je alternativni predlog
+bolji od originalnega predloga, potem lahko alternativni zamenja originalnega. Če je alternativen zgrajen
+nad originalnim, potem bodo uredniki originalnega predloga in nove alternative napisani na seznamu kot
+uporabniki, ki so prispevali. Drugače bi morali biti uredniki alternativnega predloga biti napisani na tem seznamu.
 
-All knowledge gained during Draft stage, such as possible alternative approaches, their implications, pros
-and cons etc. as well as the reasons for choosing the proposed approach must be summarized in the meta
-document. The purpose of this rule is to prevent circular discussions or alternative proposals from
-reappearing once they have been decided on.
+Vso znanje pridobljeno med fazo osnutka, kot so možni alternativni pristopi, njihove implementacije, prednosti
+in slabosti itd kot tudi razlogi za izbiro predlaganega pristopa morajo biti povzeti v meta
+dokumentu. Razlog tega pravila je preprečiti kroženje razprav ali alternativnih predlogov iz
+ponovnega prikaza enkrat, ko je bilo na tem odločeno.
 
-When the Editor and Sponsors agree that the proposal is ready and that the meta document is objective and
-complete, the Coordinator may promote the proposal to Review stage. The promotion must be announced in a
-thread on the Mailing List with the subject "[REVIEW] PSR-N: Title of the proposal". At this point, the
-proposal must be merged into the "master" branch of the [official PHP-FIG "fig-standards" repository][repo].
+Ko se urednik in sponzorji strinjajo, da je predlog pripravljen in da je meta dokument cilj in
+dokončan, koordinator lahko spodbudi predlog v fazo pregleda. Spodbuda mora biti objavljena v
+temi na e-poštnem seznamu z naslovom "[REVIEW] PSR-N: Title of the proposal". Na tej točki
+mora biti predlog združen v "master" vejo [uradnega PHP-FIG "fig-standards" repozitorija][repo].
 
-> At this point, the Editor(s) transfer authority over the proposal to the Sponsors. This is to [prevent
-> the Editor(s) from blocking changes](https://groups.google.com/d/msg/php-fig/qHOrincccWk/HrjpQMAW4AsJ)
-> that the other PHP-FIG members agree on.
+> Na tej točki uredniki prenesejo pooblastitev nad predlogom k sponzorjem. Namen tega je [preprečitev
+> urednikov iz gradnje sprememb](https://groups.google.com/d/msg/php-fig/qHOrincccWk/HrjpQMAW4AsJ)
+> da se ostali PHP-FIG člani strinjajo.
 >
-> If the Editor(s) are not ready yet to transfer authority, they should continue working on the proposal and
-> the meta document until they feel confident to do so.
+> Če uredniki še niso pripravljeni prenesti pooblaščenosti, bi morali nadaljevati na delu predloga in
+> meta dokumenta dokler niso prepričani, da to naredijo.
 
-### 2.3 Review
+### 2.3 Pregled
 
-The goal of the Review stage is to involve the majority of the PHP-FIG members in getting familiar with
-a proposal and to decide whether it is ready for an acceptance vote. At this stage the Coordinator is in
-charge of any decisions to move the proposal forwards or backwards.
+Cilj faze pregleda je vključiti glavnino članov PHP-FIG, da se seznanijo s
+predlogom in odločijo ali je pripravljen za sprejetje glasovanja. V tej fazi je koordinator
+odgovoren za katerekoli odločitve, da prestavi predlog naprej ali nazaj.
 
-The goal is also *not necessarily* to have every PHP-FIG member agree with the approach chosen by the
-proposal. The goal however *is* to have all PHP-FIG members agree on the completeness and objectivity of
-the meta document.
+Cilj tudi *ni nujno*, da se vsak član PHP-FIG strinja z izbranim pristopom
+predloga. Cilj pa vseeno *je*, da se vsi člani PHP-FIG strinjajo na popolnosti ali objektivnosti
+meta dokumenta.
 
-> Individual members of the PHP-FIG should not be permitted to prevent a PSR from being published.
+> Posamezni člani PHP-FIG ne bi smeli preprečiti objave PSR-ja.
 
-During Review, changes in both the proposal and the meta document are limited to wording, typos, clarification
-etc. The Sponsors should use their own judgement to control the scope of these changes, and must block
-anything that is felt to be a fundamental change. The Sponsors must make changes that the majority of the
-PHP-FIG members agree on, even if they personally disagree.
+Med pregledom, spremembe v obeh predlogih in meta dokumentu so omejene na besede, tipkarske napake, pojasnila
+itd. Sponzorji bi morali uporabiti njihovo svojo presojo za kontrolo obsega teh sprememb in morajo blokirati
+karkoli se začuti, da je fundamentalna sprememba. Sponzorji morajo narediti spremembe, da se glavnina
+članov PHP-FIG z njimi strinja, tudi če se osebno ne strinjajo.
 
-> Sponsors must not block the development of the proposal.
+> Sponzorji ne smejo blokirati razvoja predloga.
 
-In this stage, major additions to the meta document are strictly prohibited. If alternative approaches are
-discovered that are not yet listed in the meta document, the Coordinator must abort the Review by
-publishing a thread titled "[CANCEL REVIEW] PSR-N: Title of the proposal" on the Mailing List, unless
-the acceptance vote has started already. However, the Sponsors may choose to abort the vote (by publishing
-a thread on the mailing list) and the Review even after that, if they agree that this is necessary. The
-purpose of this rule is to give PHP-FIG members the chance to consider *all* known alternatives during
-the Review stage.
+V tej fazi je glavnina sprememb v meta dokumentu striktno prepovedana. Če so alternativni pristopi
+odkriti, da še niso napisani na seznamu v meta dokumentu, mora koordinator preklicati pregled z
+objavo teme z naslovom "[CANCEL REVIEW] PSR-N: Title of the proposal" na e-poštnem seznamu, razen če
+se je glasovanje sprejetja že začelo. Vendar sponzorji lahko izberejo, da prekličejo glasovanje (z objavo
+teme na e-poštnem seznamu) in pregled tudi po tem, če se strinjajo, da je to potrebno. Razlog
+tega pravila je dati PHP-FIG članom možnost, da premislijo *vse* znane alternative med
+fazo pregleda.
 
-Unless a proposal is moved to Draft stage again, it must remain in Review stage for a minimum of two weeks
-before an acceptance vote is called. This gives every PHP-FIG Member sufficient time to get familiar
-with and influence a proposal before the final vote is called.
+Razen, če je predlog ponovno premaknjen v fazo osnutka, mora ostati v fazi pregleda za vsaj dva tedna
+preden se skliče glasovanje sprejetja. To da vsakemu članu PHP-FIG dovolj časa, da se seznani
+z njim in vpliva na predlog preden se skliče končno glasovanje.
 
-When the Editor(s) and Sponsors agree that the proposal is ready to become a PSR, an acceptance vote is
-called. The Coordinator must publish a thread on the Mailing List with the subject "[VOTE][Accept] PSR-N:
-Title of the proposal" to announce the vote. The vote must adhere to [the voting protocol][voting].
+Ko se uredniki in sponzorji strinjajo, da je predlog pripravljen, da postane PSR, je sklicano glasovanje
+sprejetja. Koordinator mora objaviti temo na e-poštnem seznamu z naslovom "[VOTE][Accept] PSR-N:
+Title of the proposal", da naznani glasovanje. Glasovanje se mora držati [the voting protocol][voting].
 
-### 2.4 Accepted
+### 2.4 Sprejetje
 
-If the acceptance vote passes, then the proposal officially becomes an accepted PSR. The proposal
-itself is moved from `/proposed` to `/accepted` by a PHP-FIG member with GitHub access and prefixed with
-its PSR number, such as "PSR-3-logger-interface.md". Comments must be removed from this document, but a
-copy of the commented proposal must be kept in `/accepted/meta`, bearing the suffix "-commented" (e.g.
-"PSR-3-logger-interface-commented.md"). The commented version can be used to interpret the rules of the
-PSR in case of doubt.
+Če gre glasovanje sprejetja skozi, potem predlog uradno postane sprejeti PSR. Sam predlog
+je premaknjen iz `/proposed` v `/accepted` s strani člana PHP-FIG z GitHub dostopom in dobi predpono s
+svojo PSR številko, kot je "PSR-3-logger-interface.md". Komentarji morajo biti odstranjeni iz tega dokumenta, vendar
+kopija komentiranega predloga mora biti ohranjena v `/accepted/meta`, ki vsebuje pripono "-commented" (npr.
+"PSR-3-logger-interface-commented.md"). Komentirana verzija je lahko uporabljena, da razlaga pravila
+PSR-ja v primeru dvoma.
 
-> Reason for having both a commented PSR and a meta document:
+> Razlog imeti tako komentirani PSR in meta dokument:
 >
-> The meta document provides the high-level perspective, why an approach was
-> taken and what other approaches exist.
+> Meta dokument ponuja perspektivo visokega nivoja, zakaj je bil pristop
+> izbran in kateri ostali pristopi obstajajo.
 >
-> The comments in a PSR, on the contrary, provide additional information about
-> specific rules in a PSR or explain the intention of a rule in simple words
-> (like doc blocks in source code). Comments are mostly useful during Draft and
-> Review. With their additional information, other people reading the proposal
-> can judge more easily whether they disagree with a rule fundamentally or
-> whether they agree, but the Editor just happened to formulate the rule badly.
+> Komentarji v PSR v nasprotju, ponujajo dodatne informacije o
+> določenih pravilih v PSR ali razlagajo namen pravila v enostavnih besedah
+> (kot so dokumentacijskih bloki in izvorna koda). Komentarji so največkrat uporabni med fazama osnutka in
+> pregleda. Z njihovimi dodatnimi informacijami, ostali ljudje, ki berejo predlog
+> lahko sodijo bolj enostavno ali se v osnovi ne strinjajo s pravilom ali
+> se strinjajo, vendar urednik je lahko samo slučajno formuliral pravilo slabo.
 
-The meta document of the proposal must also be moved to `/accepted/meta` and prefixed with the PSR number,
-for example "PSR-3-logger-interface-meta.md".
+Meta dokument predloga mora biti tudi prestavljen v `/accepted/meta` in imeti predpono z PSR številko,
+na primer "PSR-3-logger-interface-meta.md".
 
-## 3. Meta Document
+## 3. Meta dokument
 
-The purpose of the meta document is to provide the high-level perspective of a proposal for the voters
-and to give them objective information about both the chosen approach and any alternative approaches in
-order to make an informed decision.
+Razlog meta dokumenta je ponuditi visoki nivo perspektive predloga za glasovalce
+in jim dati objektivne informacije o tako izbranem pristopu kot tudi o katerihkoli alternativnih pristopih,
+da naredi informirano odločitev.
 
-### 3.1 Executive Summary
+### 3.1 Povzetek
 
-Summarizes the purpose and big picture of the proposal, possibly with a few simple examples of how the
-contributors(s) imagine an implementation of the PSR to be used in practice.
+Povzeta razlog in veliko sliko predloga, verjetno z nekaj enostavnimi primeri, kako si
+uporabniki, ki prispevajo, zamišljajo implementacijo PSR-ja, da bo uporabljen v praksi.
 
-### 3.2 Why Bother?
+### 3.2 Zakaj se truditi?
 
-An argument for why the proposed topic should be specified in a PSR at all. Should include a list of
-positive and negative implications of releasing this PSR. The purpose of this section is to convince
-voters to accept the proposal as draft during the entrance vote.
+Argument zakaj bi morala biti predlagana tema sploh določena v PSR. Moral bi vključevati seznam
+pozitivnih in negativnih posledic izdaje tega PSR-ja. Razlog te sekcije je prepričati
+glasovalce, da sprejmejo predlog kot osnutek med vstopnim glasovanjem.
 
-### 3.3 Scope
+### 3.3 Obseg
 
-A listing of both goals and non-goals that the PSR should achieve. The goals/non-goals should be specific
-and measurable.
+Seznam tako ciljev kot ne-ciljev, ki jih bi PSR moral doseči. Cilji/ne-cilji bi morali biti specifični
+in merljivi.
 
-**Bad:** Make logging easier.
+**Slabo:** Narediti dnevnik enostavnejši.
 
-**Better:** Provide an interoperable logger interface.
+**Boljše:** Ponuditi interoperabilen vmesnik dnevnika.
 
-### 3.4 Approaches
+### 3.4 Pristopi
 
-Describes the design decisions that were made in the proposal and *why* they were taken. Most importantly,
-this section must objectively list both the positive and negative implications of these decisions. If
-possible, links to individual, relevant posts on the Mailing List, IRC logs or similar should be included.
+Opisuje odločitve oblike, ki so bile narejene v predlogu in *zakaj*, so bile izbrane. Bolj pomembno,
+ta sekcija mora objektivno navesti tako pozitibne in negativne posledice teh odločitev. Če je možno,
+povezave na individualne, relevatne objave na e-poštnem seznamu, IRC dnevnike ali podobne bi morale biti vključene.
 
-Also lists all known alternative approaches for the PSR proposal. For each of them, the document should describe
-an objective list of pros and cons and the reason why that approach is not considered good enough. Should
-also include links to Pull Requests, individual posts on the Mailing List, IRC logs or similar, if available.
+Tudi seznami vseh znanih alternativnih pristopov za PSR predlog. Za vsakega of njih, bi moral dokument opisovati
+objektivni seznam prednosti in slabosti ter razlog, zakaj ta pristop ni smatran za dovolj dobrega. Tudi bi moral
+vključevati povezave do zahtevkov potegov, individualnih objav na e-poštnem seznamu, IRC dnevnikov ali podobnih, če so na voljo.
 
-### 3.5 People
+### 3.5 Ljudje
 
-The names of the people involved in creating the PSR proposal, sorted alphabetically by last name in ascending
-order. The document should distinguish between the following groups:
+Imena ljudi, ki so vkjučeni v izdelavo PSR predloga, priimki razporejeni po abecednem
+redu. Dokument bi moral razlikovati med sledečimi skupinami:
 
-* Editors
-* Sponsors (indicating which of them was Coordinator)
-* Contributors (as defined in Section 1)
+* Uredniki
+* Sponzorji (navaja, kateri od njih je bil koordinator)
+* Tisti, ki so prispevali (kot je opisano v sekciji 1)
 
-If someone considers themselves to be a contributor but is not listed here, they should contact the
-Editors(s) and Sponsors, including some proof about their contribution. If the proof is valid, the
-contributor must be put on this list by one of the Editors(s) or Sponsors.
+Če se nekdo smatra, da je uporabnik, ki prispeva, vendar ni naveden tu, mora kontaktirati
+urednike in sponzorje vključno z nekim dokazilom o njihovem prispevanju. Če je dokazilo veljavno, mora
+uporabnik, ki je prispeval, biti dodan na ta seznam s strani enega od urednikov ali sponzorjev.
 
-### 3.6 Errata
+### 3.6 Popravek
 
-Errata can be used to add clarification on contentious points that arise after a documents formation.
-This is limited to non-binding, backwards compatible explanations and must not include new rules.
+Popravek je lahko uporabljen, da doda pojasnitev na spornih točkah, ki nastanejo po oblikovanju dokumentov.
+To je omejeno na ne-gradnjo, razlage združljivosti za nazaj in ne sme vključevati novih pravil.
 
-Errata may only be added to the meta document. To add new Errata to the meta document a vote must be held
-on the mailing list, and this vote must adhere to [the voting protocol][voting].
+Popravek je lahko dodan samo k meta dokumentu. Za dodajanje novega popravka meta dokumentu, je potrebno glasovati
+na e-poštnem seznamu in to glasovanje se mora držati [protokola glasovanja][voting].
 
-### 3.7 Template
+### 3.7 Predloga
 
-This is an example template that can be used to build a meta document.
+To je primer predloge, ki je lahko uporabljen za gradnjo meta dokumenta.
 
     PSR-N Meta Document
     ===================
@@ -362,7 +362,7 @@ This is an example template that can be used to build a meta document.
     8. Errata
     ---------
 
-    1. _[08/23/2013]_ This is an example of a non-binding errata rule that was originally missed
+    1. _[08/23/2013]_ This is an example of a non-binding errata rule that was originally missed 
     in the formation of the document. It can include clarification on wording, explanations, etc
     but it cannot create new rules.
 

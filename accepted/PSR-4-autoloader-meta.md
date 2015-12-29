@@ -1,24 +1,24 @@
-PSR-4 Meta Document
+PSR-4 meta dokument
 ===================
 
-1. Summary
-----------
+1. Povzetek
+-----------
 
-The purpose is to specify the rules for an interoperable PHP autoloader that
-maps namespaces to file system paths, and that can co-exist with any other SPL
-registered autoloader.  This would be an addition to, not a replacement for,
+Namen je določiti pravila za interoperabilni PHP avtomatski nalagalnik, ki
+preslika imenske prostore v poti datotečnega sistema in da lahko so-obstoja s katerim koli ostalim SPL
+registriranim avtomatskim nalagalnikom. To bi bil dodatek in ne zamenjava za
 PSR-0.
 
-2. Why Bother?
---------------
+2. Zakaj se truditi?
+--------------------
 
-### History of PSR-0
+### Zgodovina PSR-0
 
-The PSR-0 class naming and autoloading standard rose out of the broad
-acceptance of the Horde/PEAR convention under the constraints of PHP 5.2 and
-previous. With that convention, the tendency was to put all PHP source classes
-in a single main directory, using underscores in the class name to indicate
-pseudo-namespaces, like so:
+PSR-0 poimenovanja razreda in standard avtomatskega nalagalnika so zrastla iz širokega
+sprejetja konvencij Horde/PEAR pod omejitvami PHP 5.2 in
+prejšnjih. S to konvencijo je bila težnja dati vse PHP izvorne razrede
+v en glavni direktorij, uporabljati podčrtaje v imenih razredov za navedbo
+pseudo imenskih prostorov, takole:
 
     /path/to/src/
         VendorFoo/
@@ -28,11 +28,11 @@ pseudo-namespaces, like so:
             Zim/
                 Gir.php     # Vendor_Dib_Zim_Gir
 
-With the release of PHP 5.3 and the availability of namespaces proper, PSR-0
-was introduced to allow both the old Horde/PEAR underscore mode *and* the use
-of the new namespace notation. Underscores were still allowed in the class
-name to ease transition from the older namespace naming to the newer naming,
-and thereby to encourage wider adoption.
+Z izdajo PHP 5.3 in razpoložljivostjo pravilnih imenskih prostorov, je bil
+predstavljen PSR-0, ki omogoča tako stari način Horde/PEAR *in* uporabo
+novih zapisov imenskih prostorov. Podčrtaji so bili še vedno dovoljeni v imenu
+razreda za poenostavitev prehoda iz starih imen imenskih prostorov v novo poimenovanje
+in s čimer se spodbuja širše sprejetje.
 
     /path/to/src/
         VendorFoo/
@@ -46,19 +46,19 @@ and thereby to encourage wider adoption.
                 V1.php
                 V2.php      # Irk_Operation\Impending_Doom\V2
 
-This structure is informed very much by the fact that the PEAR installer moved
-source files from PEAR packages into a single central directory.
+Ta struktura je zelo informirana z dejstvom, da je PEAR namestitveni program prestavljal
+izvorne datoteke iz PEAR paketov v en centralni direktorij.
 
-### Along Comes Composer
+### Tu prihaja Composer
 
-With Composer, package sources are no longer copied to a single global
-location. They are used from their installed location and are not moved
-around. This means that with Composer there is no "single main directory" for
-PHP sources as with PEAR. Instead, there are multiple directories; each
-package is in a separate directory for each project.
+S Composer-jem viri paketov niso več kopirani na eno globalno
+lokacijo. Uporabljeni so iz njihovih namestitvenih lokacij in niso prestavljeni
+naokrog. To pomeni, da s Composer-jem ni "enega glavnega direktorija" za
+PHP vire kot pri PEAR. Namesto tega je več direktorijev; vsak
+paket je v ločenem direktoriju za vsak projekt.
 
-To meet the requirements of PSR-0, this leads to Composer packages looking
-like this:
+Za zadostitev zhtev PSR-0, to vodi, da paketi Composer-ja izgledajo
+takole:
 
     vendor/
         vendor_name/
@@ -72,12 +72,12 @@ like this:
                         Package_Name/
                             ClassNameTest.php   # Vendor_Name\Package_Name\ClassNameTest
 
-The "src" and "tests" directories have to include vendor and package directory
-names. This is an artifact of PSR-0 compliance.
+Direktorija "src in "tests" morata vsebovati imeni direktorija izdelovalca in
+paketa. To je artefakt skladnosti PSR-0.
 
-Many find this structure to be deeper and more-repetitive than necessary. This
-proposal suggests that an additional or superseding PSR would be useful so
-that we can have packages that look more like the following:
+Lahko se zdi, da bi bila ta struktura globlja in bolj ponovljiva kot potrebno. Ta
+se predlaga, da dodatni ali nadomestni PSR bi bil uporaben, da
+imamo lahko pakete, ki izgledajo sledeče:
 
     vendor/
         vendor_name/
@@ -87,205 +87,205 @@ that we can have packages that look more like the following:
                 tests/
                     ClassNameTest.php   # Vendor_Name\Package_Name\ClassNameTest
 
-This would require an implementation of what was initially called
-"package-oriented autoloading" (as vs the traditional "direct class-to-file
-autoloading").
+To bi zahtevalo implementacijo, kar je bilo na začetku imenovano
+"paketno-orientirano avtomatsko nalaganje" (kot je napram tradicionalnem avtomatskem
+direktnem nalaganju "razred-v-datoteko").
 
-### Package-Oriented Autoloading
+### Paketno-orientirano avtomatsko nalaganje
 
-It's difficult to implement package-oriented autoloading via an extension or
-amendment to PSR-0, because PSR-0 does not allow for an intercessory path
-between any portions of the class name. This means the implementation of a
-package-oriented autoloader would be more complicated than PSR-0. However, it
-would allow for cleaner packages.
+Implementirati paketno-orientirano avtomatsko nalaganje je zahtevno preko razširitve ali
+predloga spremembe za PSR-0, ker PSR-0 ne dovoljuje posredovalne poti
+med katerimkoli delom imena razreda. To pomeni, da implementacija
+paketno-orientiranega avtomatskega nalagalnika bi bila bolj zakomplicirana kot PSR-0. Vendar
+bi dovoljevala čistejše pakete.
 
-Initially, the following rules were suggested:
+Sprva so bila predlagana sledeča pravila:
 
-1. Implementors MUST use at least two namespace levels: a vendor name, and
-package name within that vendor. (This top-level two-name combination is
-hereinafter referred to as the vendor-package name or the vendor-package
-namespace.)
+1. Implementatorji MORAJO uporabljati vsaj dva nivoja imenskih prostorov: ime izdelovalca in
+ime paketa znotraj tega izdelovalca. (Ta zgornji nivo dvo-imenske kombinacije je
+v nadaljevanju sklican kot ime izdelovalec-paket ali izdelovalec-paket
+imenski prostor.)
 
-2. Implementors MUST allow a path infix between the vendor-package namespace
-and the remainder of the fully qualified class name.
+2. Implementatorji MORAJO dovoljevati vpliv poti med izdelovalec-paket imenskim prostorom
+in preostankom celotno kvalificiranega imena razreda.
 
-3. The vendor-package namespace MAY map to any directory. The remaining
-portion of the fully-qualified class name MUST map the namespace names to
-identically-named directories, and MUST map the class name to an
-identically-named file ending in .php.
+3. Imenski prostor izdelovalec-paket LAHKO preslikuje na katerikoli direktorij. Preostali
+del celotno kvalificiranega imena razreda MORA preslikati ime imenskega prostora v
+identično-poimenovane direktorije in MORA preslikati ime razreda v
+identično-poimenovano datoteko s končnico .php.
 
-Note that this means the end of underscore-as-directory-separator in the class
-name. One might think underscores should be honored as they are under
-PSR-0, but seeing as their presence in that document is in reference to
-transitioning away from PHP 5.2 and previous pseudo-namespacing, it is
-acceptable to remove them here as well.
+Bodite pozorni, saj to pomeni konec podčrtaj-kot-direktorij-ločila v imenu
+razreda. Lahko si mislite, da morajo biti te podčrtaji počaščeni, saj so pod
+PSR-0, vendar kot se gleda njihovo prisotnost v tistem dokumentu je v referencu
+k premiku stran od PHP 5.2 in predhodnih pseudo-imenskih prostorov, tako da jih je
+sprejemljivo odstraniti tudi tukaj.
 
 
-3. Scope
+3. Obseg
 --------
 
-### 3.1 Goals
+### 3.1 Cilji
 
-- Retain the PSR-0 rule that implementors MUST use at least two namespace
-  levels: a vendor name, and package name within that vendor.
+- Ohranitev pravila PSR-0, da implementatorji MORAJO uporabljati vsaj dva nivoja imenskega
+  prostora: ime izdelovalca in ime paketa znotraj tega izdelovalca.
 
-- Allow a path infix between the vendor-package namespace and the remainder of
-  the fully qualified class name.
+- Dovoliti pot vpliva med izdelovalec-paket imenskim prostorom in preostankom
+  celotno kvalificiranega imena razreda.
 
-- Allow the vendor-package namespace MAY map to any directory, perhaps
-  multiple directories.
+- Dovoliti izdelovalec-paket imenski prostor, da LAHKO preslika v katerikoli direktorij, verjetno
+  več direktorijev.
 
-- End the honoring of underscores in class names as directory separators
+- Končati čaščenje podčrtajev v imenih razredov kot ločila direktorijev
 
-### 3.2 Non-Goals
+### 3.2 Niso cilji
 
-- Provide a general transformation algorithm for non-class resources
-
-
-4. Approaches
--------------
-
-### 4.1 Chosen Approach
-
-This approach retains key characteristics of PSR-0 while eliminating the
-deeper directory structures it requires. In addition, it specifies certain
-additional rules that make implementations explicitly more interoperable.
-
-Although not related to directory mapping, the final draft also specifies how
-autoloaders should handle errors.  Specifically, it forbids throwing exceptions
-or raising errors.  The reason is two-fold.
-
-1. Autoloaders in PHP are explicitly designed to be stackable so that if one
-autoloader cannot load a class another has a chance to do so. Having an autoloader
-trigger a breaking error condition violates that compatibility.
-
-2. `class_exists()` and `interface_exists()` allow "not found, even after trying to
-autoload" as a legitimate, normal use case. An autoloader that throws exceptions
-renders `class_exists()` unusable, which is entirely unacceptable from an interoperability
-standpoint.  Autoloaders that wish to provide additional debugging information
-in a class-not-found case should do so via logging instead, either to a PSR-3
-compatible logger or otherwise.
-
-Pros:
-
-- Shallower directory structures
-
-- More flexible file locations
-
-- Stops underscore in class name from being honored as directory separator
-
-- Makes implementations more explicitly interoperable
-
-Cons:
-
-- It is no longer possible, as under PSR-0, to merely examine a class name to
-  determine where it is in the file system (the "class-to-file" convention
-  inherited from Horde/PEAR).
+- Ponuditi splošni pretvorbeni algoritem za vire ne-razredov
 
 
-### 4.2 Alternative: Stay With PSR-0 Only
+4. Pristopi
+-----------
 
-Staying with PSR-0 only, although reasonable, does leave us with relatively
-deeper directory structures.
+### 4.1 Izbrani pristop
 
-Pros:
+Ta pristop ohranja ključne karakteristike PSR-0 med tem ko eliminira
+globljo strukturo direktorijev, ki je zahtevana. Kot dodatek določa nekatera
+dodatna pravila, ki delajo implementacije eksplicitno bolj interoperabilne.
 
-- No need to change anyone's habits or implementations
+Čeprav ni vezano na preslikave direktorijev, končni osnutek tudi določa, kako
+bi avtomatski nalagalniki morali ravnati z napakami. Posebej prepoveduje vreči izjeme
+ali dvigniti napake. Razlog je dvo-plasten.
 
-Cons:
+1. Avtomatski nalagalniki v PHP so eksplicitno načrtovani, da so zložljivi tako da če nek
+avtomatski nalagalnik ne more naložiti razreda, ima drug priložnost, da to naredi. Ko avtomatski nalagalnik
+sproži večjo napako, pogoj krši to kompatibilnost.
 
-- Leaves us with deeper directory structures
+2. `class_exists()` in `interface_exists()` omogočata "ni najdeno, tudi po poskusu
+avtomatskega nalaganja" kot legitimen običajen primer uporabe. Avtomatski nalagalnik, ki vrže izjeme
+izpiše `class_exists()` neuporabnega, kar je v celoti nesprejemljivo iz vidika
+interoperabilnosti. Avtomatski nalagalniki, ki želijo ponujati dodatne razhroščevalne informacije
+v primeru razred-ni-najdem, bi morali narediti to namesto tega preko dnevnikov, ali preko PSR-3
+kompatibilnega dnevnika ali drugače.
 
-- Leaves us with underscores in the class name being honored as directory
-  separators
+Prednosti:
 
+- Plitkejše strukture direktorijev
 
-### 4.3 Alternative: Split Up Autoloading And Transformation
+- Bolj fleksibilne lokacije datotek
 
-Beau Simensen and others suggested that the transformation algorithm might be
-split out from the autoloading proposal, so that the transformation rules
-could be referenced by other proposals. After doing the work to separate them,
-followed by a poll and some discussion, the combined version (i.e.,
-transformation rules embedded in the autoloader proposal) was revealed as the
-preference.
+- Končanje podčrtajev v imenih razredov, da se jih časti kot ločilo direktorijev
 
-Pros:
+- Narediti implementacije bolj eksplicitno interoperabilne
 
-- Transformation rules could be referenced separately by other proposal
+Slabosti:
 
-Cons:
-
-- Not in line with the wishes of poll respondents and some collaborators
-
-### 4.4 Alternative: Use More Imperative And Narrative Language
-
-After the second vote was pulled by a Sponsor after hearing from multiple +1 
-voters that they supported the idea but did not agree with (or understand) the 
-wording of the proposal, there was a period during which the voted-on proposal
-was expanded with greater narrative and somewhat more imperative language. This
-approach was decried by a vocal minority of participants. After some time, Beau
-Simensen started an experimental revision with an eye to PSR-0; the Editor and
-Sponsors favored this more terse approach and shepherded the version now under
-consideration, written by Paul M. Jones and contributed to by many.
-
-### Compatibility Note with PHP 5.3.2 and below
-
-PHP versions before 5.3.3 do not strip the leading namespace separator, so 
-the responsibility to look out for this falls on the implementation. Failing 
-to strip the leading namespace separator could lead to unexpected behavior. 
+- Ni več mogoče pod PSR-0 se zgolj pregledati ime razreda, da
+  določa, kje je v datotečnem sistemu (konvencija "razred-v-datoteko"
+  podedovana iz Horde/PEAR).
 
 
-5. People
+### 4.2 Alternativa: Ostanite pri samo PSR-0
+
+Ostati samo s PSR-0 je sicer razumno in nas pusti z relativno
+globljo strukturo direktorijev.
+
+Prednosti:
+
+- Ni potrebe po spremembi navad kogarkoli ali implementacij
+
+Slabosti:
+
+- Pusti nas z globljo strukturo direktorijev
+
+- Pusti nas s podčrtaji v imenu razreda, kar se časti kot ločila
+  direktorijev
+
+
+### 4.3 Alternativa: Razdelitev avtomatskega nalagalnika in pretvorb
+
+Beau Simensen in ostali predlagajo, da se algoritem pretvorbe lahko
+izloči iz predloga avtomatskega nalagalnika, da so pravila pretvorbe
+lahko sklicana iz ostalih predlogov. Po početju izločitve,
+ki ji je sledila anketa in nekaj razprave, kombinirana verzija (t.j.,
+pretvorba pravil priloženih v predlog avtomatskega nalagalnika) se je pokazala kot
+prednost.
+
+Prednosti:
+
+- Pravila pretvorbe bi bila lahko sklicana ločeno z ostalimi predlogi
+
+Slabosti:
+
+- Ni v skladu z željami anketirancev in nekaterih sodelavcev
+
+### 4.4 Alternativa: Uporaba bolj nujnih in pripovednih jezikov
+
+Ko je bilo izvedeno drugo glasovanje s strani sponzorja, ko je bilo slišano za mnoge +1
+glasovalce, da podpirajo idejo, vendar se ne strinjajo (ali razumejo)
+besede predloga, je bilo drugo obdobje, ki glasovalni predlog
+razširi z večjo pripovednostjo in nekako bolj nujnim jezikom. Ta
+pristop je dekodirala vokalna večina udeležencev. Po določenem času je Beau
+Simensen pričel poiskusno revizijo z očesom na PSR-0; Urednik in
+sponzorji so se zavzemali za ta bolj zgoščen pristop in so ravnali z verzijo pod
+premislekom, napisanim s strani Paul M. Jones-a in mnogih ostalih, ki so prispevali.
+
+### Opomba kompatibilnosti s PHP 5.3.2 in manjšimi
+
+PHP verzije pred 5.3.3 ne izolirajo vodilnih ločil imenskega prostora, tako da
+je odgovornost na to paziti padla na implementacijo. Neuspešna
+izolacija vodilnih ločil imenskega prostora bi lahko vodila k nepričakovanim obnašanjem.
+
+
+5. Ljudje
 ---------
 
-### 5.1 Editor
+### 5.1 Urednik
 
 - Paul M. Jones, Solar/Aura
 
-### 5.2 Sponsors
+### 5.2 Sponzorji
 
 - Phil Sturgeon, PyroCMS (Coordinator)
 - Larry Garfield, Drupal
 
-### 5.3 Contributors
+### 5.3 Prispevali so
 
 - Andreas Hennings
 - Bernhard Schussek
 - Beau Simensen
-- Donald Gilbert 
+- Donald Gilbert
 - Mike van Riel
 - Paul Dragoonis
-- Too many others to name and count
+- In mnogi ostali, ki jih je preveč, da bi jih poimensko naštevali in imenovali
 
 
-6. Votes
---------
+6. Glasovi
+----------
 
-- **Entrance Vote:** <https://groups.google.com/d/msg/php-fig/_LYBgfcEoFE/ZwFTvVTIl4AJ>
+- **Uvodno glasovanje:** <https://groups.google.com/d/msg/php-fig/_LYBgfcEoFE/ZwFTvVTIl4AJ>
 
-- **Acceptance Vote:**
+- **Glasovanje sprejetja:**
 
-    - 1st attempt: <https://groups.google.com/forum/#!topic/php-fig/Ua46E344_Ls>,
-      presented prior to new workflow; aborted due to accidental proposal modification
+    - 1. poskus: <https://groups.google.com/forum/#!topic/php-fig/Ua46E344_Ls>,
+      predstavljen pred novim načinom dela; prekinjen zaradi naključne spremembe predloga
       
-    - 2nd attempt: <https://groups.google.com/forum/#!topic/php-fig/NWfyAeF7Psk>,
-      cancelled at the discretion of the sponsor <https://groups.google.com/forum/#!topic/php-fig/t4mW2TQF7iE>
+    - 2. poskus: <https://groups.google.com/forum/#!topic/php-fig/NWfyAeF7Psk>,
+      preklican pri diskretnosti sponzorja <https://groups.google.com/forum/#!topic/php-fig/t4mW2TQF7iE>
     
-    - 3rd attempt: TBD
+    - 3. poskus: Bo še določen
 
 
-7. Relevant Links
------------------
+7. Ustrezne povezave
+--------------------
 
-- [Autoloader, round 4](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/lpmJcmkNYjM)
-- [POLL: Autoloader: Split or Combined?](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/fGwA6XHlYhI)
-- [PSR-X autoloader spec: Loopholes, ambiguities](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/kUbzJAbHxmg)
-- [Autoloader: Combine Proposals?](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/422dFBGs1Yc)
-- [Package-Oriented Autoloader, Round 2](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/Y4xc71Q3YEQ)
-- [Autoloader: looking again at namespace](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/bnoiTxE8L28)
-- [DISCUSSION: Package-Oriented Autoloader - vote against](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/SJTL1ec46II)
-- [VOTE: Package-Oriented Autoloader](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/Ua46E344_Ls)
-- [Proposal: Package-Oriented Autoloader](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/qT7mEy0RIuI)
-- [Towards a Package Oriented Autoloader](https://groups.google.com/forum/#!searchin/php-fig/package$20oriented$20autoloader/php-fig/JdR-g8ZxKa8/jJr80ard-ekJ)
-- [List of Alternative PSR-4 Proposals](https://groups.google.com/forum/#!topic/php-fig/oXr-2TU1lQY)
-- [Summary of [post-Acceptance Vote pull] PSR-4 discussions](https://groups.google.com/forum/#!searchin/php-fig/psr-4$20summary/php-fig/bSTwUX58NhE/YPcFgBjwvpEJ)
+- [Avtomatski nalagalnik, 4. krog](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/lpmJcmkNYjM)
+- [ANKETA: Avtomatski nalagalnik: Razdelitev ali kombiniranje?](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/fGwA6XHlYhI)
+- [PSR-X specifikacije avtomatskega nalagalnika: Vrzeli, nejasnosti](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/kUbzJAbHxmg)
+- [Avtomatski nalagalnik: Združitev predlogov?](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/422dFBGs1Yc)
+- [Paketno-orientirani avtomatski nalagalnik, 2. krog](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/Y4xc71Q3YEQ)
+- [Avtomatski nalagalnik: ponovni pregled imenskega prostora](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/bnoiTxE8L28)
+- [RAZPRAVA: Paketno-orientirani avtomatski nalagalnik - glasovanje proti](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/SJTL1ec46II)
+- [GLASOVANJE: Paketno-orientirani avtomatski nalagalnik](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/Ua46E344_Ls)
+- [Predlog: Paketno-orientirani avtomatski nalagalnik](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/qT7mEy0RIuI)
+- [Proti paketno orientiranemu avtomatskemu nalagalniku](https://groups.google.com/forum/#!searchin/php-fig/package$20oriented$20autoloader/php-fig/JdR-g8ZxKa8/jJr80ard-ekJ)
+- [Seznam alternativnih predlogov PSR-4](https://groups.google.com/forum/#!topic/php-fig/oXr-2TU1lQY)
+- [Povzetek [potega sprejetja glasov] PSR-4 razprav](https://groups.google.com/forum/#!searchin/php-fig/psr-4$20summary/php-fig/bSTwUX58NhE/YPcFgBjwvpEJ)

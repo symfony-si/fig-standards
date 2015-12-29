@@ -1,254 +1,254 @@
-# HTTP Message Meta Document
+# Sporočilo HTTP meta dokument
 
-## 1. Summary
+## 1. Povzetek
 
-The purpose of this proposal is to provide a set of common interfaces for HTTP
-messages as described in [RFC 7230](http://tools.ietf.org/html/rfc7230) and
-[RFC 7231](http://tools.ietf.org/html/rfc7231), and URIs as described in
-[RFC 3986](http://tools.ietf.org/html/rfc3986) (in the context of HTTP messages).
+Namen tega predloga je ponuditi skupek skupnih vmesnikov za sporočila HTTP, kot
+so opisana v [RFC 7230](http://tools.ietf.org/html/rfc7230) in
+[RFC 7231](http://tools.ietf.org/html/rfc7231) ter URI-jev, kot so opisani v
+[RFC 3986](http://tools.ietf.org/html/rfc3986) (v kontekstu sporočil HTTP).
 
 - RFC 7230: http://www.ietf.org/rfc/rfc7230.txt
 - RFC 7231: http://www.ietf.org/rfc/rfc7231.txt
 - RFC 3986: http://www.ietf.org/rfc/rfc3986.txt
 
-All HTTP messages consist of the HTTP protocol version being used, headers, and
-a message body. A _Request_ builds on the message to include the HTTP method
-used to make the request, and the URI to which the request is made. A
-_Response_ includes the HTTP status code and reason phrase.
+Vsa sporočila HTTP sestojijo iz verzije protokola HTTP, ki je uporabljen, glav in
+telesa sporočila. _Zahtevek_ se zgradi na sporočilu, ki vključuje metodo HTTP,
+ki je uporabljena za izdelavo zahtevka in URI-ja za katerega je narejen zahtevek.
+_Odziv_ vključuje statusno kodo HTTP in frazo razloga.
 
-In PHP, HTTP messages are used in two contexts:
+V PHP so sporočila HTTP uporabljena v dveh kontekstih:
 
-- To send an HTTP request, via the `ext/curl` extension, PHP's native stream
-  layer, etc., and process the received HTTP response. In other words, HTTP
-  messages are used when using PHP as an _HTTP client_.
-- To process an incoming HTTP request to the server, and return an HTTP response
-  to the client making the request. PHP can use HTTP messages when used as a
-  _server-side application_ to fulfill HTTP requests.
+- Da pošljejo zahtevek HTTP preko razširitve `ext/curl`, PHP-jevega osnovnega nivoja toka
+  itd. ter procesirajo odziv HTTP. Z drugimi besedami, sporočila HTTP
+  so uporabljena, ko se uporablja PHP kot _klient HTTP_.
+- Da procesirajo prihajajoči zahtevek HTTP strežniku in vrnejo odziv HTTP
+  klientu, ki dela zahtevek. PHP lahko uporabi sporočila HTTP, ko so uporabljena kot
+  _aplikacija strežniške strani_, da zapolni zahtevke HTTP.
 
-This proposal presents an API for fully describing all parts of the various
-HTTP messages within PHP.
+Ta predlog predstavlja API za poln opis vseh delov različnih
+sporočil HTTP znotraj PHP.
 
-## 2. HTTP Messages in PHP
+## 2. Sporočila HTTP v PHP
 
-PHP does not have built-in support for HTTP messages.
+PHP nima vgrajene podpore za sporočila HTTP.
 
-### Client-side HTTP support
+### Podpora HTTP na strani klienta
 
-PHP supports sending HTTP requests via several mechanisms:
+PHP podpira pošiljanje zahtevkov HTTP preko večih mehanizmov:
 
-- [PHP streams](http://php.net/streams)
-- The [cURL extension](http://php.net/curl)
-- [ext/http](http://php.net/http) (v2 also attempts to address server-side support)
+- [Tokovi PHP](http://php.net/streams)
+- [Razširitev cURL](http://php.net/curl)
+- [ext/http](http://php.net/http) (v2 tudi poskuša naslavljati podporo strežniške strani)
 
-PHP streams are the most convenient and ubiquitous way to send HTTP requests,
-but pose a number of limitations with regards to properly configuring SSL
-support, and provide a cumbersome interface around setting things such as
-headers. cURL provides a complete and expanded feature-set, but, as it is not a
-default extension, is often not present. The http extension suffers from the
-same problem as cURL, as well as the fact that it has traditionally had far
-fewer examples of usage.
+Tokovi PHP so najbolj priročen in vseposoten način za pošiljanje zahtevkov HTTP,
+vendar predstavljajo številne omejitve, kot so ustrezno nastavljanje podpore SSL
+in ponujajo nepriročen vmesnik okrog nastavitev stvari, kot so
+glave. cURL ponuja celoten in razširjen skupek lastnosti, vendar ker ni
+privzeta razširitev, pogostokrat ni prisotna. Razširitev http trpi za enakimi
+težavami kot cURL, kot tudi dejstvo, da je imela tradicionalno veliko manj
+primerov uporabe.
 
-Most modern HTTP client libraries tend to abstract the implementation, to
-ensure they can work on whatever environment they are executed on, and across
-any of the above layers.
+Večina modernih knjižnic klienta HTTP skuša abstraktirati implementacijo, da
+zagotovijo delo v kateremkoli okolju, na katerem so izvršena in preko
+katerega koli zgornjih nivojev.
 
-### Server-side HTTP Support
+### Podpora HTTP strežniške strani
 
-PHP uses Server APIs (SAPI) to interpret incoming HTTP requests, marshal input,
-and pass off handling to scripts. The original SAPI design mirrored [Common
-Gateway Interface](http://www.w3.org/CGI/), which would marshal request data
-and push it into environment variables before passing delegation to a script;
-the script would then pull from the environment variables in order to process
-the request and return a response.
+PHP uporablja API-je strežnika (SAPI), da prevede prihajajoče zahtevke HTTP, maršalni vnos
+in poda upravljanje skriptam. Originalni načrt preslikanega SAPI-ja [Common
+Gateway Interface](http://www.w3.org/CGI), ki bi maršalno zahteval podatke
+in jih poslal v spremenljivke okolja pred posredovanjem delegiranju skripte;
+skripta bi nato potegnila iz spremenljivk okolja, da procesira
+zahtevek in vrne odziv.
 
-PHP's SAPI design abstracts common input sources such as cookies, query string
-arguments, and url-encoded POST content via superglobals (`$_COOKIE`, `$_GET`,
-and `$_POST`, respectively), providing a layer of convenience for web developers.
+PHP-jev načrt SAPI abstraktira skupen vir vnosa, kot so piškotki, argumenti niza zahtevka
+in url-enkodirano vsebino POST preko t.i. superglobals (pripadajoči `$_COOKIE`, `$_GET`,
+in `$_POST`) ponuja nivo udobja za spletne razvijalce.
 
-On the response side of the equation, PHP was originally developed as a
-templating language, and allows intermixing HTML and PHP; any HTML portions of
-a file are immediately flushed to the output buffer. Modern applications and
-frameworks eschew this practice, as it can lead to issues with
-regards to emitting a status line and/or response headers; they tend to
-aggregate all headers and content, and emit them at once when all other
-application processing is complete. Special care needs to be paid to ensure
-that error reporting and other actions that send content to the output buffer
-do not flush the output buffer.
+Na strani odziva enačbe je bil PHP prvotno razvit kot
+jezik predloge in omogoča mešanje HTML in PHP; katerikoli HTML del
+datoteke je takoj prenesen v izhodni medpomnilnik. Moderne aplikacije in
+ogrodja se tej praksi izogibajo, saj lahko vodi do težav glede
+opuščanja statusne vrstice in/ali glav odziva; stremijo
+k združevanju vseh glav in vsebine in jih opustiti, ko je procesiranje
+vseh ostalih aplikacij končano. Posebna skrb je potrebna za zagotavljanje,
+da poročanje napak in ostale akcije, ki pošiljajo vsebino izhodnemu medpomnilniku,
+ne izpraznijo izhodnega medpomnilnika.
 
-## 3. Why Bother?
+## 3. Zakaj se truditi?
 
-HTTP messages are used in a wide number of PHP projects -- both clients and
-servers. In each case, we observe one or more of the following patterns or
-situations:
+Sporočila HTTP so uporabljena v številnih PHP projektih -- tako klientih in
+strežnikih. V vsakem primeru opazimo enega ali več od sledečih vzorcev ali
+situacij:
 
-1. Projects use PHP's superglobals directly.
-2. Projects will create implementations from scratch.
-3. Projects may require a specific HTTP client/server library that provides
-   HTTP message implementations.
-4. Projects may create adapters for common HTTP message implementations.
+1. Projekti uporabljajo PHP-jeve superglobals direktno.
+2. Projekti bodo ustvarili implementacije od začetka.
+3. Projekti lahko potrebujejo določeno knjižnico klienta/strežnika HTTP, ki ponuja
+   implementacije sporočil HTTP.
+4. Projekti lahko ustvarijo adapterje za pogoste implementacije sporočil HTTP.
 
-As examples:
+Kot primeri:
 
-1. Just about any application that began development before the rise of
-   frameworks, which includes a number of very popular CMS, forum, and shopping
-   cart systems, have historically used superglobals.
-2. Frameworks such as Symfony and Zend Framework each define HTTP components
-   that form the basis of their MVC layers; even small, single-purpose
-   libraries such as oauth2-server-php provide and require their own HTTP
-   request/response implementations. Guzzle, Buzz, and other HTTP client
-   implementations each create their own HTTP message implementations as well.
-3. Projects such as Silex, Stack, and Drupal 8 have hard dependencies on
-   Symfony's HTTP kernel. Any SDK built on Guzzle has a hard requirement on
-   Guzzle's HTTP message implementations.
-4. Projects such as Geocoder create redundant [adapters for common
-   libraries](https://github.com/geocoder-php/Geocoder/tree/6a729c6869f55ad55ae641c74ac9ce7731635e6e/src/Geocoder/HttpAdapter).
+1. Skoraj katerakoli aplikacija, ki je pričela z razvojem pred vzponom
+   ogrodij, kar vključuje številne priljubljene CMS, forumske sisteme in sisteme nakupovalnih
+   košaric, je zgodovinsko uporabljala superglobals.
+2. Ogrodja, kot sta Symfony in Zend Framework, definirajo komponente HTTP, ki
+   oblikujejo osnovo njihovih nivojev MVC; tudi majhne eno-namenske
+   knjižnice, kot je oauth2-server-php, ponujajo in zahtevajo svojo lastno
+   implementacijo zahtevka/odziva HTTP. Guzzle, Buzz in druge implementacije klientov
+   HTTP vsake ustvarijo tudi svoje lastne implementacije sporočil HTTP.
+3. Projekti, kot so Silex, Stack in Drupal 8, imajo močne odvisnosti na
+   Symfony-jevo jedro HTTP. Katerikoli SDK zgrajen na Guzzle ima močno zahtevo po
+   implementacijah Guzzle-ovega sporočila HTTP.
+4. Projekti, kot je Geocoder, ustvarijo odvečne [adapterje iz pogostih
+   knjižnic](https://github.com/geocoder-php/Geocoder/tree/6a729c6869f55ad55ae641c74ac9ce7731635e6e/src/Geocoder/HttpAdapter).
 
-Direct usage of superglobals has a number of concerns. First, these are
-mutable, which makes it possible for libraries and code to alter the values,
-and thus alter state for the application. Additionally, superglobals make unit
-and integration testing difficult and brittle, leading to code quality
-degradation.
+Direktna uporaba superglobalov ima mnoge skrbi. Najprej so te
+spremenljive, kar naredi možnost za knjižnice in kodo, da spreminja vrednosti
+in torej spreminjajo stanje za aplikacijo. Dodatno superglobal-i naredijo testiranje
+enot in integracije težko in krhko, kar pelje do degradacije kvalitete
+kode.
 
-In the current ecosystem of frameworks that implement HTTP message abstractions,
-the net result is that projects are not capable of interoperability or
-cross-pollination. In order to consume code targeting one framework from
-another, the first order of business is building a bridge layer between the
-HTTP message implementations. On the client-side, if a particular library does
-not have an adapter you can utilize, you need to bridge the request/response
-pairs if you wish to use an adapter from another library.
+V trenutnem ekosistemu ogrodij, ki implementirajo abstrakcioj sporočil HTTP,
+je neto rezultat, da projekti niso zmožni interoperabilnosti ali
+navzkrižnega opraševanja. Da se uporabi koda, ki cilja na eno ogrodje iz
+drugega, je prvo potrebno zgraditi nivo mosta med
+implementacijami sporočila HTTP. Na strani klienta, če posebne knjižnice
+nimajo adapterja, ki ga lahko uporabite, morate premostiti pare zahtevka/odziva,
+če želite uporabiti adapter iz druge knjižnice.
 
-Finally, when it comes to server-side responses, PHP gets in its own way: any
-content emitted before a call to `header()` will result in that call becoming a
-no-op; depending on error reporting settings, this can often mean headers
-and/or response status are not correctly sent. One way to work around this is
-to use PHP's output buffering features, but nesting of output buffers can
-become problematic and difficult to debug. Frameworks and applications thus
-tend to create response abstractions for aggregating headers and content that
-can be emitted at once - and these abstractions are often incompatible.
+Na koncu, ko pride do odzivov strežniške strani, PHP dobi svoj lastni način: katerakoli
+vsebina oddana pred klicem `header()` bo rezultirala, da ta klic postane
+ne delujoča; odvisno od nastavitev poročanja napak, to lahko pogosto pomeni, da glave
+in/ali stanja odzivov niso pravilno poslane. En način kako to obiti je
+uporaba PHP-jeve izhodne lastnosti medpomnilnika, vendar gnezdenje izhodnih medpomnilnikov lahko
+postane problematično in težko za razhroščevanje. Ogrodja in aplikacije torej
+stremijo k izdelavi abstrakcij odziva za agregacijo glav in vsebine, ki
+je lahko oddana naenkrat - in te abstrakcije so pogostokrat nekompatibilne.
 
-Thus, the goal of this proposal is to abstract both client- and server-side
-request and response interfaces in order to promote interoperability between
-projects. If projects implement these interfaces, a reasonable level of
-compatibility may be assumed when adopting code from different libraries.
+Torej cilj tega predloga je abstrakcija obeh strani vmesnikov zahtevkov in odzivov
+klienta in strežnika, da promovirata interoperabilnost med
+projekti. Če projekti implementirajo te vmesnike, je lahko razumni nivo
+kompatibilnosti predpostavljen, ko se sprejme kodo iz različnih knjižnic.
 
-It should be noted that the goal of this proposal is not to obsolete the
-current interfaces utilized by existing PHP libraries. This proposal is aimed
-at interoperability between PHP packages for the purpose of describing HTTP
-messages.
+Poudariti bi bilo potrebno, da cilj tega predloga ni zastarati
+trenutne uporabljene vmesnike v obstoječih knjižnicah PHP. Ta predlog cilja
+na interoperabilnost med paketi PHP za namen opisa sporočil
+HTTP.
 
-## 4. Scope
+## 4. Obseg
 
-### 4.1 Goals
+### 4.1 Cilji
 
-* Provide the interfaces needed for describing HTTP messages.
-* Focus on practical applications and usability.
-* Define the interfaces to model all elements of the HTTP message and URI
-  specifications.
-* Ensure that the API does not impose arbitrary limits on HTTP messages. For
-  example, some HTTP message bodies can be too large to store in memory, so we
-  must account for this.
-* Provide useful abstractions both for handling incoming requests for
-  server-side applications and for sending outgoing requests in HTTP clients.
+* Ponuditi potrebne vmesnike za opis sporočil HTTP.
+* Fokusirati se na praktične aplikacije in uporabnost.
+* Definirati vmesnike za modeliranje vseh elementov sporočila HTTP in specifikacij
+  URI-ja.
+* Zagotoviti, da API ne vsiljuje arbitrarnih omejitev na sporočilih HTTP. Na
+  primer, nekatera telesa sporočil HTTP so lahko prevelika za shranjevanje v spominu, torej
+  moramo to upoštevati.
+* Ponuditi uporabne abstrakcije tako ravnanja prihajajočih zahtevkov za
+  aplikacije strežniške strani in za pošiljanje odhajajočih zahtevkov v klientih HTTP.
 
-### 4.2 Non-Goals
+### 4.2 Niso cilji
 
-* This proposal does not expect all HTTP client libraries or server-side
-  frameworks to change their interfaces to conform. It is strictly meant for
-  interoperability.
-* While everyone's perception of what is and is not an implementation detail
-  varies, this proposal should not impose implementation details. As
-  RFCs 7230, 7231, and 3986 do not force any particular implementation,
-  there will be a certain amount of invention needed to describe HTTP message
-  interfaces in PHP.
+* Ta predlog ne pričakuje, da bodo vse knjižnice klientov HTTP ali ogrodij strežniške strani
+  spremenili svoje vmesnike, da se to upošteva. Je striktno mišljen za
+  sodelovanje.
+* Medtem ko se zaznavanja vseh, kaj je in kaj ni podrobnost implementacije,
+  razlikujejo, ta predlog ne bi smel vsiljevati podrobnosti implementacije. Kot
+  RFC-ji 7230, 7231 in 3986 ne vsiljujejo katerihkoli določenih implementacij,
+  bo potrebno določeno število izumov za opis vmesnikov sporočil HTTP
+  v PHP.
 
-## 5. Design Decisions
+## 5. Odločitve načrta
 
-### Message design
+### Načrt sporočila
 
-The `MessageInterface` provides accessors for the elements common to all HTTP
-messages, whether they are for requests or responses. These elements include:
+`MessageInterface` ponuja dostope za elemente, ki so skupni vsem sporočilom
+HTTP, bodisi da so za vse zahtevke ali odzive. Te elementi vključujejo:
 
-- HTTP protocol version (e.g., "1.0", "1.1")
-- HTTP headers
-- HTTP message body
+- verzijo protokola HTTP (npr., "1.0", "1.1")
+- glave HTTP
+- telo sporočila HTTP
 
-More specific interfaces are used to describe requests and responses, and more
-specifically the context of each (client- vs. server-side). These divisions are
-partly inspired by existing PHP usage, but also by other languages such as
-Ruby's [Rack](https://rack.github.io),
-Python's [WSGI](https://www.python.org/dev/peps/pep-0333/),
-Go's [http package](http://golang.org/pkg/net/http/),
-Node's [http module](http://nodejs.org/api/http.html), etc.
+Bolj specifični vmesniki so uporabljeni za opis zahtevkov in odzivov in bolj
+specifično kontekst vsakega (stran klienta proti strani strežnika). Ta deljenja so
+delno navdihnjena s strani obstoječe uporabe PHP, vendar tudi s strani ostalih jezikov kot so
+Ruby-jev [Rack](https://rack.github.io),
+Python-ov [WSGI](https://www.python.org/dev/peps/pep-0333/),
+Go-jev [http package](http://golang.org/pkg/net/http/),
+Node-ov [http module](http://nodejs.org/api/http.html) itd.
 
-### Why are there header methods on messages rather than in a header bag?
+### Zakaj so metode glave na sporočilih namesto v torbi glave?
 
-The message itself is a container for the headers (as well as the other message
-properties). How these are represented internally is an implementation detail,
-but uniform access to headers is a responsibility of the message.
+Samo sporočilo je kontejner za glave (kot tudi druge lastnosti sporočila).
+Kako so te predstavljene interno, je to podrobnost implementacije,
+vendar enoten dostop do glav je odgovornost sporočila.
 
-### Why are URIs represented as objects?
+### Zakaj so URI-ji predstavljeni kot objekti?
 
-URIs are values, with identity defined by the value, and thus should be modeled
-as value objects.
+URI-ji so vrednosti z definirano identiteto vrednosti in bi morali biti torej modelirani
+kot objekti vrednosti.
 
-Additionally, URIs contain a variety of segments which may be accessed many
-times in a given request -- and which would require parsing the URI in order to
-determine (e.g., via `parse_url()`). Modeling URIs as value objects allows
-parsing once only, and simplifies access to individual segments. It also
-provides convenience in client applications by allowing users to create new
-instances of a base URI instance with only the segments that change (e.g.,
-updating the path only).
+Dodatno, URI-ji vsebujejo raznolikost segmentov, ki so lahko dostopani mnogokrat
+v danem zahtevku -- in ki bi zahtevali prevajanje URI-ja, da
+se jih določi (npr. preko `parse_url()`). Modeliranje URI-jev kot objektov vrednosti omogočajo
+prevajanje samo enkrat in poenostavljajo dostop do individualnih segmentov. Tudi
+ponujajo priročnost v aplikacijah klienta z omogočanjem uporabnikom, da ustvarijo nove
+instance instanc osnovnega URI-ja s samo segmenti, ki se spremenijo (npr.
+posodabljanje samo poti).
 
-### Why does the request interface have methods for dealing with the request-target AND compose a URI?
+### Zakaj ima vmesnik zahtevka metode za ukvarjanje z request-target IN sestavlja URI?
 
-RFC 7230 details the request line as containing a "request-target". Of the four
-forms of request-target, only one is a URI compliant with RFC 3986; the most
-common form used is origin-form, which represents the URI without the
-scheme or authority information. Moreover, since all forms are valid for
-purposes of requests, the proposal must accommodate each.
+RFC 7230 ima podrobnosti zahtevka vrstice saj vsebuje "request-target". Od štirih
+oblik request-target, je samo ena URI-skladna z RFC 3986; najbolj
+pogosta uporabljena oblika je origin-form, ki predstavlja URI brez
+sheme ali informacij avtoritete. Še več odkar so vsi obrazci veljavni za
+razloge zahtevkov, mora predlog namestiti vsako.
 
-`RequestInterface` thus has methods relating to the request-target. By default,
-it will use the composed URI to present an origin-form request-target, and, in
-the absence of a URI instance, return the string "/".  Another method,
-`withRequestTarget()`, allows specifying an instance with a specific
-request-target, allowing users to create requests that use one of the other
-valid request-target forms.
+`RequestInterface` ima torej metode, ki so povezane z request-target. Privzeto
+bo uporabil sestavljeni URI za predstavitev origin-form request-target in v
+odsotnosti instance URI vrnil niz "/". Druga metoda
+`withRequestTarget()` omogoča določanje instance z določenim
+request-target, kar omogoča uporabnikom izdelavo zahtevkov, ki uporabljajo eno izmed ostalih
+veljavnih request-target oblik.
 
-The URI is kept as a discrete member of the request for a variety of reasons.
-For both clients and servers, knowledge of the absolute URI is typically
-required. In the case of clients, the URI, and specifically the scheme and
-authority details, is needed in order to make the actual TCP connection. For
-server-side applications, the full URI is often required in order to validate
-the request or to route to an appropriate handler.
+URI je ohranjen kot diskretni član zahtevka zaradi vrste razlogov.
+Za tako kliente in strežnike je vedenje o absolutnem URI-ju običajno
+zahtevano. V primeru klientov so URI in še posebno shema in
+podrobnosti avtorizacije potrebni, da se naredi dejansko povezavo TCP. Za
+aplikacije strežniške strani je pogostokrat polni URI zahtevan, da se potrdi
+zahtevek ali usmeritev k ustreznemu krmilniku.
 
-### Why value objects?
+### Zakaj objekti vrednosti?
 
-The proposal models messages and URIs as [value objects](http://en.wikipedia.org/wiki/Value_object).
+Predlog modelira sporočila in URI-je kot [objekte vrednosti](http://en.wikipedia.org/wiki/Value_object).
 
-Messages are values where the identity is the aggregate of all parts of the
-message; a change to any aspect of the message is essentially a new message.
-This is the very definition of a value object. The practice by which changes
-result in a new instance is termed [immutability](http://en.wikipedia.org/wiki/Immutable_object),
-and is a feature designed to ensure the integrity of a given value.
+Sporočila so vrednosti, kjer je identiteta agregat vseh delov
+sporočila; sprememba kateregakoli aspekta sporočila je v bistvu novo sporočilo.
+To je sama opredelitev objekta vrednosti. Praksa, ki spreminja
+rezultat v novi instanci je imenovana [nespremenljivost](http://en.wikipedia.org/wiki/Immutable_object)
+in je načrtovana lastnost za zagotavljanje integritete date vrednosti.
 
-The proposal also recognizes that most clients and server-side
-applications will need to be able to easily update message aspects, and, as
-such, provides interface methods that will create new message instances with
-the updates. These are generally prefixed with the verbiage `with` or
+Predlo tudi prepoznava, da bo večina klientov in aplikacij
+strežniške strani morala biti sposobna enostavno posodobiti aspekte sporočila in
+kot take ponuditi metode vmesnika, ki bodo ustvarile nove instance sporočila s
+posodobitvami. Te imajo v splošnem predpono z besedičenjem `with` ali
 `without`.
 
-Value objects provides several benefits when modeling HTTP messages:
+Objekti vrednosti ponujajo nekaj koristi, ko se modelira sporočila HTTP:
 
-- Changes in URI state cannot alter the request composing the URI instance.
-- Changes in headers cannot alter the message composing them.
+- Spremembe v stanju URI ne morejo spremeniti zahtevka, ki sestavlja instanco URI.
+- Spremembe v glavah ne morejo spremeniti sporočila, ki jih sestavlja.
 
-In essence, modeling HTTP messages as value objects ensures the integrity of
-the message state, and prevents the need for bi-directional dependencies, which
-can often go out-of-sync or lead to debugging or performance issues.
+V osnovi modeliranje sporočil HTTP kot objektov vrednosti zagotavlja integriteto
+stanja sporočila in preprečuje potrebo po dvosmernih odvisnostih, ki
+se lahko pogosto neujemajo ali vodijo do težav razhroščevanja ali performančnosti.
 
-For HTTP clients, they allow consumers to build a base request with data such
-as the base URI and required headers, without needing to build a brand new
-request or reset request state for each message the client sends:
+Za kliente HTTP, omogočajo uporabnikom zgraditi osnovni zahtevek s podatki kot
+so osnovni URI ali zahtevane glave, brez potrebe po gradnji novega
+zahtevka ali ponastavitvi stanja zahtevka za vsako sporočilo, ki ga klient pošlje:
 
 ```php
 $uri = new Uri('http://api.example.com');
@@ -278,26 +278,26 @@ $request = $baseRequest->withUri($uri->withPath('/tasks'))->withMethod('GET');
 $response = $client->send($request);
 ```
 
-On the server-side, developers will need to:
+Na strežniški strani bodo razvijalci morali:
 
-- Deserialize the request message body.
-- Decrypt HTTP cookies.
-- Write to the response.
+- deserializirati telo sporočila zahtevka.
+- dekriptirati piškotke HTTP.
+- zapisati odziv.
 
-These operations can be accomplished with value objects as well, with a number
-of benefits:
+Te operacije so lahko dosežene z vrednostmi objektov kot takimi s številnimi
+koristmi:
 
-- The original request state can be stored for retrieval by any consumer.
-- A default response state can be created with default headers and/or message body.
+- Prvotno stanje zahtevka je lahko shranjeno za pridobivanje s strani kateregakoli uporabnika.
+- Privzeto stanje odziva je lahko ustvarjeno s privzetimi glavami in/ali telesom sporočila.
 
-Most popular PHP frameworks have fully mutable HTTP messages today. The main
-changes necessary in consuming true value objects are:
+Večina priljubljenih PHP ogrodij ima danes polno spremenljiva sporočila HTTP. Glavne
+spremembe potrebne v uporabi pravih objektov vrednosti so:
 
-- Instead of calling setter methods or setting public properties, mutator
-  methods will be called, and the result assigned.
-- Developers must notify the application on a change in state.
+- Namesto klicanja metod nastavitev ali nastavljanja javnih lastnosti, bodo klicane metode
+  mutatorja in dodeljen rezultat.
+- Razvijalci morajo obvestiti aplikacijo pri spremembi stanja.
 
-As an example, in Zend Framework 2, instead of the following:
+Kot primer v Zend Framework 2, namesto sledečega:
 
 ```php
 function (MvcEvent $e)
@@ -307,7 +307,7 @@ function (MvcEvent $e)
 }
 ```
 
-one would now write:
+bi se sedaj zapisalo:
 
 ```php
 function (MvcEvent $e)
@@ -319,61 +319,61 @@ function (MvcEvent $e)
 }
 ```
 
-The above combines assignment and notification in a single call.
+Zgornje kombinira dodelitev in obvestilo v enem klicu.
 
-This practice has a side benefit of making explicit any changes to application
-state being made.
+Ta praksa ima stransko korist izdelave eksplicitnih katerihkoli narejenih sprememb stanja
+aplikacije.
 
-### New instances vs returning $this
+### Nove instance napram vračanju $this
 
-One observation made on the various `with*()` methods is that they can likely
-safely `return $this;` if the argument presented will not result in a change in
-the value. One rationale for doing so is performance (as this will not result in
-a cloning operation).
+Ena opazka narejena na različnih metodah `with*()` je, da lahko zelo verjetno
+varno naredijo `return $this;`, če predstavljeni argument ne bo rezultiral k spremembi
+vrednosti. Ena smiselnost za to je uspešnost (saj to ne bo rezultiralo h
+kloniranju operacije).
 
-The various interfaces have been written with verbiage indicating that
-immutability MUST be preserved, but only indicate that "an instance" must be
-returned containing the new state. Since instances that represent the same value
-are considered equal, returning `$this` is functionally equivalent, and thus
-allowed.
+Različni vmesniki so bili napisani z besedičenjem, ki indicira, da
+nespremenljivost MORA biti ohranjena, vendar samo indicirajo, da mora vrnjena "instanca"
+vsebovati novo stanje. Ker se instance, ki predstavljajo enako vrednost,
+štejejo za enake, je vračanje `$this` funkcionalno ekvivalentno in torej
+dovoljeno.
 
-### Using streams instead of X
+### Uporaba tokov namesto X
 
-`MessageInterface` uses a body value that must implement `StreamInterface`. This
-design decision was made so that developers can send and receive (and/or receive
-and send) HTTP messages that contain more data than can practically be stored in
-memory while still allowing the convenience of interacting with message bodies
-as a string. While PHP provides a stream abstraction by way of stream wrappers,
-stream resources can be cumbersome to work with: stream resources can only be
-cast to a string using `stream_get_contents()` or manually reading the remainder
-of a string. Adding custom behavior to a stream as it is consumed or populated
-requires registering a stream filter; however, stream filters can only be added
-to a stream after the filter is registered with PHP (i.e., there is no stream
-filter autoloading mechanism).
+`MessageInterface` uporablja vrednost telesa, ki mora implementirati `StreamInterface`. Ta
+načrtovalska odločitev je bila sprejeta, da razvijalci lahko pošljejo in pridobijo (in/ali pridobijo
+in pošljejo) sporočila HTTP, ki vsebujejo več podatkov, kot se jih lahko shrani v
+spomin, medtem ko še vedno omogoča priročnost interakcije s telesi sporočil
+kot niza. Medtem ko PHP ponuja abstrakcijo toka na način ovojev toka,
+so lahko viri toka neprikladni za delo: viri toka lahko igrajo samo
+vlogo niza z uporabo `stream_get_contents()` ali ročno branje preostalega
+niza. Dodajanje obnašanj po meri toku, kot je uporabljen ali zapolnjen
+zahteva registracijo filtra toka; vendar, filtri toka so lahko samo dodani
+k toku za registracijo filtra s PHP (t.j. da ni na voljo nobenega mehanizma avtomatskega
+nalaganja filtra).
 
-The use of a well- defined stream interface allows for the potential of
-flexible stream decorators that can be added to a request or response
-pre-flight to enable things like encryption, compression, ensuring that the
-number of bytes downloaded reflects the number of bytes reported in the
-`Content-Length` of a response, etc. Decorating streams is a well-established
-[pattern in the Java](http://docs.oracle.com/javase/7/docs/api/java/io/package-tree.html)
-and [Node](http://nodejs.org/api/stream.html#stream_class_stream_transform_1)
-communities that allows for very flexible streams.
+Uporaba dobro definiranega vmesnika toka omogoča potencial
+fleksibilnih dekoratorjev toka, ki so lahko dodani k zahtevku ali odzivu
+pred zagonom, da se omogoči stvari, kot je enkripcija, kompresija, zagotavljanje, da
+število prenesenih bajtov odseva število bajtov poročanih v
+`Content-Length` glavi odziva itd. Dekoracija tokov je dobro ustaljen
+vzorec v skupnostih [Java](http://docs.oracle.com/javase/7/docs/api/java/io/package-tree.html)
+in [Node](http://nodejs.org/api/stream.html#stream_class_stream_transform_1),
+kar omogoča zelo fleksibilne tokove.
 
-The majority of the `StreamInterface` API is based on
-[Python's io module](http://docs.python.org/3.1/library/io.html), which provides
-a practical and consumable API. Instead of implementing stream
-capabilities using something like a `WritableStreamInterface` and
-`ReadableStreamInterface`, the capabilities of a stream are provided by methods
-like `isReadable()`, `isWritable()`, etc. This approach is used by Python,
+Glavnina API-ja `StreamInterface` je osnovan na
+[Python io modulu](http://docs.python.org/3.1/library/io.html), kar omogoča
+praktičen in uporaben API. Namesto implementacije zmožnosti
+toka, ki uporablja nekaj kot je `WritableStreamInterface` in
+`ReadableStreamInterface`, so zmožnosti toka omogočene z metodami
+kot sta `isReadable()` in `isWritable()` itd. Ta pristop je uporabljen v Python-u
 [C#, C++](http://msdn.microsoft.com/en-us/library/system.io.stream.aspx),
 [Ruby](http://www.ruby-doc.org/core-2.0.0/IO.html),
-[Node](http://nodejs.org/api/stream.html), and likely others.
+[Node](http://nodejs.org/api/stream.html) in verjetno ostalih.
 
-#### What if I just want to return a file?
+#### Kaj, če želim ponuditi samo datoteko?
 
-In some cases, you may want to return a file from the filesystem. The typical
-way to do this in PHP is one of the following:
+V nekaterih primerih boste morda želeli vrniti datoteko iz datotečnega sistema. Običajni
+način, da to naredite v PHP je eden izmed sledečih:
 
 ```php
 readfile($filename);
@@ -381,14 +381,14 @@ readfile($filename);
 stream_copy_to_stream(fopen($filename, 'r'), fopen('php://output', 'w'));
 ```
 
-Note that the above omits sending appropriate `Content-Type` and
-`Content-Length` headers; the developer would need to emit these prior to
-calling the above code.
+Bodite pozorni, da ima zgornje opuščeno pošiljanje ustreznih glav `Content-Type` in
+`Content-Lenght`; razvijalec bi moral poslati te pred
+klicem zgornje kode.
 
-The equivalent using HTTP messages would be to use a `StreamInterface`
-implementation that accepts a filename and/or stream resource, and to provide
-this to the response instance. A complete example, including setting appropriate
-headers:
+Ekvivalentna uporaba sporočil HTTP bi bila uporaba implementacije `StreamInterface`,
+ki sprejema ime datoteke in/ali vir toka ter ponuja
+to instanci odziva. Celoten primer, vključno z nastavitvijo ustreznih
+glav:
 
 ```php
 // where Stream is a concrete StreamInterface:
@@ -400,18 +400,18 @@ $response = $response
     ->withBody($stream);
 ```
 
-Emitting this response will send the file to the client.
+Pošiljanje tega odziva bo poslalo datoteko klientu.
 
-#### What if I want to directly emit output?
+#### Kaj, če želim direktno pošiljati izhod?
 
-Directly emitting output (e.g. via `echo`, `printf`, or writing to the
-`php://output` stream) is generally only advisable as a performance optimization
-or when emitting large data sets. If it needs to be done and you still wish
-to work in an HTTP message paradigm, one approach would be to use a
-callback-based `StreamInterface` implementation, per [this
-example](https://github.com/phly/psr7examples#direct-output). Wrap any code
-emitting output directly in a callback, pass that to an appropriate
-`StreamInterface` implementation, and provide it to the message body:
+Direktno pošiljanje izhoda (npr. preko `echo`, `printf` ali pisanje v
+tok `php://output`) je v splošnem priporočljivo samo kot optimizacija uspešnosti
+ali kot se pošilja večji skupek podatkov. Če je potrebno to narediti in še vedno želite
+delati s paradigmo sporočila HTTP, bi bil en pristop uporabiti
+implementacijo `StreamInterface` na osnovi povratnega klica, kot je [v tem
+primeru](https://github.com/phly/psr7examples#direct-output). Ovijte katerokoli kodo,
+ki pošilja izhod direktno v povratni klic, pošljite to k ustrezni
+implementaciji `StreamInterface` in ga ponudite telesu sporočila:
 
 ```php
 $output = new CallbackStream(function () use ($request) {
@@ -423,78 +423,78 @@ return (new Response())
     ->withBody($output);
 ```
 
-#### What if I want to use an iterator for content?
+#### Kaj, če želim uporabiti iterator za vsebino?
 
-Ruby's Rack implementation uses an iterator-based approach for server-side
-response message bodies. This can be emulated using an HTTP message paradigm via
-an iterator-backed `StreamInterface` approach, as [detailed in the
-psr7examples repository](https://github.com/phly/psr7examples#iterators-and-generators).
+Ruby-jeva implementacija Rack uporablja pristop na osnovi iteratorja za telesa sporočila
+odziva strežniške strani. To je lahko emulirano z uporabo paradigme sporočila HTTP preko
+iteratorja, ki podpira pristor `StreamInterface` kot je [podrobno opisano
+v repozitoriju psr7examples](https://github.com/phly/psr7examples#iterators-and-generators).
 
-### Why are streams mutable?
+### Zakaj so tokovi spremenljivi?
 
-The `StreamInterface` API includes methods such as `write()` which can
-change the message content -- which directly contradicts having immutable
-messages.
+API `StreamInterface` vključuje metode, kot je `write()`, ki lahko
+spremeni vsebino sporočila -- kar direktno nasprotuje imetju nespremenljivih
+sporočil.
 
-The problem that arises is due to the fact that the interface is intended to
-wrap a PHP stream or similar. A write operation therefore will proxy to writing
-to the stream. Even if we made `StreamInterface` immutable, once the stream
-has been updated, any instance that wraps that stream will also be updated --
-making immutability impossible to enforce.
+Težava, ki nastane, je zaradi dejstva, da je vmesnik namenjen
+ovitju toka PHP ali podobnega. Operacija pisanje bo zato proxy za pisanje
+v tok. Tudi če naredimo `StreamInterface` nespremenljiv, ko je enkrat tok
+posodobljen, bo katerakoli instanca, ki ovija ta tok, tudi posodobljena --
+kar naredi nespremenljivost nemogočo za vsiljanje.
 
-Our recommendation is that implementations use read-only streams for
-server-side requests and client-side responses.
+Naše priporočilo je, da implementacije uporabljajo samo bralne tokove za
+zahtevke strežniške strani in odzive klientne strani.
 
-### Rationale for ServerRequestInterface
+### Razlog za ServerRequestInterface
 
-The `RequestInterface` and `ResponseInterface` have essentially 1:1
-correlations with the request and response messages described in
-[RFC 7230](http://www.ietf.org/rfc/rfc7230.txt). They provide interfaces for
-implementing value objects that correspond to the specific HTTP message types
-they model.
+`RequestInterface` in `ResponseInterface` imata v osnovi 1:1
+korelacij s sporočili zahtevka in odziva opisanih v
+[RFC 7230](http://www.ietf.org/rfc/rfc7230.txt). Ponujajo vmesnike za
+implementacijo objektov vrednosti, ki ustrezajo določenim tipom sporočil HTTP,
+ki jih modelirajo.
 
-For server-side applications there are other considerations for
-incoming requests:
+Za aplikacije strežniške strani so drugi premisleki za
+prihajajoče zahtevke:
 
-- Access to server parameters (potentially derived from the request, but also
-  potentially the result of server configuration, and generally represented
-  via the `$_SERVER` superglobal; these are part of the PHP Server API (SAPI)).
-- Access to the query string arguments (usually encapsulated in PHP via the
-  `$_GET` superglobal).
-- Access to the parsed body (i.e., data deserialized from the incoming request
-  body; in PHP, this is typically the result of POST requests using
-  `application/x-www-form-urlencoded` content types, and encapsulated in the
-  `$_POST` superglobal, but for non-POST, non-form-encoded data, could be
-  an array or an object).
-- Access to uploaded files (encapsulated in PHP via the `$_FILES` superglobal).
-- Access to cookie values (encapsulated in PHP via the `$_COOKIE` superglobal).
-- Access to attributes derived from the request (usually, but not limited to,
-  those matched against the URL path).
+- Dostop do parametrov strežnika (potencialno pridobljeni iz zahtevka, vendar tudi
+  potencialno rezultat strežniške nastavitve in splošno predstavljeni
+  preko `$_SERVER` superglobal-a; te so del PHP Server API-ja (SAPI)).
+- Dostop do argumentov niza poizvedbe (običajno vdelani v PHP preko
+  `$_GET` superglobal-a).
+- Dostop do prevedenega telesa (to so deserializirani podatki iz prihajajočega zahtevka
+  telesa; v PHP je to običajno rezultat POST zahtevkov z uporabo
+  `application/x-www-form-urlencoded` tipa vsebine in vdelanega v
+  `$_POST` superglobal-a vendar ne-POST, podatki, ki niso vkodirani v obrazec, bi lahko bili
+  polje ali objekt).
+- Dostop do naloženih datotek (vdelane v PHP preko `$_FILES` superglobal-a).
+- Dostop do vrednosti piškotkov (vdelane v PHP preko `$_COOKIE` superglobal-a).
+- Dostop do atributov pridobljenih iz zahtevka (običajno, vendar ne omejeno na
+  tista ujemanja poti URL-ja).
 
-Uniform access to these parameters increases the viability of interoperability
-between frameworks and libraries, as they can now assume that if a request
-implements `ServerRequestInterface`, they can get at these values. It also
-solves problems within the PHP language itself:
+Enoten dostop do teh parametrov poveča rentabilnost interoperabilnosti
+med ogrodji in knjižnicami, saj lahko predpostavljajo, da če zahtevek
+implementira `ServerRequestInterface`, lahko dobijo te vrednosti. Tudi
+rešuje probleme znotraj samega jezika PHP:
 
-- Until 5.6.0, `php://input` was read-once; as such, instantiating multiple
-  request instances from multiple frameworks/libraries could lead to
-  inconsistent state, as the first to access `php://input` would be the only
-  one to receive the data.
-- Unit testing against superglobals (e.g., `$_GET`, `$_FILES`, etc.) is
-  difficult and typically brittle. Encapsulating them inside the
-  `ServerRequestInterface` implementation eases testing considerations.
+- Do 5.6.0, `php://input` je bil enkrat bralen; kot tak, izdelava večih
+  instanc zahtevka iz večih ogrodij/knjižnic bi lahko vodila
+  do nekonsistentnega stanja, saj prvi dostop `php://input` be bil edini
+  za pridobitev podatkov.
+- Testiranje enot proti superglobalom (npr., `$_GET`, `$_FILES` itd.) je
+  težko in običajno krhko. Njihovo zaobjemanje znotraj
+  implementacije `ServerRequestInterface` poenostavlja premisleke testiranj.
 
-### Why "parsed body" in the ServerRequestInterface?
+### Zakaj "parsed body" v ServerRequestInterface?
 
-Arguments were made to use the terminology "BodyParams", and require the value
-to be an array, with the following rationale:
+Argumenti so bili izdelani za uporabo terminologije "BodyParams" in zahteva se, da je
+vrednost polje s sledečimi razlogi:
 
-- Consistency with other server-side parameter access.
-- `$_POST` is an array, and the 80% use case would target that superglobal.
-- A single type makes for a strong contract, simplifying usage.
+- Konsistentnost z drugimi dostopi parametrov strežniške strani.
+- `$_POST` je polje in v 80% primerov uporabe bi ciljali na ta superglobal.
+- En tip naredi močno povezavo in poenostavljeno uporabo.
 
-The main argument is that if the body parameters are an array, developers have
-predictable access to values:
+Glavni argument je, da če so parametri telesa polje, imajo razvijalci
+predvidljiv dostop do vrednosti:
 
 ```php
 $foo = isset($request->getBodyParams()['foo'])
@@ -502,22 +502,22 @@ $foo = isset($request->getBodyParams()['foo'])
     : null;
 ```
 
-The argument for using "parsed body" was made by examining the domain. A message
-body can contain literally anything. While traditional web applications use
-forms and submit data using POST, this is a use case that is quickly being
-challenged in current web development trends, which are often API centric, and
-thus use alternate request methods (notably PUT and PATCH), as well as
-non-form-encoded content (generally JSON or XML) that _can_ be coerced to arrays
-in many cases, but in many cases also _cannot_ or _should not_.
+Argument za uporabo "parsed body" je bil izdelan s preučitvijo domene. Sporočilo
+telesa lahko vsebuje dobesedno karkoli. Medtem ko tradicionalne spletne aplikacije uporabljajo
+obrazce in pošiljajo podatke s POST, je to primer uporabe, ki je hitro
+izpodbijan v trenutnih trendih spletnega razvoja, kar so pogosto API centrične in
+zato uporabljajo alternativne metode zahtevka (poseben PUT in PATCH), kot tudi
+vsebina, ki ni enkodirana v obrazcu (posebej JSON ali XML), ki je _lahko_ prisiljena na polja
+v mnogih primerih uporabe, vendar v mnogih primerih tudi _ne more bit_ ali _ne bi smela biti_.
 
-If forcing the property representing the parsed body to be only an array,
-developers then need a shared convention about where to put the results of
-parsing the body. These might include:
+Če siljenje predstavitve lastnosti prevedenega telesa, da je samo polje,
+razvijalci potem potrebujejo deljeno konvencijo o tem, kam dati rezultat
+prevedenega telesa. To lahko vključuje:
 
-- A special key under the body parameters, such as `__parsed__`.
-- A special named attribute, such as `__body__`.
+- Poseben ključ pod parametri telesa, kot je `__parsed__`.
+- Posebno imenovan atribut, kot je `__body__`.
 
-The end result is that a developer now has to look in multiple locations:
+Končni rezultat je, da mora razvijalec sedaj pogledati na več lokacij:
 
 ```php
 $data = $request->getBodyParams();
@@ -532,10 +532,10 @@ if ($request->hasAttribute('__body__')) {
 }
 ```
 
-The solution presented is to use the terminology "ParsedBody", which implies
-that the values are the results of parsing the message body. This also means
-that the return value _will_ be ambiguous; however, because this is an attribute
-of the domain, this is also expected. As such, usage will become:
+Predstavljena rešitev je uporaba terminologije "ParsedBody", ki implicira na to,
+da so vrednosti rezultati prevedenega telesa sporočila. To tudi pomeni, da
+_bo_ vrnjena vrednost dvoumna; vendar ker je to atribut
+domene, je tudi to pričakovano. Kot taka bo uporaba postala:
 
 ```php
 $data = $request->getParsedBody();
@@ -545,99 +545,98 @@ if (! $data instanceof \stdClass) {
 // otherwise, we have what we expected
 ```
 
-This approach removes the limitations of forcing an array, at the expense of
-ambiguity of return value. Considering that the other suggested solutions —
-pushing the parsed data into a special body parameter key or into an attribute —
-also suffer from ambiguity, the proposed solution is simpler as it does not
-require additions to the interface specification. Ultimately, the ambiguity
-enables the flexibility required when representing the results of parsing the
-body.
+Ta pristop odstranjuje omejitve siljenja polja na račun
+dvoumnosti vrnjene vrednosti. Če upoštevamo, da druge predlagane rešitve —
+potiskajo prevedene podatke v poseben ključ parametra telesa ali v atribut —
+to tudi trpi za dvoumnostjo, predlagana rešitev je enostavnejša, saj ne
+zahteva dodatkov k specifikaciji vmesnika. Ultimativno, dvoumnost
+omogoča zahtevano fleksibilnost, ko se predstavlja rezultate prevajanja
+telesa.
 
-### Why is no functionality included for retrieving the "base path"?
+### Zakaj funkcionalnost za pridobivanje "base path" ni vključena?
 
-Many frameworks provide the ability to get the "base path," usually considered
-the path up to and including the front controller. As an example, if the
-application is served at `http://example.com/b2b/index.php`, and the current URI
-used to request it is `http://example.com/b2b/index.php/customer/register`, the
-functionality to retrieve the base path would return `/b2b/index.php`. This value
-can then be used by routers to strip that path segment prior to attempting a
-match.
+Mnoga ogrodja ponujajo zmožnost dobit "base path", običajno mišljena
+pot do in vključno s prednjim krmilnikom. Kot primer, če je
+aplikacija servirana na `http://example.com/b2b/index.php` in je trenutni URI
+uporabljen za zahtevek `http://example.com/b2b/index.php/customer/register`, bo
+funkcionalnost za pridobivanje osnovne poti vrnila `b2b/index.php`. Ta vrednost
+je lahko nato uporabljena s strani usmerjevalnikov za čiščenje tega segmenta poti pred poskusom
+ujemanja.
 
-This value is often also then used for URI generation within applications;
-parameters will be passed to the router, which will generate the path, and
-prefix it with the base path in order to return a fully-qualified URI. Other
-tools — typically view helpers, template filters, or template functions — are
-used to resolve a path relative to the base path in order to generate a URI for
-linking to resources such as static assets.
+Ta vrednost je pogosto nato tudi uporabljena za generiranje URI-ja znotraj aplikacij;
+parametri bodo podani usmerjevalniku, ki bo generiral pot in
+ji dodal predpono z osnovno potjo, da vrne polno-kvalificirani URI. Ostala orodja,
+za reševanje poti relativno glede na osnovno pot za namen generiranja URI-ja za
+povezovanje virov, kot so statična sredstva.
 
-On examination of several different implementations, we noticed the following:
+Pri pregledu večih različnih implementacij smo opazili sledeče:
 
-- The logic for determining the base path varies widely between implementations.
-  As an example, compare the [logic in ZF2](https://github.com/zendframework/zf2/blob/release-2.3.7/library/Zend/Http/PhpEnvironment/Request.php#L477-L575)
-  to the [logic in Symfony 2](https://github.com/symfony/symfony/blob/2.7/src/Symfony/Component/HttpFoundation/Request.php#L1858-L1877).
-- Most implementations appear to allow manual injection of a base path to the
-  router and/or any facilities used for URI generation.
-- The primary use cases — routing and URI generation — typically are the only
-  consumers of the functionality; developers usually do not need to be aware
-  of the base path concept as other objects take care of that detail for them.
-  As examples:
-  - A router will strip off the base path for you during routing; you do not
-    need to pass the modified path to the router.
-  - View helpers, template filters, etc. typically are injected with a base path
-    prior to invocation. Sometimes this is manually done, though more often it
-    is the result of framework wiring.
-- All sources necessary for calculating the base path *are already in the
-  `RequestInterface` instance*, via server parameters and the URI instance.
+- Logika za določanje osnovne poti se na veliko spreminja med implementacijami.
+  Kot primer, primerjajmo [logiko v ZF2](https://github.com/zendframework/zf2/blob/release-2.3.7/library/Zend/Http/PhpEnvironment/Request.php#L477-L575)
+  z [logiko v Symfony 2](https://github.com/symfony/symfony/blob/2.7/src/Symfony/Component/HttpFoundation/Request.php#L1858-L1877).
+- Večina implementacij izgleda, da omogočajo ročno injiciranje osnovne poti
+  usmerjevalniku in/ali kakršnekoli olajšave uporabljene za generiranje URI-ja.
+- Primarno primer uporabe — usmerjanje in generiranje URI-ja — sta običajno edini
+  uporabi funkcionalnosti; razvijalci obiačjno ne potrebujejo vedeti
+  koncepta osnovne poti, saj drugi objekti poskrbijo za to podrobnost namesto njih.
+  Kot primer:
+  - Usmerjevalnik bo počistil osnovno pot za vas med usmerjanjem; ne potrebujete
+    podajati spremenjene poti usmerjevalniku.
+  - Pomočniki pogleda, filtri predlog itd. so običajno injicirani z osnovno potjo
+    pred invokacijo. Včasih je to narejeno ročno, vendar bolj pogost je
+    rezultat ožičenja ogrodja.
+- Vsi viri potrebni za izračun osnovne poti *so že v
+  instanci `RequestInterface`*, preko parametrov server in instance URI.
 
-Our stance is that base path detection is framework and/or application
-specific, and the results of detection can be easily injected into objects that
-need it, and/or calculated as needed using utility functions and/or classes from
-the `RequestInterface` instance itself.
+Naša naravnanost je, da je zaznavanje osnovne poti specifično za ogrodje in/ali aplikacijo
+in rezultati zaznave so lahko enostavno injicirani v objekte, ki
+jo potrebujejo in/ali izračunani, kot je potrebno z uporabo funkcij koristnosti in/ali razredov iz
+same instance `RequestInterface`.
 
-### Why does getUploadedFiles() return objects instead of arrays?
+### Zakaj getUploadedFiles() vrne objekte namesto polj?
 
-`getUploadedFiles()` returns a tree of `Psr\Http\Message\UploadedFileInterface`
-instances. This is done primarily to simplify specification: instead of
-requiring paragraphs of implementation specification for an array, we specify an
-interface.
+`getUploadedFiles()` vrne drevo instanc `Psr\Http\Message\UploadedFileInterface`.
+To je urejeno primarno za poenostavitev specifikacije: namesto,
+da se zahteva odstavke implementacije specifikacije za polje, določimo
+vmesnik.
 
-Additionally, the data in an `UploadedFileInterface` is normalized to work in
-both SAPI and non-SAPI environments. This allows creation of processes to parse
-the message body manually and assign contents to streams without first writing
-to the filesystem, while still allowing proper handling of file uploads in SAPI
-environments.
+Dodatno, podatki `UploadedFileInterface` je normaliziran za delo v
+obeh okoljih SAPI in ne-SAPI. To omogoča izdelavo procesov, da prevedejo
+telo sporočila ročno in določijo kontekste za tokove brez pisanja
+v datotečni sistem, medtem ko še vedno omogočajo ustrezno upravljanje nalaganj datotek v SAPI
+okoljih.
 
-### What about "special" header values?
+### Kaj pa "posebne" vrednosti glave?
 
-A number of header values contain unique representation requirements which can
-pose problems both for consumption as well as generation; in particular, cookies
-and the `Accept` header.
+Številne vrednosti glave vsebujejo unikatno predstavitev zahtev, ki lahko
+predstavlja probleme tako za obdelavo kot za generacijo; posebej piškotki
+in glava `Accept`.
 
-This proposal does not provide any special treatment of any header types. The
-base `MessageInterface` provides methods for header retrieval and setting, and
-all header values are, in the end, string values.
+Ta predlog ne ponuja kakršnihkoli posebnih tretmajev katerihkoli tipov glav.
+Osnovni `MessageInterface` ponuja metode za pridobivanje glav in nastavitev ter
+vse vrednosti glavo so na koncu vrednosti nizov.
 
-Developers are encouraged to write commodity libraries for interacting with
-these header values, either for the purposes of parsing or generation. Users may
-then consume these libraries when needing to interact with those values.
-Examples of this practice already exist in libraries such as
-[willdurand/Negotiation](https://github.com/willdurand/Negotiation) and
-[aura/accept](https://github.com/pmjones/Aura.Accept). So long as the object
-has functionality for casting the value to a string, these objects can be
-used to populate the headers of an HTTP message.
+Razvijalci so spodbujeni, da napištejo udobne knjižnice za interakcijo s
+temi vrednostmi glav, bodisi za namene obdelave ali generiranja. Uporabniki lahko
+nato uporabijo te knjižnice, ko potrebujejo delati s temi vrednostmi.
+Primeri te prakse že obstajajo v knjižnicah kot je
+[willdurand/Negotiation](https://github.com/willdurand/Negotiation) in
+[aura/accept](https://github.com/pmjones/Aura.Accept). Dokler ima objekt
+funkcionalnost za vlogo vrednosti nizu, so te objekti lahko
+uporabljeni za zapolnitev glav sporočila HTTP.
 
-## 6. People
+## 6. Ljudje
 
-### 6.1 Editor(s)
+### 6.1 Urednik(i)
 
 * Matthew Weier O'Phinney
 
-### 6.2 Sponsors
+### 6.2 Sponzorji
 
 * Paul M. Jones
 * Beau Simensen (coordinator)
 
-### 6.3 Contributors
+### 6.3 Prispevali so
 
 * Michael Dowling
 * Larry Garfield

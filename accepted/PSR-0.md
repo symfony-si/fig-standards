@@ -1,55 +1,55 @@
-Autoloading Standard
-====================
+Standard avtomatskega nalagalnika
+=================================
 
-> **Deprecated** - As of 2014-10-21 PSR-0 has been marked as deprecated. [PSR-4] is now recommended 
-as an alternative.
+> **Opuščen** - Od 2014-10-21 je bil PSR-0 označen za opuščenega. [PSR-4] je sedaj priporočen
+kot alternativa.
 
 [PSR-4]: http://www.php-fig.org/psr/psr-4/
 
-The following describes the mandatory requirements that must be adhered
-to for autoloader interoperability.
+Sledeče opisuje obvezne zahteve, ki se jih morate držati
+za interoperabilnost avtomatskega nalagalnika.
 
-Mandatory
----------
+Obveznosti
+----------
 
-* A fully-qualified namespace and class must have the following
-  structure `\<Vendor Name>\(<Namespace>\)*<Class Name>`
-* Each namespace must have a top-level namespace ("Vendor Name").
-* Each namespace can have as many sub-namespaces as it wishes.
-* Each namespace separator is converted to a `DIRECTORY_SEPARATOR` when
-  loading from the file system.
-* Each `_` character in the CLASS NAME is converted to a
-  `DIRECTORY_SEPARATOR`. The `_` character has no special meaning in the
-  namespace.
-* The fully-qualified namespace and class is suffixed with `.php` when
-  loading from the file system.
-* Alphabetic characters in vendor names, namespaces, and class names may
-  be of any combination of lower case and upper case.
+* Polno kvalificirani imenski prostor in razred morata imeti sledečo
+  strukturo `\<Vendor Name>\(<Namespace>\)*<Class Name>`
+* Vsak imenski prostor mora imeti imenski prostor najvišje ravni ("t.i. Vendor Name oz. ime izdelovalca").
+* Vsak imenski prostor ima lahko kolikor želite pod-imenskih prostorov.
+* Vsak ločevalec imenskega prostora je pretvorjen v t.i. `DIRECTORY_SEPARATOR`, ko
+  nalaga iz datotečnega sistema.
+* Vsak znak `_` v imenu razreda je pretvorjen v
+  `DIRECTORY_SEPARATOR`. Znak `_` nima kakšnega posebnega pomena v
+  imenskem prostoru.
+* Polno kvalificirani imenski prostor in razred ima pripono `.php` ko
+  se nalaga iz datotečnega sistema.
+* Znaki abecede v imenih izdelovalcev, imenskih prostorih in imenih razredov so lahko
+  katerakoli kombinacija malih in velikih črk.
 
-Examples
---------
+Primeri
+-------
 
 * `\Doctrine\Common\IsolatedClassLoader` => `/path/to/project/lib/vendor/Doctrine/Common/IsolatedClassLoader.php`
 * `\Symfony\Core\Request` => `/path/to/project/lib/vendor/Symfony/Core/Request.php`
 * `\Zend\Acl` => `/path/to/project/lib/vendor/Zend/Acl.php`
 * `\Zend\Mail\Message` => `/path/to/project/lib/vendor/Zend/Mail/Message.php`
 
-Underscores in Namespaces and Class Names
------------------------------------------
+Podčrtaji v imenskih prostorih in imena razredov
+------------------------------------------------
 
 * `\namespace\package\Class_Name` => `/path/to/project/lib/vendor/namespace/package/Class/Name.php`
 * `\namespace\package_name\Class_Name` => `/path/to/project/lib/vendor/namespace/package_name/Class/Name.php`
 
-The standards we set here should be the lowest common denominator for
-painless autoloader interoperability. You can test that you are
-following these standards by utilizing this sample SplClassLoader
-implementation which is able to load PHP 5.3 classes.
+Standarde, ki jih tu nastavimo, bi morali biti najnižji skupni imenovalec za
+nebolečo interoperabilnost avtomatskega nalagalnika. Preverite lahko, da
+sledite tem standardom z uporabo tega primera SplClassLoader
+izvedbe, ki je zmožen naložiti PHP 5.3 razrede.
 
-Example Implementation
-----------------------
+Primer izvedbe
+--------------
 
-Below is an example function to simply demonstrate how the above
-proposed standards are autoloaded.
+Spodaj je primer funkcije, ki enostavno ponazarja, kako so zgoraj
+predlagani standardi avtomatsko naloženi.
 
 ```php
 <?php
@@ -71,13 +71,12 @@ function autoload($className)
 spl_autoload_register('autoload');
 ```
 
-SplClassLoader Implementation
------------------------------
+SplClassLoader izvedba
+----------------------
 
-The following gist is a sample SplClassLoader implementation that can
-load your classes if you follow the autoloader interoperability
-standards proposed above. It is the current recommended way to load PHP
-5.3 classes that follow these standards.
+Sledeči gist je primer izvedbe SplClassLoader, ki lahko
+naloži vaše razrede, če sledite zgoraj predlaganim standardom interoperabilnosti
+avtomatskega nalagalnika. Gre za trenutno priporočljivi način nalaganja PHP
+5.3 razredov, ki sledijo tem standardom.
 
 * [http://gist.github.com/221634](http://gist.github.com/221634)
-

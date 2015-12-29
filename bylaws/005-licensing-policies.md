@@ -1,17 +1,17 @@
-Licensing Policies
-==================
+Politike licenciranja
+=====================
 
-## 1. Code
+## 1. Koda
 
-1. All PHP-FIG code must be licensed under the MIT license.
+1. Vsa PHP-FIG koda mora biti licencirana pod licenco MIT.
 
-2. Code includes any pure PHP files (including but not limited to classes,
-   functions, interfaces and procedural code), as well as any code inside of
-   examples, tutorials, supporting documents and the PSRs themselves.
+2. Koda vključuje katerekoli čiste PHP datoteke (vključno vendar ni omejeno na razrede,
+   funkcije, vmesnike in proceduralno kodo), kot tudi katerokoli kodo znotraj
+   primerov, vodičev, dokazil in samih PSR-jev.
 
 
-## 2. Documentation
+## 2. Dokumentacija
 
-All remaining non-code items must be licensed under the Creative Commons BY 3.0
-license. Attribution policies will be defined in the bylaws based on the type
-of asset created.
+Vsi preostali elementi ne-kode morajo biti licencirani pod licenco Creative Commons
+BY 3.0. Pripisovanje politike bo definirano v aktih osnovanih na ustvrjenem tipu
+in sredstvu.

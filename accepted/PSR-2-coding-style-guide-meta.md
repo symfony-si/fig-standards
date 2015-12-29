@@ -1,33 +1,33 @@
-PSR-2 Meta Document
+PSR-2 meta dokument
 ===================
 
-1. Summary
-----------
+1. Povzetek
+-----------
 
-The intent of this guide is to reduce cognitive friction when scanning code from different authors. It does so 
-by enumerating a shared set of rules and expectations about how to format PHP code.
+Namen tega vodiča je zmanjšanje kognitivnega trenja, ko se skenira kodo različnih avtorjev. To naredi tako,
+z naštevanjem skupnega niza pravil in pričakovanj o tem, kako oblikovati PHP kodo.
 
-The style rules herein are derived from commonalities among the various member projects. When various authors 
-collaborate across multiple projects, it helps to have one set of guidelines to be used among all those 
-projects. Thus, the benefit of this guide is not in the rules themselves, but in the sharing of those rules.
-
-
-2. Votes
---------
-
-- **Acceptance Vote:** [ML](https://groups.google.com/d/msg/php-fig/c-QVvnZdMQ0/TdDMdzKFpdIJ)
+Stilska pravila tu so pridobljena iz skupnih značilnosti med različnimi projekti članov. Ko različni avtorji
+sodelujejo med večimi projekti, pomaga imeti en niz smernic, ki so uporabljene med vsemi temi
+projekti. Tako da korist tega vodiča ni v samih pravilih, vendar v deljenju teh pravil.
 
 
-3. Errata
----------
+2. Glasovanje
+-------------
 
-### 3.1 - Multi-line Arguments (09/08/2013)
+- **Sprejetje glasovanja:** [ML](https://groups.google.com/d/msg/php-fig/c-QVvnZdMQ0/TdDMdzKFpdIJ)
 
-Using one or more multi-line arguments (i.e: arrays or anonymous functions) does not constitute 
-splitting the argument list itself, therefore Section 4.6 is not automatically enforced. Arrays and anonymous 
-functions are able to span multiple lines.
 
-The following examples are perfectly valid in PSR-2:
+3. Popravki
+-----------
+
+### 3.1 - Več-vrstični argumenti (09/08/2013)
+
+Uporaba enega ali več več-vrstičnih argumentov (t.j. polja ali anonimne funkcije) ne štejejo kot
+razdelitev samo seznama argumentov, zato Sekcija 4.6 ni avtomatsko uveljavljena. Polja in anonimne
+funkcije so zmožne razpenjanja v večih vrsticah.
+
+Sledeči primeri so odlično veljavni v PSR-2:
 
 ```php
 <?php
@@ -40,8 +40,8 @@ $app->get('/hello/{name}', function ($name) use ($app) {
 });
 ```
 
-### 3.2 - Extending Multiple Interfaces (10/17/2013)
+### 3.2 - Razširitev večih vmesnikov (10/17/2013)
 
-When extending multiple interfaces, the list of `extends` should be treated the same as a list
-of `implements`, as declared in Section 4.1.
+Ko razširjate več vmesnikov, bi moral seznam `razširitev` bi obravnavan enako kot seznam
+`implementacij`, kot je deklarirano v Sekciji 4.1.
 

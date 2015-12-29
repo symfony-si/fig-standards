@@ -1,68 +1,67 @@
-Basic Coding Standard
-=====================
+Osnovni kodni standard
+======================
 
-This section of the standard comprises what should be considered the standard
-coding elements that are required to ensure a high level of technical
-interoperability between shared PHP code.
+Ta sekcija standarda obsega, kar bi moralo šteti za standard
+kodnih elementov, ki so potrebni za zagotovitev visokega nivoja tehnične
+interoperabilnosti med skupno PHP kodo.
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-interpreted as described in [RFC 2119].
+Ključne besede "MORA", "NE SME", "ZAHTEVA", "PRIPOROČA", "LAHKO" in "NEOBVEZNO"
+v tem dokumentu se tolmačijo, kot je navedeno v
+[RFC 2119].
 
 [RFC 2119]: http://www.ietf.org/rfc/rfc2119.txt
 [PSR-0]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
 [PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
 
 
-1. Overview
+1. Pregled
+----------
+
+- Datoteke MORAJO uporabljati samo `<?php` in `<?=` značke.
+
+- Datoteke MORAJO uporabljati samo UTF-8 brez BOM za PHP kodo.
+
+- Datoteke BI MORALE *bodisi* razglasiti simbole (razrede, funkcije, konstante itd.)
+  *ali* povrzočiti stranske učinke (npr. generirati izpis, spremeniti .ini nastavitve itd.)
+  vendar NE BI SMELE početi obojega.
+
+- Imenski prostori in razredi MORAJO slediti "avtomatskemu nalagalniku" PSR: [[PSR-0], [PSR-4]].
+
+- Imena razredov MORAJO biti deklarirana v `StudlyCaps`.
+
+- Konstante razreda MORAJO biti deklarirane v celoti z veliki črkami z ločilom podčrtaja.
+
+- Imena metod MORAJO biti deklarirana v obliki `camelCase`.
+
+
+2. Datoteke
 -----------
 
-- Files MUST use only `<?php` and `<?=` tags.
+### 2.1. PHP značke
 
-- Files MUST use only UTF-8 without BOM for PHP code.
+PHP koda MORA uporabljati dolge `<?php ?>` značke ali kratke izpisne `<?= ?>` značke; NE SME uporabljati drugih različic značk.
 
-- Files SHOULD *either* declare symbols (classes, functions, constants, etc.)
-  *or* cause side-effects (e.g. generate output, change .ini settings, etc.)
-  but SHOULD NOT do both.
+### 2.2. Kodiranje znakov
 
-- Namespaces and classes MUST follow an "autoloading" PSR: [[PSR-0], [PSR-4]].
+PHP koda MORA uporabljati samo UTF-8 brez BOM.
 
-- Class names MUST be declared in `StudlyCaps`.
+### 2.3. Stranski učinki
 
-- Class constants MUST be declared in all upper case with underscore separators.
+Datoteka MORA deklarirati nove simbole (razrede, funkcije, konstante
+itd.) in ne povročati drugih stranskih učinkov, ali MORA izvrševati logiko s stranskimi
+učinki, vendar NE BI SMELA delati obojega.
 
-- Method names MUST be declared in `camelCase`.
+Fraza "stranski učinki" pomeni izvrševanje logike, ki ni direktno povezana z
+deklaracijo razredov, funkcij, konstant itd., *le iz vključevanja
+datoteke*.
 
+"Stranski učinki" vključujejo, vendar niso omejeni na: generiranje izpisa, eksplicitno
+uporabo `require` ali `include`, povezavo z zunanjimi storitvami, spreminjanje ini
+nastavitev, oddajo napak ali izjem, spreminjanje globalnih ali statičnih spremenljivk,
+branje iz ali pisanje v datoteko in tako naprej.
 
-2. Files
---------
-
-### 2.1. PHP Tags
-
-PHP code MUST use the long `<?php ?>` tags or the short-echo `<?= ?>` tags; it
-MUST NOT use the other tag variations.
-
-### 2.2. Character Encoding
-
-PHP code MUST use only UTF-8 without BOM.
-
-### 2.3. Side Effects
-
-A file SHOULD declare new symbols (classes, functions, constants,
-etc.) and cause no other side effects, or it SHOULD execute logic with side
-effects, but SHOULD NOT do both.
-
-The phrase "side effects" means execution of logic not directly related to
-declaring classes, functions, constants, etc., *merely from including the
-file*.
-
-"Side effects" include but are not limited to: generating output, explicit
-use of `require` or `include`, connecting to external services, modifying ini
-settings, emitting errors or exceptions, modifying global or static variables,
-reading from or writing to a file, and so on.
-
-The following is an example of a file with both declarations and side effects;
-i.e, an example of what to avoid:
+Sledeči primer je datoteka, ki vljučuje tako deklaracijo in stranske učinke;
+t.j. primer, ki se ga je potrebno izogibati:
 
 ```php
 <?php
@@ -82,8 +81,8 @@ function foo()
 }
 ```
 
-The following example is of a file that contains declarations without side
-effects; i.e., an example of what to emulate:
+Sledeči primer je datoteka, ki vključuje deklaracijo brez stranskih
+učinkov; t.j. primer, ki ga je dobro posnemati:
 
 ```php
 <?php
@@ -103,19 +102,19 @@ if (! function_exists('bar')) {
 ```
 
 
-3. Namespace and Class Names
-----------------------------
+3. Imenski prostori in imena razredov
+-------------------------------------
 
-Namespaces and classes MUST follow an "autoloading" PSR: [[PSR-0], [PSR-4]].
+Imenski prostor in razredi MORAJO slediti PSR-ju avtomatskega nalaganja: [[PSR-0], [PSR-4]]
 
-This means each class is in a file by itself, and is in a namespace of at
-least one level: a top-level vendor name.
+To pomeni, da je vsak razred v samostojni datoteki in je znotraj imenskega prostora
+vsaj enega nivoja: vrhnje ime izdelovalca.
 
-Class names MUST be declared in `StudlyCaps`.
+Imena razredov MORAJO biti deklarirana v `StudlyCaps`.
 
-Code written for PHP 5.3 and after MUST use formal namespaces.
+Koda napisana za PHP 5.3 in kasnejše MORA uporabljati formalne imenske prostore.
 
-For example:
+Na primer:
 
 ```php
 <?php
@@ -127,8 +126,7 @@ class Foo
 }
 ```
 
-Code written for 5.2.x and before SHOULD use the pseudo-namespacing convention
-of `Vendor_` prefixes on class names.
+Koda napisana za 5.2.x in prej BI MORALA uporabljati konvencijo pseudo-imenskih prostorov z `Vendor_` predponami na imenih razredov.
 
 ```php
 <?php
@@ -138,15 +136,15 @@ class Vendor_Model_Foo
 }
 ```
 
-4. Class Constants, Properties, and Methods
--------------------------------------------
+4. Konstante razredov, lastnosti in metode
+------------------------------------------
 
-The term "class" refers to all classes, interfaces, and traits.
+Izraz "razred" se nanaša na vse razrede, vmesnike in lastnosti (traits).
 
-### 4.1. Constants
+### 4.1. Konstante
 
-Class constants MUST be declared in all upper case with underscore separators.
-For example:
+Konstante razredov MORAJO biti deklarirane v celoti z velikimi črkami z ločilom podčrtajev.
+Na primer:
 
 ```php
 <?php
@@ -159,15 +157,14 @@ class Foo
 }
 ```
 
-### 4.2. Properties
+### 4.2. Lastnosti
 
-This guide intentionally avoids any recommendation regarding the use of
-`$StudlyCaps`, `$camelCase`, or `$under_score` property names.
+Ta vodič se namensko izogiba kakršnim koli priporočilom glede uporabe
+`$StudlyCaps`, `$camelCase` ali `$under_score` imenom lastnosti.
 
-Whatever naming convention is used SHOULD be applied consistently within a
-reasonable scope. That scope may be vendor-level, package-level, class-level,
-or method-level.
+Kakršnokoli ime konvencije je uporabljeno, BI MORALO biti uporabljeno konsistentno znotraj
+razumnega področja. To področje je lahko na nivoju izdelovalca, nivoju paketa, nivoju razreda ali nivoju metode.
 
-### 4.3. Methods
+### 4.3. Metode
 
-Method names MUST be declared in `camelCase()`.
+Imena metod MORAJO biti deklarirana v `camelCase()`.

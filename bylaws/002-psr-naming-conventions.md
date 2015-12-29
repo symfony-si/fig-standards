@@ -1,18 +1,18 @@
-Naming conventions for code released by PHP-FIG
-===============================================
+Konvencije poimenovanja za kodo izdano pod PHP-FIG
+==================================================
 
-1. Interfaces MUST be suffixed by `Interface`: e.g. `Psr\Foo\BarInterface`.
-2. Abstract classes MUST be prefixed by `Abstract`: e.g. `Psr\Foo\AbstractBar`.
-3. Traits MUST be suffixed by `Trait`: e.g. `Psr\Foo\BarTrait`.
-4. PSR-1, 2 and 4 MUST be followed.
-5. The vendor namespace MUST be `Psr`.
-6. There MUST be a package/second-level namespace in relation with the PSR that
-   covers the code.
-7. Composer package MUST be named `psr/<package>` e.g. `psr/log`. If they
-   require an implementation as a virtual package it MUST be named
-   `psr/<package>-implementation` and be required with a specific version like
-   `1.0.0`. Implementors of that PSR can then provide
-   `"psr/<package>-implementation": "1.0.0"` in their package to satisfy that
-   requirement. Specification changes via further PSRs should only lead to a new
-   tag of the `psr/<package>` package, and an equal version bump of the
-   implementation being required.
+1. Vmesniki MORAJO imeti pripono `Interface`: npr. `Psr\Foo\BarInterface`.
+2. Abstraktni razredi MORAJO imeti predpono `Abstract`: npr. `Psr\Foo\AbstractBar`.
+3. Lastnosti oz. t.i. Traits MORAJO imeti pripono `Trait`: npr. `Psr\Foo\BarTrait`.
+4. PSR-0, 1 in 2 SE MORA upoštevati.
+5. Imenski prostor izdelovalca MORA biti `Psr`.
+6. Biti MORA paket/drugi-nivo imenski prostor v povezavi s PSR, ki
+   pokriva kodo.
+7. Composer paket MORA biti imenovan `psr/<package>` npr. `psr/log`. Če
+   se zahteva implementacija kot virtualni paket MORA biti imenovan
+   `psr/<package>-implementation` in je zahtevano z določeno verzijo kot
+   `1.0.0`. Implementatorji tega PSR lahko potem ponudijo
+   `"psr/<package>-implementation": "1.0.0"` v njihovem paketu, da zadostijo tej
+   zahtevi. Spremembe specifikacije preko nadaljnih PSR-jev bi morale voditi samo v novo
+   značko `psr/<package>` paketa in enako izdajo verzije
+   implementacije, ki se zahteva.

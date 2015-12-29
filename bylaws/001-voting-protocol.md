@@ -1,48 +1,45 @@
-Voting Protocol
-===============
+Glasovalni protokol
+===================
 
-1. Only voting members and FIG Secretaries may initiate a call for votes on a measure.
+1. Samo člani glasovanja lahko sprožijo klic za glasovanje na merjenju.
 
-2. Only voting members may vote on a measure.
+2. Samo člani glasovanja lahko glasujejo na merjenju.
 
-3. The time limit on a vote is 14 days from the time of the call for votes, or
-until all voting members have cast their vote, whichever comes first. Votes
-cast after the time limit are not valid.
+3. Časovna omejitev na glasovanju je 14 dni od časa klica za glasovanje, ali
+dokler niso vsi člani glasovanja oddali svojega glasu, karkoli pride prej. Oddaja
+glasov po časovni omejitvi ni veljavna.
 
-4. Votes can be +1 ("in favor"), -1 ("against"), or 0 ("abstain").
+4. Glasovi so lahko +1 ("za"), -1 ("proti"), ali 0 ("vzdržani").
 
-5. One-third or more of the *voting members* must vote within the time limit
-for the vote to be valid. This is the equivalent of establishing a quorum. For
-example:
+5. Ena tretjina ali več *članov glasovanja* morajo glasovati znotraj časovne omejitve,
+da je glasovanje veljavno. To ustreza sklepčni ustanovitvi. Na
+primer:
 
-        - If there are 20, 21, or 22 members, then 7 or more must vote within the
-          time limit for the vote to be valid.
+        - Če je 20, 21, ali 22 članov, potem mora 7 ali več glasovati
+          znotraj časovne omejitve, da je glasovanje veljavno.
 
-        - If there are 23, 24, or 25 members, then 8 or more must vote within the
-          time limit for the vote to be valid.
+        - Če je 23, 24, ali 25 članov, potem mora 8 ali več glasovati znotraj
+          časovne omejitve, da je glasovanje veljavno.
 
-6. The measure passes if a simple majority of the *votes cast* are "in favor".
-The measure does not pass otherwise. For example:
+6. Merjenje gre skozi, če je enostavna večina *oddanih glasov* "za".
+To merjenje drugače ne gre skozi. Na primer:
 
-        - If there are 10 or 11 votes cast, 6 or more must be "in favor".
+        - Če je 10 ali 11 oddanih glasov, 6 ali več jih mora biti "za".
 
-        - If there are 12 or 13 votes cast, 7 or more must be "in favor".
+        - Če je oddanih 12 ali 13 glasov, 7 ali več jih mora biti "za".
 
-7. Measures passed are not binding. A vote "in favor" of a measure is an
-indication that the measure is approved, but the voting member may not be able
-to apply it immediately for reasons outside the purview of this group.
+7. Merjenje, ki gre skozi niso obvezujoča. Glas "za" merjenja je
+pokazatelj, da je merjenje odobreno, vendar ga član merjenja lahko ni uspel
+uporabiti takoj zaradi razlogov izven klavzule te skupine.
 
-8. Votes on membership requests represent a special case:
+8. Glasovi o članstvu zahtevajo predstavitev posebnega primera:
 
-        - Regarding point 1, they may be initiated by non-members.
+        - Glede točke 1, so lahko začeti s strani ne-članov.
 
-        - Regarding point 7, it is binding on all members.
-
-9. Responsibility for vote tallying is shared between the member who starts a vote
-and the FIG Secretaries, both of whom should confirm the result.
+        - Glede točke 7, je obvezujoče za vse člane.
 
 * * *
 
-N.b.: "Abstain" votes are counted only for quorum, and are not counted when
-calculating majority.
+N.b.: "Vzdržani" glasovi so šteti samo za sklepčnost in niso šteti, ko
+se šteje večino.
 

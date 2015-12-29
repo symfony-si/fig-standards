@@ -1,87 +1,87 @@
-Amendments
-==========
+Predlogi sprememb
+=================
 
-Following the rules of the [workflow bylaw], once a PSR has been "Accepted" the PSR meaning
-cannot change, backwards compatibility must remain at 100%, and any confusion that arises from
-original wording can be clarified through errata.
+Pri sledenju pravil [akta poteka dela][bylaw], ko je enkrat PSR bil "sprejet", se pomen PSR-ja
+ne more spremeniti, združljivost za nazaj mora ostati 100% in kakršna koli zmeda, ki nastane iz
+originalnega pomena, je lahko razjasnjena preko popravka.
 
-The rules for errata are covered in the [workflow bylaw], and only allow non-backwards compatible
-clarification to be added to the meta document. Sometimes, modifications will be necessary in PSR
-document itself, and this document outlines those cases.
+Pravila za popravke so pokrita v [aktu poteka dela][bylaw] in samo dovoljujejo združjive ne za nazaj
+razjasnitve, da se dodajo k meta dokumentu. Včasih bodo spremembe potrebne v samem PSR
+dokumentu in ta dokument obriše te primere.
 
-## 1. Deprecation and Replacement
+## 1. Opustitev in zamenjava
 
-If a PSR is found to require substantive updates or errata is no longer able to clarify confusion,
-then the PSR must be replaced, following the workflow set out in [workflow bylaw].
+Če se za PSR ugotovi, da potrebuje vsebinske posodobitve ali popravke, ni več zmožen razjasniti zmedo,
+zato mora biti PSR zamenjan in slediti poteku dela določenega v [aktu poteka dela][bylaw].
 
-The original PSR may at some point in time be deprecated, and the new PSR becomes the recommended
-document. Deprecation and recommendation changes must be made with a vote according to the rules
-of the [voting protocol], with a subject like "[VOTE] Deprecate PSR-X", at which point a
-superseding PSR should be specified as a recommendation.
+Originalni PSR je lahko na določeni točki obdobja opuščen in novi PSR postane priporočljiv
+dokument. Opuščanje in priporočene spremembe morajo biti narejene z glasovanjem glede na pravila
+[glasovalnega protokola], z naslovom kot je "[VOTE] Deprecate PSR-X", kjer
+bi moral nadomestni PSR biti specificiran kot priporočilo.
 
-Once a vote to deprecate a PSR and supersede it with another PSR has passed, the deprecated PSR must
-be marked as such in the original document and a link should be placed in the body.
+Ko je enkrat glasovanje opravljeno za opustitev PSR-ja in se ga nadomesti z drugim PSR, mora opuščeni PSR
+biti označen kot tak v originalnem dokumentu in povezava bi morala biti postavljena v telo.
 
-For example, the following Markdown be placed at the very top of the relevant standard file in the
-official PHP-FIG GitHub repo `fig-standards`.
+Na primer, sledeči Markdown je postavljen na sam vrh pomembne standardne datoteke v
+uradnem PHP-FIG GitHub repozitoriju `fig-standards`.
 
 > **Deprecated** - As of 2014-12-30 PSR-0 has been marked as deprecated. [PSR-4] is now recommended
 as an alternative.
 > [PSR-4]: http://php-fig.org/psr/psr-4
 
 
-## 2. Dependencies
+## 2. Odvisnosti
 
-As documents are expected to be replaced rather than amended, dependencies on
-other PSR's should be avoided whenever possible. For instance, the following is
-no longer permitted:
+Kot se za dokumente pričakuje, da se jih zamenja namesto spremeni, bi se moralo odvisnostim
+na ostale PSR-je izogibati, kadarkoli je možno. Na primer, sledeče
+ni več dovoljeno:
 
-> - Namespaces and classes MUST follow PSR-0.
+> - Imenski prostori in razredi MORAJO slediti PSR-0.
 
-Instead - if a dependency is considered necessary by the working group creating it - then the following
-example can be used:
+Namesto - če se smatra za odvisnost nujno s strani delovne skupine, ki jo je ustvarila - potem je sledeči
+primer lahko uporabljen:
 
 > - Namespaces and classes MUST follow an autoloading PSR: [ [PSR-0] ].
 
-The outer set of square brackets denote a "dependency list", which is a list of PSRs
-that are considered a compatible dependency.
+Zunanji set oglatih oklepajev označuje "seznam odvisnosti", ki je seznam PSR-jev,
+ki štejejo za združljivo odvisnost.
 
-When more PSR's are added to the "dependency list" the same example would look like this:
+Ko je več PSR-jev dodanih k "seznamu odvisnosti", bi enak primer izgledal takole:
 
 > - Namespaces and classes MUST follow an autoloading PSR: [ [PSR-0], [PSR-4] ].
 
-New PSR's can be added to the "dependency list", but old PSR's can never be removed as this would break
-backwards compatability.
+Nove PSR-je se lahko doda k "seznamu odvisnosti", vendar starih PSR-jev se nikoli ne odstranja, saj bi to polomilo
+združljivost za nazaj.
 
-## 3. Acceptable Amendments
+## 3. Sprejemljive spremembe
 
-Other than updating the "dependency list", there are two other potentially acceptable amendment scenarios
-which do not require their own special vote.
+Drugače kot posodabljanje "seznama odvisnosti", obstajata dva druga potencialno sprejemljiva scenarija predloga sprememb,
+ki ne zahtevata njihove lastnega posebnega glasovanja.
 
-### 3.1. Annotations
+### 3.1. Zaznamki
 
-If Errata is added which is deemed important enough by whoever is initiating the errata vote,
-annotations may be placed in or near the offending line so that readers know to view the errata for
-more information, with a link containing an anchor to that specific piece of errata.
+Če so dodani popravki, ki štejejo za dovolj pomembne za kogarkoli, ki začne glasovanje za popravke,
+se zaznamke lahko doda v ali blizu kršene vrstice, da bralci vedo pogledati popravke za
+več informacij s povezavo, ki vključuje sidro na tisti določeni del popravka.
 
-> - Something confusing about where brackets go. [cf. [errata](foo-meta.md#errata-1-foo)]
+> - Nekaj zmedenega o tem, kam morajo iti zaviti oklepaji. [cf. [errata](foo-meta.md#errata-1-foo)]
 
-This will be done as part of the errata vote, not its own.
+To bo urejeno kot del glasovanja o popravkih in ne na svojem.
 
-### 3.2. Formatting & Typos
+### 3.2. Oblikovanje & tipkarske napake
 
-If formatting is broken for any reason then changing formatting must not be considered a
-change to the document. These can be merged or pushed without hesitation, as long as they
-don't change anything of any meaning or syntax.
+Če je oblikovanje polomljeno zaradi katerega koli razloga, potem spreminjanje oblikovanja ne sme biti smatrano za
+spremembo dokumenta. Te so lahko združeni ali poslani brez oklevanja, dokler
+ne spremenijo ničesar kateregakoli pomena ali sintakse.
 
-Some typos as trivial as a misplaced comma could have a subtle impact on meaning. Take special care not to
-alter backwards compatibility and create a vote if unsure. Common sense will help here.
+Nekaj trivialnih tipkarskih napak, kot je napačno postavljena vejica imajo subtilen vpliv na pomen. Bodite posebej pozorni, da
+ne spremenite združljivosti za nazaj in izdelate glasovanje, če niste prepričani. Razum bo tam pomagal.
 
-Examples:
+Primeri:
 
-1. HTML Tables are currently broken on php-fig.org because of the syntax used.
-2. Somebody spelled something wrong and nobody spotted it for a year.
-3. Problems with GitHub Markdown
+1. HTML tabele so trenutno zlomljene na php-fig.org zaradi sintakse, ki je uporabljena.
+2. Nekdo je nekaj napačno črkoval in nihče ni tega opazil leto dni.
+3. Problemi z GitHub Markdown
 
-[workflow bylaw]: https://github.com/php-fig/fig-standards/blob/master/bylaws/004-psr-workflow.md
-[voting protocol]: https://github.com/php-fig/fig-standards/blob/master/bylaws/001-voting-protocol.md
+[bylaw]: https://github.com/php-fig/fig-standards/blob/master/bylaws/004-psr-workflow.md
+[glasovalnega protokola]: https://php-fig/philsturgeon/fig-standards/blob/master/bylaws/001-voting-protocol.md
