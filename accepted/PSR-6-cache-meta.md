@@ -1,96 +1,98 @@
-PSR-Cache Meta Document
-===================
+PSR predpomnilnik meta dokument
+===============================
 
-1. Summary
-----------
+1. Povzetek
+-----------
 
-Caching is a common way to improve the performance of any project, making
-caching libraries one of the most common features of many frameworks and
-libraries. This has lead to a situation where many libraries roll their own
-caching libraries, with various levels of functionality. These differences are
-causing developers to have to learn multiple systems which may or may not
-provide the functionality they need. In addition, the developers of caching
-libraries themselves face a choice between only supporting a limited number
-of frameworks or creating a large number of adapter classes.
+Predpomnenje je pogosti način izboljšanja uspešnosti kateregakoli projekta, kar naredi
+predpomnilne knjižnice ene izmed najpogostejših lastnosti mnogih ogrodij in
+knjižnjic. To je pripeljalo do situacije, kjer so mnoge knjižnice naredile svoje lastne
+predpomnilne knjižnice z različnimi nivoji funkcionalnosti. Zaradi teh razlik
+se morajo razvijalci naučiti mnoge sisteme, ki lahko ali pa ne
+ponujajo funkcionalnosti, ki jih potrebujejo. Poleg tega se razvijalci predpomnilnih
+knjižnic sami soočajo z izbiro med samo podpiranjem omejenega števila
+ogrodij ali izdelavo velikega števila razredov adapterjev.
 
+2. Zakaj se truditi?
+--------------------
 
-2. Why Bother?
---------------
+Skupni vmesnik za predpomnilne sisteme bi rešil te probleme. Razvijalci knjižnic in
+ogrodij se lahko zanašajo na to, da sistem predpomnenja deluje tako, kot
+pričakujejo, medtem ko morajo razvijalci predpomnilnih sistemov samo implementirati
+posamezen skupek vmesnikov namesto celotnega izbora adapterjev.
 
-A common interface for caching systems will solve these problems. Library and
-framework developers can count on the caching systems working the way they're
-expecting, while the developers of caching systems will only have to implement
-a single set of interfaces rather than a whole assortment of adapters.
+Poleg tega je implementacija predstavljena tu načrtovana za prihodnjo razširljivost.
+Omogoča raznolikost notranje različnih vendar API kompatibilnih implementacij
+in ponuja jasno pot za prihodnjo razširitev glede na kasnejše PSR-je ali specifične
+izvajalce.
 
-Moreover, the implementation presented here is designed for future extensibility.
-It allows a variety of internally-different but API-compatible implementations
-and offers a clear path for future extension by later PSRs or by specific
-implementers.
+Prednosti:
+* Standardizirani vmesnik za predpomnenje omogoča prosto stoječe knjižnice za podporo
+predpomnenja posrednih podatkov brez napora; lahko so enostavno (opcijsko) odvisne
+od tega standardnega vmesnika in ga dopolnjujejo brez skrbi nad
+podrobnosti implementacije.
+* Skupno razvite predpomnilne knjižnice, ki so deljene v mnogih projektih, tudi če
+razširjajo ta vmesnik, bodo verjetno bolj robustne kot pa ducat ločeno
+razvitih implementacij.
 
-Pros:
-* A standard interface for caching allows free-standing libraries to support
-caching of intermediary data without effort; they may simply (optionally) depend
-on this standard interface and leverage it without being concerned about
-implementation details.
-* Commonly developed caching libraries shared by multiple projects, even if
-they extend this interface, are likely to be more robust than a dozen separately
-developed implementations.
+Slabosti:
+* Katerikola standardizacija vmesnika ima tveganje slabe prihodnosti inovacije, saj
+ni narejena kot bi morala biti. Vendar verjamemo, da je predpomnenje dovolj
 
-Cons:
 * Any interface standardization runs the risk of stifling future innovation as
 being "not the Way It's Done(tm)".  However, we believe caching is a sufficiently
 commoditized problem space that the extension capability offered here mitigates
 any potential risk of stagnation.
 
-3. Scope
+3. Obseg
 --------
 
-## 3.1 Goals
+## 3.1 Cilji
 
-* A common interface for basic and intermediate-level caching needs.
-* A clear mechanism for extending the specification to support advanced features,
-both by future PSRs or by individual implementations. This mechanism must allow
-for multiple independent extensions without collision.
+* Skupen vmesnik za osnovni in vmesni nivo potreb predpomnenja.
+* Jasen mehanizem za razširitev specifikacije, da podpira napredne lastnosti,
+tako v prihodnjih PSR-jih ali pri individualnih implementacijah. Ta mehanizem mora dovoljevati
+več neodvisnih razširitev brez trkov.
 
-## 3.2 Non-Goals
+## 3.2 Niso cilji
 
-* Architectural compatibility with all existing cache implementations.
-* Advanced caching features such as namespacing or tagging that are used by a
-minority of users.
+* Arhitekturna združljivost z vsemi obstoječimi implementacijami predpomnilnikov.
+* Napredne predpomnilne lastnosti, kot so imenski prostori ali označevanje, ki je uporabljeno pri
+manjšini uporabnikov.
 
-4. Approaches
--------------
+4. Pristopi
+-----------
 
-### 4.1 Chosen Approach
+### 4.1 Izbrani pristop
 
-This specification adopts a "repository model" or "data mapper" model for caching
-rather than the more traditional "expire-able key-value" model.  The primary
-reason is flexibility.  A simple key/value model is much more difficult to extend.
+Ta specifikacija sprejema "model repozitorija" ali "data mapper" model za predpomnenje
+namesto bolj tradicionalnega modela "ključ-vrednost z rokom trajanja". Glavni
+razlog je fleksibilnost. Enostaven model ključ/vrednost je veliko težje razširljiv.
 
-The model here mandates the use of a CacheItem object, which represents a cache
-entry, and a Pool object, which is a given store of cached data.  Items are
-retrieved from the pool, interacted with, and returned to it.  While a bit more
-verbose at times it offers a good, robust, flexible approach to caching,
-especially in cases where caching is more involved than simply saving and
-retrieving a string.
+Model tu pooblašča uporabo objekta CacheItem, ki predstavlja vnos predpomnilnika
+in objekt Pool, ki je dana shramba predpomnjenih podatkov. Elementi so
+pridobljeni iz zaloge, ki je v interakciji in vrenjeni nazaj. Medtem ko je včasih nekoliko
+bolj gostobeseden, ponuja dober, robusten in fleksibilen pristop k predpomnenju,
+posebej v primerih, kjer je predpomnenje bolj vključeno, kot pa enostavno shranjevanje in
+pridobivanje niza.
 
-Most method names were chosen based on common practice and method names in a
-survey of member projects and other popular non-member systems.
+Večina imen metod je bilo izbranih na osnovi pogoste prakse in imen metod v
+anketi članskih projektov in ostalih popularnih ne-članskih projektov.
 
-Pros:
+Prednosti:
 
-* Flexible and extensible
-* Allows a great deal of variation in implementation without violating the interface
-* Does not implicitly expose object constructors as a pseudo-interface.
+* Fleksibilen in razširljiv
+* Omogoča veliko raznolikosti v implementaciji brez kršenja vmesnika
+* Implicitno ne izpostavlja konstruktorjev kot pseudo-vmesnika.
 
-Cons:
+Slabosti:
 
-* A bit more verbose than the naive approach
+* Nekoliko bolj gostobeseden od naivnega pristopa
 
-Examples:
+Primeri:
 
-Some common usage patterns are shown below.  These are non-normative but should
-demonstrate the application of some design decisions.
+Nekateri pogosti vzorci uporabe so prikazani spodaj. Ti so ne-normativni, vendar bi
+morali prikazati aplikacijo nekih načrtovalskih odločitev.
 
 ```php
 /**
@@ -230,73 +232,72 @@ function set_widget(TaggablePoolInterface $pool, Widget $widget)
 }
 ```
 
-### 4.2 Alternative: "Weak item" approach
+### 4.2 Alternativa: Pristop "šibkega elementa"
 
-A variety of earlier drafts took a simpler "key value with expiration" approach,
-also known as a "weak item" approach.  In this model, the "Cache Item" object
-was really just a dumb array-with-methods object.  Users would instantiate it
-directly, then pass it to a cache pool.  While more familiar, that approach
-effectively prevented any meaningful extension of the Cache Item.  It effectively
-made the Cache Item's constructor part of the implicit interface, and thus
-severely curtailed extensibility or the ability to have the cache item be where
-the intelligence lives.
+Različni prejšnji osnutki so ubrali enostavni pristop "ključ vrednost z rokom trajanja",
+znan tudi kot pristop "šibkega elementa". V tem modelu je bil objekt "Cache Item"
+resnično nepameten objekt polje-z-metodami. Uporabniki bi ga sprožili
+direktno, nato pa mu podali zalogo predpomnilnika. Medtem ko je bolj poznan, je ta pristop
+efektivno preprečeval kakršnokoli smiselno razširitev elementa predpomnilnika. Efektivno
+je naredil Cache Item konstruktor del implicitnega vmesnika in tako
+zelo okrnil razširljivost ali zmožnost imeti element predpomnilnika, kjer
+domuje inteligenca.
 
-In a poll conducted in June 2013, most participants showed a clear preference for
-the more robust if less conventional "Strong item" / repository approach, which
-was adopted as the way forward.
+V anketi izvedeni v juniju 2013 je večina udeležencev pokazala jasno izbiro za
+bolj robustni in manj konvekcionalni pristop "močni element" / repozitorij, ki je
+bil sprejet kot pot naprej.
 
-Pros:
-* More traditional approach.
+Prednosti:
+* Bolj tradicionalni pristop.
 
-Cons:
-* Less extensible or flexible.
+Slabosti:
+* Manj razširljiv ali fleksibilen.
 
-### 4.3 Alternative: "Naked value" approach
+### 4.3 Alternativa: Pristop "gola vrednost"
 
-Some of the earliest discussions of the Cache spec suggested skipping the Cache
-Item concept all together and just reading/writing raw values to be cached.
-While simpler, it was pointed out that made it impossible to tell the difference
-between a cache miss and whatever raw value was selected to represent a cache
-miss.  That is, if a cache lookup returned NULL it's impossible to tell if there
-was no cached value or if NULL was the value that had been cached.  (NULL is a
-legitimate value to cache in many cases.)
+Nekaj najzgodnejših diskusij specifikacije predpomnilnika je predlagala preskočiti
+koncept elementa predpomnilnika v celoti in samo brati/pisati surove vrednosti za predpomnenje.
+Medtem ko je to enostavneje, se je izkazalo, da je nemogoče povedati razliko
+med zgrešitvijo predpomnilnika in katerakoli surova vrednost je bila izbrana, da predstavlja
+zgrešitev predpomnilnika. To je, če je iskalnik predpomnilnika vrnil NULL, je nemogoče povedati, če
+ni bilo nobene predpomnjene vrednosti ali če je predpomnjena vrednost NULL. (NULL je
+legitimna vrednost za predpomnenje v mnogih primerih.)
 
-Most more robust caching implementations we reviewed -- in particular the Stash
-caching library and the home-grown cache system used by Drupal -- use some sort
-of structured object on `get` at least to avoid confusion between a miss and a
-sentinel value.  Based on that prior experience FIG decided that a naked value
-on `get` was impossible.
+Večina bolj robustnih implementacij predpomnilnikov, ki smo jih pregledali -- v določenih
+knjižnicah predpomnenja zaloge in v domače izdelanih sistemih predpomnenja, uporabljen v Drupal -- uporabljajo neke vrste
+strukturirani objekt vsaj na `get`, da se izognejo nejasnosti med zgrešitvijo in
+sentinelni vrednosti. Na osnovi prejšnje izkušnje, se je FIG odločil, da je gola vrednost
+na `get`, nemogoča.
 
-### 4.4 Alternative: ArrayAccess Pool
+### 4.4 Alternativa: ArrayAccess Pool
 
-There was a suggestion to make a Pool implement ArrayAccess, which would allow
-for cache get/set operations to use array syntax.  That was rejected due to
-limited interest, limited flexibility of that approach (trivial get and set with
-default control information is all that's possible), and because it's trivial
-for a particular implementation to include as an add-on should it desire to
-do so.
+Predlog je bil narediti, da Pool implementira ArrayAccess, kar bi omogočalo
+get/set operacijam predpomnenja uporabiti sintakso polja. To je bilo zavrnjeno zaradi
+omejenega interesa, omejene fleksibilnosti tega pristopa (trivialni get in set s
+privzetim krmiljenjem informacij je vse nemogoče) in ker je trivialno,
+da določene implementacije vključijo kot dodatek, če je to potrebno.
 
-5. People
+5. Ljudje
 ---------
 
-### 5.1 Editor
+### 5.1 Urednik
 
 * Larry Garfield
 
-### 5.2 Sponsors
+### 5.2 Sponzorji
 
 * Paul Dragoonis, PPI Framework (Coordinator)
 * Robert Hafner, Stash
 
-6. Votes
---------
-[Acceptance vote on the mailing list][https://groups.google.com/forum/#!msg/php-fig/dSw5IhpKJ1g/O9wpqizWAwAJ]
+6. Glasovanje
+-------------
+[Glasovanje sprejeto na e-poštnem seznamu][https://groups.google.com/forum/#!msg/php-fig/dSw5IhpKJ1g/O9wpqizWAwAJ]
 
 
-7. Relevant Links
------------------
+7. Ustrezne povezave
+--------------------
 
-_**Note:** Order descending chronologically._
+_**Opomba:** Vrstni red kronološko padajoče._
 
 * [Survey of existing cache implementations][1], by @dragoonis
 * [Strong vs. Weak informal poll][2], by @Crell
