@@ -328,7 +328,7 @@ aplikacije.
 
 Ena opazka narejena na različnih metodah `with*()` je, da lahko zelo verjetno
 varno naredijo `return $this;`, če predstavljeni argument ne bo rezultiral k spremembi
-vrednosti. Ena smiselnost za to je uspešnost (saj to ne bo rezultiralo h
+vrednosti. Ena smiselnost za to je zmogljivost (saj to ne bo rezultiralo h
 kloniranju operacije).
 
 Različni vmesniki so bili napisani z besedičenjem, ki indicira, da
@@ -405,8 +405,8 @@ Pošiljanje tega odziva bo poslalo datoteko klientu.
 #### Kaj, če želim direktno pošiljati izhod?
 
 Direktno pošiljanje izhoda (npr. preko `echo`, `printf` ali pisanje v
-tok `php://output`) je v splošnem priporočljivo samo kot optimizacija uspešnosti
-ali kot se pošilja večji skupek podatkov. Če je potrebno to narediti in še vedno želite
+tok `php://output`) je v splošnem priporočljivo samo kot optimizacija zmogljivosti
+ali pa ko se pošiljajo veliki nabori podatkov. Če je potrebno to narediti in še vedno želite
 delati s paradigmo sporočila HTTP, bi bil en pristop uporabiti
 implementacijo `StreamInterface` na osnovi povratnega klica, kot je [v tem
 primeru](https://github.com/phly/psr7examples#direct-output). Ovijte katerokoli kodo,

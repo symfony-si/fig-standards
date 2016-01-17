@@ -4,7 +4,7 @@ PSR predpomnilnik meta dokument
 1. Povzetek
 -----------
 
-Predpomnenje je pogosti način izboljšanja uspešnosti kateregakoli projekta, kar naredi
+Predpomnjenje je pogosti način izboljšanja zmogljivosti kateregakoli projekta, kar naredi
 predpomnilne knjižnice ene izmed najpogostejših lastnosti mnogih ogrodij in
 knjižnjic. To je pripeljalo do situacije, kjer so mnoge knjižnice naredile svoje lastne
 predpomnilne knjižnice z različnimi nivoji funkcionalnosti. Zaradi teh razlik
@@ -13,11 +13,12 @@ ponujajo funkcionalnosti, ki jih potrebujejo. Poleg tega se razvijalci predpomni
 knjižnic sami soočajo z izbiro med samo podpiranjem omejenega števila
 ogrodij ali izdelavo velikega števila razredov adapterjev.
 
+
 2. Zakaj se truditi?
 --------------------
 
 Skupni vmesnik za predpomnilne sisteme bi rešil te probleme. Razvijalci knjižnic in
-ogrodij se lahko zanašajo na to, da sistem predpomnenja deluje tako, kot
+ogrodij se lahko zanašajo na to, da sistem predpomnjenja deluje tako, kot
 pričakujejo, medtem ko morajo razvijalci predpomnilnih sistemov samo implementirati
 posamezen skupek vmesnikov namesto celotnega izbora adapterjev.
 
@@ -27,8 +28,8 @@ in ponuja jasno pot za prihodnjo razširitev glede na kasnejše PSR-je ali speci
 izvajalce.
 
 Prednosti:
-* Standardizirani vmesnik za predpomnenje omogoča prosto stoječe knjižnice za podporo
-predpomnenja posrednih podatkov brez napora; lahko so enostavno (opcijsko) odvisne
+* Standardizirani vmesnik za predpomnjenje omogoča prosto stoječe knjižnice za podporo
+predpomnjenja posrednih podatkov brez napora; lahko so enostavno (opcijsko) odvisne
 od tega standardnega vmesnika in ga dopolnjujejo brez skrbi nad
 podrobnosti implementacije.
 * Skupno razvite predpomnilne knjižnice, ki so deljene v mnogih projektih, tudi če
@@ -37,19 +38,16 @@ razvitih implementacij.
 
 Slabosti:
 * Katerikola standardizacija vmesnika ima tveganje slabe prihodnosti inovacije, saj
-ni narejena kot bi morala biti. Vendar verjamemo, da je predpomnenje dovolj
-
-* Any interface standardization runs the risk of stifling future innovation as
-being "not the Way It's Done(tm)".  However, we believe caching is a sufficiently
-commoditized problem space that the extension capability offered here mitigates
-any potential risk of stagnation.
+ni narejena kot bi morala biti. Vendar verjamemo, da je predpomnjenje prostor, ki je dovolj
+preplavljen s produkti, kjer možnost razširitve ponujena tu blaži
+kakršnokoli tveganje stagnacije.
 
 3. Obseg
 --------
 
 ## 3.1 Cilji
 
-* Skupen vmesnik za osnovni in vmesni nivo potreb predpomnenja.
+* Skupen vmesnik za osnovni in vmesni nivo potreb predpomnjenja.
 * Jasen mehanizem za razširitev specifikacije, da podpira napredne lastnosti,
 tako v prihodnjih PSR-jih ali pri individualnih implementacijah. Ta mehanizem mora dovoljevati
 več neodvisnih razširitev brez trkov.
@@ -65,15 +63,15 @@ manjšini uporabnikov.
 
 ### 4.1 Izbrani pristop
 
-Ta specifikacija sprejema "model repozitorija" ali "data mapper" model za predpomnenje
+Ta specifikacija sprejema "model repozitorija" ali "data mapper" model za predpomnjenje
 namesto bolj tradicionalnega modela "ključ-vrednost z rokom trajanja". Glavni
 razlog je fleksibilnost. Enostaven model ključ/vrednost je veliko težje razširljiv.
 
 Model tu pooblašča uporabo objekta CacheItem, ki predstavlja vnos predpomnilnika
 in objekt Pool, ki je dana shramba predpomnjenih podatkov. Elementi so
 pridobljeni iz zaloge, ki je v interakciji in vrenjeni nazaj. Medtem ko je včasih nekoliko
-bolj gostobeseden, ponuja dober, robusten in fleksibilen pristop k predpomnenju,
-posebej v primerih, kjer je predpomnenje bolj vključeno, kot pa enostavno shranjevanje in
+bolj gostobeseden, ponuja dober, robusten in fleksibilen pristop k predpomnjenju,
+posebej v primerih, kjer je predpomnjenje bolj vključeno, kot pa enostavno shranjevanje in
 pridobivanje niza.
 
 Večina imen metod je bilo izbranih na osnovi pogoste prakse in imen metod v
@@ -256,15 +254,15 @@ Slabosti:
 ### 4.3 Alternativa: Pristop "gola vrednost"
 
 Nekaj najzgodnejših diskusij specifikacije predpomnilnika je predlagala preskočiti
-koncept elementa predpomnilnika v celoti in samo brati/pisati surove vrednosti za predpomnenje.
+koncept elementa predpomnilnika v celoti in samo brati/pisati surove vrednosti za predpomnjenje.
 Medtem ko je to enostavneje, se je izkazalo, da je nemogoče povedati razliko
 med zgrešitvijo predpomnilnika in katerakoli surova vrednost je bila izbrana, da predstavlja
 zgrešitev predpomnilnika. To je, če je iskalnik predpomnilnika vrnil NULL, je nemogoče povedati, če
 ni bilo nobene predpomnjene vrednosti ali če je predpomnjena vrednost NULL. (NULL je
-legitimna vrednost za predpomnenje v mnogih primerih.)
+legitimna vrednost za predpomnjenje v mnogih primerih.)
 
 Večina bolj robustnih implementacij predpomnilnikov, ki smo jih pregledali -- v določenih
-knjižnicah predpomnenja zaloge in v domače izdelanih sistemih predpomnenja, uporabljen v Drupal -- uporabljajo neke vrste
+knjižnicah predpomnjenja zaloge in v domače izdelanih sistemih predpomnjenja, uporabljen v Drupal -- uporabljajo neke vrste
 strukturirani objekt vsaj na `get`, da se izognejo nejasnosti med zgrešitvijo in
 sentinelni vrednosti. Na osnovi prejšnje izkušnje, se je FIG odločil, da je gola vrednost
 na `get`, nemogoča.
@@ -272,10 +270,11 @@ na `get`, nemogoča.
 ### 4.4 Alternativa: ArrayAccess Pool
 
 Predlog je bil narediti, da Pool implementira ArrayAccess, kar bi omogočalo
-get/set operacijam predpomnenja uporabiti sintakso polja. To je bilo zavrnjeno zaradi
+get/set operacijam predpomnjenja uporabiti sintakso polja. To je bilo zavrnjeno zaradi
 omejenega interesa, omejene fleksibilnosti tega pristopa (trivialni get in set s
 privzetim krmiljenjem informacij je vse nemogoče) in ker je trivialno,
-da določene implementacije vključijo kot dodatek, če je to potrebno.
+da določene implementacije vključijo kot dodatek, če je to
+potrebno.
 
 5. Ljudje
 ---------
@@ -291,7 +290,8 @@ da določene implementacije vključijo kot dodatek, če je to potrebno.
 
 6. Glasovanje
 -------------
-[Glasovanje sprejeto na e-poštnem seznamu][https://groups.google.com/forum/#!msg/php-fig/dSw5IhpKJ1g/O9wpqizWAwAJ]
+
+[Glasovanje sprejeto na e-poštnem seznamu](https://groups.google.com/forum/#!msg/php-fig/dSw5IhpKJ1g/O9wpqizWAwAJ)
 
 
 7. Ustrezne povezave

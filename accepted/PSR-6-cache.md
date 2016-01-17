@@ -1,6 +1,6 @@
 ## Uvod
 
-Predpomnenje je pogosti način izboljšanja uspešnosti kateregakoli projekta, kar naredi
+Predpomnjenje je pogosti način izboljšanja zmogljivosti kateregakoli projekta, kar naredi
 predpomnilne knjižnice ene izmed najpogostejših lastnosti mnogih ogrodij in
 knjižnjic. To je pripeljalo do situacije, kjer so mnoge knjižnice naredile svoje lastne
 predpomnilne knjižnice z različnimi nivoji funkcionalnosti. Zaradi teh razlik
@@ -10,143 +10,145 @@ knjižnic sami soočajo z izbiro med samo podpiranjem omejenega števila
 ogrodij ali izdelavo velikega števila razredov adapterjev.
 
 Skupni vmesnik za predpomnilne sisteme bi rešil te probleme. Razvijalci knjižnic in
-ogrodij se lahko zanašajo na to, da sistem predpomnenja deluje tako, kot
+ogrodij se lahko zanašajo na to, da sistem predpomnjenja deluje tako, kot
 pričakujejo, medtem ko morajo razvijalci predpomnilnih sistemov samo implementirati
 posamezen skupek vmesnikov namesto celotnega izbora adapterjev.
 
 Ključne besede "MORA", "NE SME", "ZAHTEVA", "PRIPOROČA", "LAHKO" in "NEOBVEZNO"
 v tem dokumentu se tolmačijo, kot je navedeno v
+[RFC 2119][].
+
 [RFC 2119]: http://tools.ietf.org/html/rfc2119
 
 ## Cilj
 
-The goal of this PSR is to allow developers to create cache-aware libraries that
-can be integrated into existing frameworks and systems without the need for
-custom development.
+Cilj tega PSR-ja je omogočiti razvijalcem, da izdelajo predpomnilno zavedne knjižnice, ki
+se lahko integrirajo v obstoječa ogrodja in sisteme brez potrebe po
+razvoju po meri.
 
 
-## Definitions
+## Definicije
 
-*    **Calling Library** - The library or code that actually needs the cache
-services. This library will utilize caching services that implement this
-standard's interfaces, but will otherwise have no knowledge of the
-implementation of those caching services.
+*    **Klicna knjižnica** - Knjižnica ali koda, ki dejansko potrebuje storitve
+predpomnilnika. Ta knjižnica bo uporabila storitve predpomnjenja, ki implementirajo
+vmesnik tega standarda, vendar drugače ne bo poznala
+implementacije teh storitev predpomnjenja.
 
-*    **Implementing Library** - This library is responsible for implementing
-this standard in order to provide caching services to any Calling Library. The
-Implementing Library MUST provide classes which implement the
-Cache\CacheItemPoolInterface and Cache\CacheItemInterface interfaces.
-Implementing Libraries MUST support at minimum TTL functionality as described
-below with whole-second granularity.
+*    **Izvedbena knjižnica** - Ta knjižnica je odgovorna za izvedbo
+tega standarda, da zagotovi storitve predpomnjenja katerikoli klicni knjižnici.
+Izvedbena knjižnica MORA zagotoviti razrede, ki implementirajo
+vmesnika Cache\CacheItemPoolInterface in Cache\CacheItemInterface.
+Izvedbene knjižnice MORAJO podpirati najmanj funkcionalnost TTL, kot je opisano
+spodaj s celotno drugo razdrobljenostjo.
 
-*    **TTL** - The Time To Live (TTL) of an item is the amount of time between
-when that item is stored and it is considered stale. The TTL is normally defined
-by an integer representing time in seconds, or a DateInterval object.
+*    **TTL** - Življenska doba (TTL) elementa je količina časa medtem
+ko je ta element shranjen in se smatra za nesvežega. TTL je običajno definiran
+s celim številom, ki predstavlja čas v sekundah ali objektov DateInterval.
 
-*    **Expiration** - The actual time when an item is set to go stale. This it
-typically calculated by adding the TTL to the time when an object is stored, but
-may also be explicitly set with DateTime object.
+*    **Pretek** - Dejanski čas, ko je element nastavljen za potek. To je
+običajno izračunano z dodajanjem TTL času, ko je objekt shranjen, vendar
+je lahko tudi eksplicitno nastavljen z objektom DateTime.
 
-    An item with a 300 second TTL stored at 1:30:00 will have an expiration of
+    Element s TTL 300 sekund, shranjen ob 1:30:00 bo imel pretek ob
     1:35:00.
 
-    Implementing Libraries MAY expire an item before its requested Expiration Time,
-but MUST treat an item as expired once its Expiration Time is reached. If a calling
-library asks for an item to be saved but does not specify an expiration time, or
-specifies a null expiration time or TTL, an Implementing Library MAY use a configured
-default duration. If no default duration has been set, the Implementing Library
-MUST interpret that as a request to cache the item forever, or for as long as the
-underlying implementation supports.
+    Izvedbene knjižnice LAHKO potečejo element pred njegovim zahtevanim časom poteka,
+vendar MORAJO obravnavati element kot potečen, ko je dosežen njegov čas poteka. Če klicna
+knjižnica zaprosi, da je element shranjen vendar ne določa časa poteka ali
+določa čas poteka null ali TTL, izvedbena knjižnica LAHKO uporabi nastavljeno
+privzeto trajanje. Če privzeto trajanje ni bilo nastavljeno, MORA izvedbena knjižnica
+to prevesti kot zahtevek, ki predpomni element za vedno ali pa dokler to
+podpira spodnja implementacija.
 
-*    **Key** - A string of at least one character that uniquely identifies a
-cached item. Implementing libraries MUST support keys consisting of the
-characters `A-Z`, `a-z`, `0-9`, `_`, and `.` in any order in UTF-8 encoding and a
-length of up to 64 characters. Implementing libraries MAY support additional
-characters and encodings or longer lengths, but must support at least that
-minimum.  Libraries are responsible for their own escaping of key strings
-as appropriate, but MUST be able to return the original unmodified key string.
-The following characters are reserved for future extensions and MUST NOT be
-supported by implementing libraries: `{}()/\@:`
+*    **Ključ** - Niz vsaj enega znaka, ki unikatno identificira
+predpomnjeni element. Izvedbene knjižnice MORAJO podpirati ključe sestavljene iz
+znakov `A-Z`, `a-z`, `0-9`, `_` in `.` v kateremkoli vrstnem redu v kodiranju UTF-8 in
+dolžine do 64 znakov. Izvedbene knjižnice LAHKO podpirajo dodatne
+znake in kodiranja ali daljše dolžine, vendar morajo podpirati vsaj ta
+minimum. Knjižnice so odgovorne za svoje lastne ubežne znake ključev nizov
+kot je potrebno, vendar MORAJO biti sposobne vrniti prvotni nespremenjeni ključ niza.
+Sledeči znaki so rezervirani za prihodnje razširitve in NE SMEJO biti
+podprti v izvedbenih knjižnicah `{}()/\@:`
 
-*    **Hit** - A cache hit occurs when a Calling Library requests an Item by key
-and a matching value is found for that key, and that value has not expired, and
-the value is not invalid for some other reason. Calling Libraries SHOULD make
-sure to verify isHit() on all get() calls.
+*    **Zadetek** - Zadetek predpomnilnika se zgodi, ko klicna knjižnica zahteva element po ključu,
+je najdena ujeta vrednost za ta ključ, ta vrednost še ni potekla in
+vrednost ni neveljavna zaradi kakršnegakoli razloga. Klicne knjižnice BI MORALE
+zagotoviti preverjanje isHit() na vseh klicih get().
 
-*    **Miss** - A cache miss is the opposite of a cache hit. A cache miss occurs
-when a Calling Library requests an item by key and that value not found for that
-key, or the value was found but has expired, or the value is invalid for some
-other reason. An expired value MUST always be considered a cache miss.
+*    **Zgrešitev** - Zgrešitev predpomnilnika je nasprotje zadetka predpomnilnika. Zgrešitev se zgodi,
+ko klicna knjižnica zahteva element po ključu in ta vrednost ni najdena za ta
+ključ, ali je najdena vrednost potekla, ali pa je vrednost neveljavna zaradi
+kakšnega drugega razloga. Pretečena vrednost MORA biti vedno smatrana za zgrešitev predpomnilnika.
 
-*    **Deferred** - A deferred cache save indicates that a cache item may not be
-persisted immediately by the pool. A Pool object MAY delay persisting a deferred
-cache item in order to take advantage of bulk-set operations supported by some
-storage engines. A Pool MUST ensure that any deferred cache items are eventually
-persisted and data is not lost, and MAY persist them before a Calling Library
-requests that they be persisted. When a Calling Library invokes the commit()
-method all outstanding deferred items MUST be persisted. An Implementing Library
-MAY use whatever logic is appropriate to determine when to persist deferred
-items, such as an object destructor, persisting all on save(), a timeout or
-max-items check or any other appropriate logic. Requests for a cache item that
-has been deferred MUST return the deferred but not-yet-persisted item.
+*    **Posredni** - Posredno shranjevanje predpomnilnika navaja, da element predpomnilnika lahko ni
+pridobljen takoj iz zaloge. Objekt Pool LAHKO zakasni pridobivanje posrednega
+elementa predpomnilnika, da izkoristi operacije v večjem skupku, podprte z
+nekaterimi motorji shranjevanja. Zaloga MORA zagotoviti, da katerikoli posredni elementi predpomnilnika so na koncu
+pridobljeni in podatki niso izgubljeni in jih LAHKO pridobi pred klicna knjižnica
+zahteva, da so pridobljeni. Ko klicna knjižnica uveljavi metodo commit(),
+MORAJO biti pridobljeni vsi odprti posredni elementi. Izvedbena knjižnica
+LAHKO uporabi katerokoli ustrezno logiko, da določi, kdaj pridobiti posredne
+elemente, kot je destruktor objekta, pridobitev vsega pri save(), časovna omejitev ali
+preverjanje največjega števila elementov ali katerakoli druga ustrezna logika. Zahtevki za predpomnjeni element,
+ki je bil posredovan MORA vrniti posrednega vendar še ne pridobljenega elementa.
 
 
-## Data
+## Podatki
 
-Implementing libraries MUST support all serializable PHP data types, including:
+Izvedbene knjižnice MORAJO podpirati vse zaporednostne tipe PHP podatkov vključno z:
 
-*    **Strings** - Character strings of arbitrary size in any PHP-compatible encoding.
-*    **Integers** - All integers of any size supported by PHP, up to 64-bit signed.
-*    **Floats** - All signed floating point values.
-*    **Boolean** - True and False.
-*    **Null** - The actual null value.
-*    **Arrays** - Indexed, associative and multidimensional arrays of arbitrary depth.
-*    **Object** - Any object that supports lossless serialization and
-deserialization such that $o == unserialize(serialize($o)). Objects MAY
-leverage PHP's Serializable interface, `__sleep()` or `__wakeup()` magic methods,
-or similar language functionality if appropriate.
+*    **Nizi** - Znakovni nizi arbitrarne velikosti v kateremkoli PHP-kompatibilnem kodiranju.
+*    **Celimi števili** - Vsa cela števila katerekoli velikosti, podprta s strani PHP do 64-bitno podpisanih.
+*    **Števili s plavajočo vejico** - Vse podpisane vrednosti števil s plavajočo vejico.
+*    **Logičnimi vrednostmi** - True in False.
+*    **Null** - Dejanska vrednost null.
+*    **Polji** - Indeksirana, asociativna in večdimenzijska polja arbitrarne globine.
+*    **Objekt** - Katerikoli objekt, ki podpira brezizgubno serializacijo in
+deserializacijo, tako da je $o == unserialize(serialize($o)). Objekti LAHKO
+uporabljajo PHP serializacijske objekte, `__sleep()` ali `__wakeup()` magični metodi,
+ali podobne funkcionalnosti jezika, če je to ustrezno.
 
-All data passed into the Implementing Library MUST be returned exactly as
-passed. That includes the variable type. That is, it is an error to return
-(string) 5 if (int) 5 was the value saved.  Implementing Libraries MAY use PHP's
-serialize()/unserialize() functions internally but are not required to do so.
-Compatibility with them is simply used as a baseline for acceptable object values.
+Vsi podatki poslani v izvedbeno knjižnico MORAJO biti vrnjeni točno tako, kakor so
+poslani. To vključuje tip vrednosti. To pomeni, da napaka, ki vrne
+(string) 5 če je bila vrednost (int) 5 shranjena. Izvedbene knjižnice LAHKO uporabijo PHP-jeve
+funkcije serialize()/unserialize() interno, vendar to ni zahtevano.
+Združljivost z njimi je enostavno uporabljena kot osnova za sprejemljive vrednosti objektov.
 
-If it is not possible to return the exact saved value for any reason, implementing
-libraries MUST respond with a cache miss rather than corrupted data.
+Če ni možno vrniti točne shranjene vrednosti zaradi kakršnegakoli razloga, se MORAJO izvedbene
+knjižnice odzvati z zgrešitvijo predpomnilnika kot pa s pokvarjenimi podatki.
 
-## Key Concepts
+## Ključni koncepti
 
-### Pool
+### Zaloga
 
-The Pool represents a collection of items in a caching system. The pool is
-a logical Repository of all items it contains.  All cacheable items are retrieved
-from the Pool as an Item object, and all interaction with the whole universe of
-cached objects happens through the Pool.
+Zaloga (Pool) predstavlja zbirko elementov v sistemu predpomnjenja. Zaloga je
+logični repozitorij vseh vsebovanih elementov. Vsi elementi predpomnjenja so pridobljeni
+iz zaloge kot objekt Item in vse interakcije v celotnem vesolju
+predpomnjenih objektov se zgodijo skozi zalogo.
 
-### Items
+### Elementi
 
-An Item represents a single key/value pair within a Pool. The key is the primary
-unique identifier for an Item and MUST be immutable. The Value MAY be changed
-at any time.
+Element predstavlja posamezen par ključ/vrednost znotraj zaloge. Ključ je glavni
+unikatni identifikator za Item in MORA biti nespemenljiv. Value se LAHKO spremeni
+kadarkoli.
 
-## Error handling
+## Upravljanje napak
 
-While caching is often an important part of application performance, it should never
-be a critical part of application functionality. Thus, an error in a cache system SHOULD NOT
-result in application failure.  For that reason Implementing Libraries MUST NOT
-throw exceptions other than those defined by the interface, and SHOULD trap any errors
-or exceptions triggered by an underlying data store and not allow them to bubble.
+Medtem ko je predpomnjenje pogosto pomemben del zmogljivosti aplikacije, ne bi nikoli smelo
+biti kritični del funkcionalnosti aplikacije. Torej napaka v sistemu predpomnjenja NE BI SMELA
+imeti za posledico odpoved aplikacije. Zato izvedbene knjižnice NE SMEJO
+vreči izjem razen tistih definiranih v vmesniku in BI MORALE ujeti katerekoli napake
+ali izjeme sprožene z osnovnim podatkovnim shranjevanjem podatkov in jim ne dovoliti, da so v mehurčkih.
 
-An Implementing Library SHOULD log such errors or otherwise report them to an
-administrator as appropriate.
+Izvedbena knjižnica BI MORALA beležiti take napake ali pa jih poročati
+administratorju kot je potrebno.
 
-If a Calling Library requests that one or more Items be deleted, or that a pool be cleared,
-it MUST NOT be considered an error condition if the specified key does not exist. The
-post-condition is the same (the key does not exist, or the pool is empty), thus there is
-no error condition.
+Če klicana knjižnica zahteva, da se en ali več elementov izbriše ali da je zaloga spraznjena,
+se to NE SME smatrati kot pogoj napake, če določeni ključ ne obstaja.
+Za pogojem je enako (ključ ne obstaja ali pa je zaloga spraznjena), torej ni
+pogoj napake.
 
-## Interfaces
+## Vmesniki
 
 ### CacheItemInterface
 
@@ -405,7 +407,7 @@ Ta vmesnik izjeme je namenjen uporabi, ko pride do kritičnih napak,
 vključno vendar ni omejeno na *namestitev predpomnilnika*, kot je povezovanje na strežnik
 predpomnilnika ali so podane neveljavne poverilnice.
 
-Katerakoli izjema, ki jo vrže implementirana knjižnica MORA implementirati ta vmesnik.
+Katerakoli izjema, ki jo vrže implementirana knjižnica, MORA implementirati ta vmesnik.
 
 ```php
 namespace Psr\Cache;
