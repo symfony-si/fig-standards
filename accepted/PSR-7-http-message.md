@@ -74,9 +74,9 @@ implementiran direktno, implementatorji BI MORALI implementirati
 Od tu naprej bo imenski prostor `Psr\Http\Message` opuščen,
 ko se sklicuje na te vmesnike.
 
-#### 1.2 Glave HTTP
+### 1.2 Glave HTTP
 
-##### Imena polj glave z neobčutljivo velikostjo črk
+#### Imena polj glave z neobčutljivo velikostjo črk
 
 Sporočila HTTP vključujejo imena polj glave z neobčutljivo velikostjo črk. Glave so vzpostavljene
 z imeni iz razredov, ki implementirajo `MessageInterface` na način neobčutljivih velikosti črk.
@@ -106,7 +106,7 @@ Neskladne aplikacije HTTP so lahko odvisne na določeno velikost črk, tako da j
 za uporabnika, da je sposoben diktirati velikost črk za glave HTTP, ko se ustvarja
 zahtevek odziva.
 
-##### Glave z večimi vrednostmi
+#### Glave z večimi vrednostmi
 
 Za namestitev glav z večimi vrednostmi še vedno ponujajo
 udobje dela z glavami kot nizi, glave so lahko pridobljene iz
@@ -133,7 +133,7 @@ Opomba: Ne vse vrednosti glav so lahko združene z uporabo vejice (npr.,
 `MessageInterface`-osnovanih razredov zanašati na metodo `getHeader()`
 za pridobivanje takih več-vrednostnih glav.
 
-##### Glava gostitelj
+#### Glava gostitelja
 
 V zahtevkih glava `Host` običajno preslika komponento gostitelja URI-ja kot
 tudi uporabljenega gostitelja, ko vzpostavlja TCP povezavo. Vendar specifikacija HTTP
