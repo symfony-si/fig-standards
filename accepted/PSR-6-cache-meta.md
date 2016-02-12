@@ -38,8 +38,8 @@ razvitih implementacij.
 
 Slabosti:
 * Katerikola standardizacija vmesnika ima tveganje slabe prihodnosti inovacije, saj
-ni narejena kot bi morala biti. Vendar verjamemo, da je predpomnjenje prostor, ki je dovolj
-preplavljen s produkti, kjer možnost razširitve ponujena tu blaži
+ni narejena kot bi morala biti. Vendar verjamemo, da je predpomnjenje področje, ki je dovolj
+preplavljeno s produkti, kjer možnost razširitve ponujena tu blaži
 kakršnokoli tveganje stagnacije.
 
 3. Obseg
@@ -69,7 +69,7 @@ razlog je fleksibilnost. Enostaven model ključ/vrednost je veliko težje razši
 
 Model tu pooblašča uporabo objekta CacheItem, ki predstavlja vnos predpomnilnika
 in objekt Pool, ki je dana shramba predpomnjenih podatkov. Elementi so
-pridobljeni iz zaloge, ki je v interakciji in vrenjeni nazaj. Medtem ko je včasih nekoliko
+pridobljeni iz zaloge, ki je v interakciji in vrnjeni nazaj. Medtem ko je včasih nekoliko
 bolj gostobeseden, ponuja dober, robusten in fleksibilen pristop k predpomnjenju,
 posebej v primerih, kjer je predpomnjenje bolj vključeno, kot pa enostavno shranjevanje in
 pridobivanje niza.
