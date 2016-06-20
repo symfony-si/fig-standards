@@ -1,3 +1,11 @@
+---
+title: "PSR-0: Standard avtomatskega nalagalnika"
+description: "PSR-0 opisuje obvezne zahteve, ki se jih je potrebno držati za interoperabilnost avtomatskega nalagalnika"
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-0-standard-avtomatskega-nalagalnika"
+---
+
 Standard avtomatskega nalagalnika
 =================================
 

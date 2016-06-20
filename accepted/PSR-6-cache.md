@@ -1,3 +1,11 @@
+---
+title: "PSR-6: Predpomnilnik"
+description: "Skupni vmesnik za PHP knjižnice predpomnilnih sistemov."
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-6-predpomnilnik"
+---
+
 ## Uvod
 
 Predpomnjenje je pogosti način izboljšanja zmogljivosti kateregakoli projekta, kar naredi

@@ -1,3 +1,12 @@
+---
+title: "PSR-1: Osnovni kodni standard"
+description: "Ta sekcija standarda obsega, kar bi moralo šteti za standard kodnih elementov, ki so potrebni za zagotovitev visokega nivoja tehnične interoperabilnosti med skupno PHP kodo."
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-1-osnovni-kodni-standard"
+file: "PSR-1-basic-coding-standard.md"
+---
+
 Osnovni kodni standard
 ======================
 

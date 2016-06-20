@@ -1,10 +1,19 @@
+---
+title: "PSR-2 meta dokument: Vodič kodnega standarda"
+description: "Namen tega vodiča je zmanjšanje kognitivnega trenja pri skeniranju kode različnih avtorjev. To naredi z naštevanjem skupnega niza pravil in pričakovanj o tem, kako oblikovati PHP kodo."
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-2-vodic-kodnega-standarda-meta"
+file: "PSR-2-coding-style-guide-meta.md"
+---
+
 PSR-2 meta dokument
 ===================
 
 1. Povzetek
 -----------
 
-Namen tega vodiča je zmanjšanje kognitivnega trenja, ko se skenira kodo različnih avtorjev. To naredi tako,
+Namen tega vodiča je zmanjšanje kognitivnega trenja pri skeniranju kode različnih avtorjev. To naredi tako,
 z naštevanjem skupnega niza pravil in pričakovanj o tem, kako oblikovati PHP kodo.
 
 Stilska pravila tu so pridobljena iz skupnih značilnosti med različnimi projekti članov. Ko različni avtorji

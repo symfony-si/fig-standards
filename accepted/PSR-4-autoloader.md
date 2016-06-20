@@ -1,3 +1,11 @@
+---
+title: "PSR-4: Avtomatski nalagalnik"
+description: "Ta PSR opisuje specifikacijo za avtomatsko nalaganje razredov iz poti datotek."
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-4-avtomatski-nalagalnik"
+---
+
 # Avtomatski nalagalnik
 
 Ključne besede "MORA", "NE SME", "ZAHTEVA", "PRIPOROČA", "LAHKO" in "NEOBVEZNO"
@@ -7,7 +15,7 @@ v tem dokumentu se tolmačijo, kot je navedeno v
 
 ## 1. Pregled
 
-Ta PSR opisuje specifikacijo za [avtomatsko nalaganje][autoloading] razrede iz poti
+Ta PSR opisuje specifikacijo za [avtomatsko nalaganje][autoloading] razredov iz poti
 datotek. Je polno interoperabilen in je lahko uporabljen kot dodatek h katerim koli ostalim
 specifikacijam avtomatskega nalagalnika, vključno s [PSR-0][]. Ta PSR tudi opisuje, kam
 dati datoteke, ki bodo avtomatsko naložene glede na specifikacijo.

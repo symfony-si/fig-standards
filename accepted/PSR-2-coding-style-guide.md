@@ -1,3 +1,11 @@
+---
+title: "PSR-2: Vodič kodnega standarda"
+description: "PSR-2 vodič podaljšuje in razširja PSR-1 osnovni kodni standard."
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-2-vodic-kodnega-standarda"
+---
+
 Vodič stila kode
 ================
 

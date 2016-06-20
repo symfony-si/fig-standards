@@ -1,3 +1,11 @@
+---
+title: "PSR-7: Sporočila HTTP"
+description: "Ta dokument opisuje skupne vmesnike za predstavitev sporočil HTTP, kot so opisani v RFC 7230 in RFC 7231 ter URI-je za uporabo s sporočili HTTP, kot so opisani v RFC 3986."
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-7-sporocila-http"
+---
+
 # Vmesniki sporočil HTTP
 
 Ta dokument opisuje skupne vmesnike za predstavitev sporočil HTTP, kot

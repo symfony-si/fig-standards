@@ -1,5 +1,13 @@
-Vmesnik dnevnika - Logger Interface
-===================================
+---
+title: "PSR-3: Vmesnik dnevnika"
+description: "Ta dokument opisuje skupne vmesnike za PHP knjižnice dnevnika."
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-3-vmesnik-dnevnika"
+---
+
+Vmesnik dnevnika
+================
 
 Ta dokument opisuje skupne vmesnike za knjižnice dnevnika.
 

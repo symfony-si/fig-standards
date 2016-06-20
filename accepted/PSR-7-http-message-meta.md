@@ -1,3 +1,11 @@
+---
+title: "PSR-7: Sporočila HTTP meta dokument"
+description: "Namen tega predloga je ponuditi skupek skupnih vmesnikov za sporočila HTTP, kot so opisana v RFC 7230 in RFC 7231 ter URI-jev, kot so opisani v RFC 3986 (v kontekstu sporočil HTTP)."
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-7-sporocila-http-meta-dokument"
+---
+
 # Sporočilo HTTP meta dokument
 
 ## 1. Povzetek

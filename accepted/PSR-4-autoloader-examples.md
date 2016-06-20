@@ -1,3 +1,11 @@
+---
+title: "PSR-4: Primeri izvedbe avtomatskega nalagalnika"
+description: "Primeri ponazoritve PSR-4 skladne kode"
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-4-avtomatski-nalagalnik-primeri"
+---
+
 Primeri izvedbe PSR-4
 =====================
 

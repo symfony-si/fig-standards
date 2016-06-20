@@ -1,3 +1,11 @@
+---
+title: "PSR-4: Avtomatski nalagalnik meta dokument"
+description: "PSR-4 določa pravila za interoperabilni PHP avtomatski nalagalnik, ki preslika imenske prostore v poti datotečnega sistema in da lahko so-obstoja s katerim koli ostalim SPL registriranim avtomatskim nalagalnikom."
+read_time: "5 min"
+updated: "2016-06-20"
+slug: "psr-4-avtomatski-nalagalnik-meta-dokument"
+---
+
 PSR-4 meta dokument
 ===================
 
