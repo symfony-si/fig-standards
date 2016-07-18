@@ -178,6 +178,8 @@ NE BI SMELE predpostavljati, da je element ustvarjen z eno implementirano knjiž
 združljiv z zalogo iz druge knjižnice.
 
 ~~~php
+<?php
+
 namespace Psr\Cache;
 
 /**
@@ -277,6 +279,8 @@ Vse nastavitve in sprožitev zaloge (Pool) so prepuščene implementirani
 knjižnici.
 
 ~~~php
+<?php
+
 namespace Psr\Cache;
 
 /**
@@ -418,6 +422,8 @@ predpomnilnika ali so podane neveljavne poverilnice.
 Katerakoli izjema, ki jo vrže implementirana knjižnica, MORA implementirati ta vmesnik.
 
 ~~~php
+<?php
+
 namespace Psr\Cache;
 
 /**
@@ -431,6 +437,8 @@ interface CacheException
 ### InvalidArgumentException
 
 ~~~php
+<?php
+
 namespace Psr\Cache;
 
 /**
