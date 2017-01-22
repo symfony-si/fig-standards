@@ -2,7 +2,7 @@
 title: "PSR-3: Vmesnik dnevnika"
 description: "Ta dokument opisuje skupne vmesnike za PHP knjižnice dnevnika."
 read_time: "5 min"
-updated: "2016-06-20"
+updated: "2017-01-11"
 slug: "psr-3-vmesnik-dnevnika"
 ---
 
@@ -143,7 +143,7 @@ Uporabniki dnevnikov so navedeni kot `uporabnik`.
 2. Paket
 --------
 
-Vmesniki in razredi opisani in tudi pomembni razredi izjem
+Opisani ter tudi pomembni vmesniki, razredi izjem
 in komplet testov za pregledovanje vaše implementacije so ponujeni kot del
 paketa [psr/log](https://packagist.org/packages/psr/log).
 

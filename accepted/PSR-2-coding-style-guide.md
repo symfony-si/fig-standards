@@ -2,7 +2,7 @@
 title: "PSR-2: Vodič kodnega standarda"
 description: "PSR-2 vodič podaljšuje in razširja PSR-1 osnovni kodni standard."
 read_time: "5 min"
-updated: "2016-06-20"
+updated: "2017-01-11"
 slug: "psr-2-vodic-kodnega-standarda"
 ---
 
@@ -76,7 +76,7 @@ use OtherVendor\OtherPackage\BazClass;
 
 class Foo extends Bar implements FooInterface
 {
-    public function sampleFunction($a, $b = null)
+    public function sampleMethod($a, $b = null)
     {
         if ($a === $b) {
             bar();
@@ -97,11 +97,11 @@ class Foo extends Bar implements FooInterface
 2. Splošno
 ----------
 
-### 2.1 Osnovni kodni standard
+### 2.1. Osnovni kodni standard
 
 Koda MORA slediti vsem pravilom opisanim v [PSR-1].
 
-### 2.2 Datoteke
+### 2.2. Datoteke
 
 Vse PHP datoteke MORAJO uporabljati Unix LF (linefeed) na koncih vrstic.
 
@@ -551,7 +551,7 @@ $longArgs_noVars = function (
     $longerArgument,
     $muchLongerArgument
 ) {
-   // body
+    // body
 };
 
 $noArgs_longVars = function () use (
@@ -559,7 +559,7 @@ $noArgs_longVars = function () use (
     $longerVar2,
     $muchLongerVar3
 ) {
-   // body
+    // body
 };
 
 $longArgs_longVars = function (
@@ -571,7 +571,7 @@ $longArgs_longVars = function (
     $longerVar2,
     $muchLongerVar3
 ) {
-   // body
+    // body
 };
 
 $longArgs_shortVars = function (
@@ -579,7 +579,7 @@ $longArgs_shortVars = function (
     $longerArgument,
     $muchLongerArgument
 ) use ($var1) {
-   // body
+    // body
 };
 
 $shortArgs_longVars = function ($arg) use (
@@ -587,7 +587,7 @@ $shortArgs_longVars = function ($arg) use (
     $longerVar2,
     $muchLongerVar3
 ) {
-   // body
+    // body
 };
 ~~~
 

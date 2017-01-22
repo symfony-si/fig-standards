@@ -2,7 +2,7 @@
 title: "PSR-0: Standard avtomatskega nalagalnika"
 description: "PSR-0 opisuje obvezne zahteve, ki se jih je potrebno držati za interoperabilnost avtomatskega nalagalnika"
 read_time: "5 min"
-updated: "2016-06-20"
+updated: "2017-01-11"
 slug: "psr-0-standard-avtomatskega-nalagalnika"
 ---
 
@@ -29,8 +29,8 @@ Obveznosti
 * Vsak znak `_` v imenu razreda je pretvorjen v
   `DIRECTORY_SEPARATOR`. Znak `_` nima kakšnega posebnega pomena v
   imenskem prostoru.
-* Polno kvalificirani imenski prostor in razred ima pripono `.php` ko
-  se nalaga iz datotečnega sistema.
+* Polno kvalificirani imenski prostor in razred imata pripono `.php`, ko
+  se nalagata iz datotečnega sistema.
 * Znaki abecede v imenih izdelovalcev, imenskih prostorih in imenih razredov so lahko
   katerakoli kombinacija malih in velikih črk.
 

@@ -2,7 +2,7 @@
 title: "PSR-7: Sporočila HTTP"
 description: "Ta dokument opisuje skupne vmesnike za predstavitev sporočil HTTP, kot so opisani v RFC 7230 in RFC 7231 ter URI-je za uporabo s sporočili HTTP, kot so opisani v RFC 3986."
 read_time: "5 min"
-updated: "2016-06-20"
+updated: "2017-01-11"
 slug: "psr-7-sporocila-http"
 ---
 
@@ -303,9 +303,9 @@ obzir Common Gateway Interface (CGI) in natančneje PHP-jevo
 abstrakcijo in razširitev CGI preko njegovih strežniških API-jev (SAPI). PHP ponuja
 poenovstavitev okrog ranžiranja vhodov preko superglobals kot so:
 
-- `$_COOKIE`, ki deserizaliza in ponuja poenostavljen dostop za piškotke
+- `$_COOKIE`, ki deserizaliza in ponuja poenostavljen dostop do piškotkov
   HTTP.
-- `$_GET`, ki deserializira in ponuja poenostavljen dostop za argumente niza
+- `$_GET`, ki deserializira in ponuja poenostavljen dostop do argumentov niza
   poizvedbe.
 - `$_POST`, ki deserializira in ponuja poenostavljen dostop za url-enkodirane
   parametre poslane preko HTTP POST; generično je lahko smatran kot
@@ -638,7 +638,7 @@ interface MessageInterface
      * new protocol version.
      *
      * @param string $version HTTP protocol version
-     * @return self
+     * @return static
      */
     public function withProtocolVersion($version);
 
@@ -728,7 +728,7 @@ interface MessageInterface
      *
      * @param string $name Case-insensitive header field name.
      * @param string|string[] $value Header value(s).
-     * @return self
+     * @return static
      * @throws \InvalidArgumentException for invalid header names or values.
      */
     public function withHeader($name, $value);
@@ -746,7 +746,7 @@ interface MessageInterface
      *
      * @param string $name Case-insensitive header field name to add.
      * @param string|string[] $value Header value(s).
-     * @return self
+     * @return static
      * @throws \InvalidArgumentException for invalid header names.
      * @throws \InvalidArgumentException for invalid header values.
      */
@@ -762,7 +762,7 @@ interface MessageInterface
      * the named header.
      *
      * @param string $name Case-insensitive header field name to remove.
-     * @return self
+     * @return static
      */
     public function withoutHeader($name);
 
@@ -783,7 +783,7 @@ interface MessageInterface
      * new body stream.
      *
      * @param StreamInterface $body Body.
-     * @return self
+     * @return static
      * @throws \InvalidArgumentException When the body is not valid.
      */
     public function withBody(StreamInterface $body);
@@ -847,10 +847,10 @@ interface RequestInterface extends MessageInterface
      * immutability of the message, and MUST return an instance that has the
      * changed request target.
      *
-     * @see http://tools.ietf.org/html/rfc7230#section-2.7 (for the various
+     * @see http://tools.ietf.org/html/rfc7230#section-5.3 (for the various
      *     request-target forms allowed in request messages)
      * @param mixed $requestTarget
-     * @return self
+     * @return static
      */
     public function withRequestTarget($requestTarget);
 
@@ -873,7 +873,7 @@ interface RequestInterface extends MessageInterface
      * changed request method.
      *
      * @param string $method Case-sensitive method.
-     * @return self
+     * @return static
      * @throws \InvalidArgumentException for invalid HTTP methods.
      */
     public function withMethod($method);
@@ -901,7 +901,7 @@ interface RequestInterface extends MessageInterface
      * setting `$preserveHost` to `true`. When `$preserveHost` is set to
      * `true`, this method interacts with the Host header in the following ways:
      *
-     * - If the the Host header is missing or empty, and the new URI contains
+     * - If the Host header is missing or empty, and the new URI contains
      *   a host component, this method MUST update the Host header in the returned
      *   request.
      * - If the Host header is missing or empty, and the new URI does not contain a
@@ -917,7 +917,7 @@ interface RequestInterface extends MessageInterface
      * @see http://tools.ietf.org/html/rfc3986#section-4.3
      * @param UriInterface $uri New request URI to use.
      * @param bool $preserveHost Preserve the original state of the Host header.
-     * @return self
+     * @return static
      */
     public function withUri(UriInterface $uri, $preserveHost = false);
 }
@@ -1007,7 +1007,7 @@ interface ServerRequestInterface extends RequestInterface
      * updated cookie values.
      *
      * @param array $cookies Array of key/value pairs representing cookies.
-     * @return self
+     * @return static
      */
     public function withCookieParams(array $cookies);
 
@@ -1045,7 +1045,7 @@ interface ServerRequestInterface extends RequestInterface
      *
      * @param array $query Array of query string arguments, typically from
      *     $_GET.
-     * @return self
+     * @return static
      */
     public function withQueryParams(array $query);
 
@@ -1070,8 +1070,8 @@ interface ServerRequestInterface extends RequestInterface
      * immutability of the message, and MUST return an instance that has the
      * updated body parameters.
      *
-     * @param array An array tree of UploadedFileInterface instances.
-     * @return self
+     * @param array $uploadedFiles An array tree of UploadedFileInterface instances.
+     * @return static
      * @throws \InvalidArgumentException if an invalid structure is provided.
      */
     public function withUploadedFiles(array $uploadedFiles);
@@ -1117,7 +1117,7 @@ interface ServerRequestInterface extends RequestInterface
      *
      * @param null|array|object $data The deserialized body data. This will
      *     typically be in an array or object.
-     * @return self
+     * @return static
      * @throws \InvalidArgumentException if an unsupported argument type is
      *     provided.
      */
@@ -1166,7 +1166,7 @@ interface ServerRequestInterface extends RequestInterface
      * @see getAttributes()
      * @param string $name The attribute name.
      * @param mixed $value The value of the attribute.
-     * @return self
+     * @return static
      */
     public function withAttribute($name, $value);
 
@@ -1182,7 +1182,7 @@ interface ServerRequestInterface extends RequestInterface
      *
      * @see getAttributes()
      * @param string $name The attribute name.
-     * @return self
+     * @return static
      */
     public function withoutAttribute($name);
 }
@@ -1238,7 +1238,7 @@ interface ResponseInterface extends MessageInterface
      * @param string $reasonPhrase The reason phrase to use with the
      *     provided status code; if none is provided, implementations MAY
      *     use the defaults as suggested in the HTTP specification.
-     * @return self
+     * @return static
      * @throws \InvalidArgumentException For invalid status code arguments.
      */
     public function withStatus($code, $reasonPhrase = '');
@@ -1612,7 +1612,7 @@ interface UriInterface
      * An empty scheme is equivalent to removing the scheme.
      *
      * @param string $scheme The scheme to use with the new instance.
-     * @return self A new instance with the specified scheme.
+     * @return static A new instance with the specified scheme.
      * @throws \InvalidArgumentException for invalid schemes.
      * @throws \InvalidArgumentException for unsupported schemes.
      */
@@ -1630,7 +1630,7 @@ interface UriInterface
      *
      * @param string $user The user name to use for authority.
      * @param null|string $password The password associated with $user.
-     * @return self A new instance with the specified user information.
+     * @return static A new instance with the specified user information.
      */
     public function withUserInfo($user, $password = null);
 
@@ -1643,7 +1643,7 @@ interface UriInterface
      * An empty host value is equivalent to removing the host.
      *
      * @param string $host The hostname to use with the new instance.
-     * @return self A new instance with the specified host.
+     * @return static A new instance with the specified host.
      * @throws \InvalidArgumentException for invalid hostnames.
      */
     public function withHost($host);
@@ -1662,7 +1662,7 @@ interface UriInterface
      *
      * @param null|int $port The port to use with the new instance; a null value
      *     removes the port information.
-     * @return self A new instance with the specified port.
+     * @return static A new instance with the specified port.
      * @throws \InvalidArgumentException for invalid ports.
      */
     public function withPort($port);
@@ -1686,7 +1686,7 @@ interface UriInterface
      * Implementations ensure the correct encoding as outlined in getPath().
      *
      * @param string $path The path to use with the new instance.
-     * @return self A new instance with the specified path.
+     * @return static A new instance with the specified path.
      * @throws \InvalidArgumentException for invalid paths.
      */
     public function withPath($path);
@@ -1703,7 +1703,7 @@ interface UriInterface
      * An empty query string value is equivalent to removing the query string.
      *
      * @param string $query The query string to use with the new instance.
-     * @return self A new instance with the specified query string.
+     * @return static A new instance with the specified query string.
      * @throws \InvalidArgumentException for invalid query strings.
      */
     public function withQuery($query);
@@ -1720,7 +1720,7 @@ interface UriInterface
      * An empty fragment value is equivalent to removing the fragment.
      *
      * @param string $fragment The fragment to use with the new instance.
-     * @return self A new instance with the specified fragment.
+     * @return static A new instance with the specified fragment.
      */
     public function withFragment($fragment);
 
@@ -1813,7 +1813,7 @@ interface UploadedFileInterface
      * @see http://php.net/is_uploaded_file
      * @see http://php.net/move_uploaded_file
      * @param string $targetPath Path to which to move the uploaded file.
-     * @throws \InvalidArgumentException if the $path specified is invalid.
+     * @throws \InvalidArgumentException if the $targetPath specified is invalid.
      * @throws \RuntimeException on any error during the move operation.
      * @throws \RuntimeException on the second or subsequent call to the method.
      */

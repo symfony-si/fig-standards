@@ -2,7 +2,7 @@
 title: "PSR-6: Predpomnilnik"
 description: "Skupni vmesnik za PHP knjižnice predpomnilnih sistemov."
 read_time: "5 min"
-updated: "2016-06-20"
+updated: "2017-01-11"
 slug: "psr-6-predpomnilnik"
 ---
 
@@ -241,7 +241,7 @@ interface CacheItemInterface
     /**
      * Sets the expiration time for this cache item.
      *
-     * @param \DateTimeInterface $expiration
+     * @param \DateTimeInterface|null $expiration
      *   The point in time after which the item MUST be considered expired.
      *   If null is passed explicitly, a default value MAY be used. If none is set,
      *   the value should be stored permanently or for as long as the
@@ -255,7 +255,7 @@ interface CacheItemInterface
     /**
      * Sets the expiration time for this cache item.
      *
-     * @param int|\DateInterval $time
+     * @param int|\DateInterval|null $time
      *   The period of time from the present after which the item MUST be considered
      *   expired. An integer parameter is understood to be the time in seconds until
      *   expiration. If null is passed explicitly, a default value MAY be used.
@@ -309,8 +309,8 @@ interface CacheItemPoolInterface
     /**
      * Returns a traversable set of cache items.
      *
-     * @param array $keys
-     * An indexed array of keys of items to retrieve.
+     * @param string[] $keys
+     *   An indexed array of keys of items to retrieve.
      *
      * @throws InvalidArgumentException
      *   If any of the keys in $keys are not a legal value a \Psr\Cache\InvalidArgumentException
@@ -332,14 +332,14 @@ interface CacheItemPoolInterface
      * such situation use CacheItemInterface::isHit() instead.
      *
      * @param string $key
-     *    The key for which to check existence.
+     *   The key for which to check existence.
      *
      * @throws InvalidArgumentException
      *   If the $key string is not a legal value a \Psr\Cache\InvalidArgumentException
      *   MUST be thrown.
      *
      * @return bool
-     *  True if item exists in the cache, false otherwise.
+     *   True if item exists in the cache, false otherwise.
      */
     public function hasItem($key);
 
@@ -355,7 +355,7 @@ interface CacheItemPoolInterface
      * Removes the item from the pool.
      *
      * @param string $key
-     *   The key for which to delete
+     *   The key to delete.
      *
      * @throws InvalidArgumentException
      *   If the $key string is not a legal value a \Psr\Cache\InvalidArgumentException
@@ -369,7 +369,7 @@ interface CacheItemPoolInterface
     /**
      * Removes multiple items from the pool.
      *
-     * @param array $keys
+     * @param string[] $keys
      *   An array of keys that should be removed from the pool.
 
      * @throws InvalidArgumentException
