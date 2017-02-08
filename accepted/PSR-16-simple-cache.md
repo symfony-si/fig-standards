@@ -260,6 +260,7 @@ interface CacheInterface
 ~~~
 
 ### 2.2 CacheException
+
 ~~~php
 
 <?php

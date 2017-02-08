@@ -148,7 +148,7 @@ Opisani vmesniki in razredi so ponujeni kot del paketa
 
 ### 3.1 `Psr\Link\LinkInterface`
 
-~~~php
+```php
 <?php
 
 namespace Psr\Link;
@@ -201,11 +201,11 @@ interface LinkInterface
      */
     public function getAttributes();
 }
-~~~
+```
 
 ### 3.2 `Psr\Link\EvolvableLinkInterface`
 
-~~~php
+```php
 <?php
 
 namespace Psr\Link;
@@ -285,11 +285,11 @@ interface EvolvableLinkInterface extends LinkInterface
      */
     public function withoutAttribute($attribute);
 }
-~~~
+```
 
 ### 3.3 `Psr\Link\LinkProviderInterface`
 
-~~~php
+```php
 <?php
 
 namespace Psr\Link;
@@ -319,11 +319,11 @@ interface LinkProviderInterface
      */
     public function getLinksByRel($rel);
 }
-~~~
+```
 
 ### 3.4 `Psr\Link\EvolvableLinkProviderInterface`
 
-~~~php
+```php
 <?php
 
 namespace Psr\Link;
@@ -359,4 +359,4 @@ interface EvolvableLinkProviderInterface extends LinkProviderInterface
      */
     public function withoutLink(LinkInterface $link);
 }
-~~~
+```

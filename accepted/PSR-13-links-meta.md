@@ -2,7 +2,7 @@
 title: "PSR-13: Povezave meta dokument"
 description: ""
 read_time: "5 min"
-updated: "2017-01-11"
+updated: "2017-02-08"
 slug: "psr-13-povezave-meta-dokument"
 ---
 
@@ -37,37 +37,36 @@ oblikami.
 Eni izmed ključnih ciljev te specifikacije so PSR-7 objeki odziva. Objekti odziva morajo biti v zasnovi
 nespremenljivi. Ostale implementacije vrednost-objekt bi verjetno tudi zahtevale nespremenljiv vmesnik.
 
-Dodatno, nekaj objektov
-Additionally, some Link Provider objects may not be value objects but other objects within a given
-domain, which are able to generate Links on the fly, perhaps off of a database result or other underlying
-representation.  In those cases a writeable provider definition would be incompatible.
+Poleg tega nekateri objekti Link Provider-ja lahko niso objekti vrednosti, ampak druge objekti znotraj določene
+domene, ki so sposobni ustvariti povezave spotoma, morda iz rezultatov podatkovne baze ali drugih osnovnih
+predstavitev. V teh primerih bi bila definicija zapisljivega ponudnika nezdružljiva.
 
-Therefore, this specification splits accessor methods and evolvable methods into separate interfaces,
-allowing objects to implement just the read-only or evolvable versions as appropriate to their use case.
+Zato ta specifikacija deli metode dostopnika in razvijalne metode v ločene vmesnike
+kar omogoča objektov implementirati le različice za branje ali razvijanje, kot je primerno za njihov primer uporabe.
 
-### Why is rel on a Link object multi-value?
+### Zakaj ima lahko rel na objektu Link več vrednosti?
 
-Different hypermedia standards handle multiple links with the same relationship differently. Some have a single
-link that has multiple rel's defined. Others have a single rel entry that then contains multiple links.
+Različni hipermedijski standardi upravljajo več povezav z istim razmerjem različno. Nekateri imajo eno samo
+povezavo, ki ima določenih več atributov rel. Drugi imajo en sam atribut rel, ki nato vsebuje več povezav.
 
-Defining each Link uniquely but allowing it to have multiple rels provides a most-compatible-denominator definition.
-A single LinkInterface object may be serialized to one or more link entries in a given hypermedia format, as
-appropriate.  However, specifying multiple link objects each with a single rel yet the same URI is also legal, and
-a hypermedia format can serialize that as appropriate, too.
+Določanje vsake povezave enolično, ampak omogočati, da ima več atributov rel določa definicijo najbolj združljivega-imenovalca.
+Posamezen objekt LinkInterface je lahko serializiran v en ali več vnosov povezav v določenem hipermedijskem formatu, kakor
+je ustrezno. Vendar pa je določati več objektov povezav, kjer ima vsaka en atribut rel in enak URI tudi ustrezno in
+hipermedijski format lahko to tudi serializira kot ustrezno.
 
-### Why is a LinkProviderInterface needed?
+### Zakaj se potrebuje LinkProviderInterface?
 
-In many contexts, a set of links will be attached to some other object.  Those objects may be used in situations
-where all that is relevant is their links, or some subset of their links. For example, various different value
-objects may be defined that represent different REST formats such as HAL, JSON-LD, or Atom.  It may be useful
-to extract those links from such an object uniformly for further processing. For instance, next/previous links
-may be extracted from an object and added to a PSR-7 Response object as Link headers.  Alternatively, many links
-would make sense to represent with a "preload" link relationship, which would indicate to an HTTP 2-compatible
-web server that the linked resources should be streamed to a client in anticipation of a subsequent request.
+V mnogih kontekstih bo niz povezav dodan kakemu drugemu objektu. Ti objekti se lahko uporabljajo v situacijah
+kjer je vse, kar je pomembno, njihove povezave ali nekatere podskupine njihovih povezav. Na primer, lahko se določijo
+različni objekti vrednosti, ki predstavljajo različne formate REST, kot so HAL, JSON-LD, ali Atom. Lahko je koristno
+za pridobivanje teh povezav iz takega objekta ter enakomerno za nadaljnjo obdelavo. Na primer naslednje/prejšnje povezave
+se lahko pridobijo iz objekta in dodajo, da objekt PSR-7 Response kot glava povezave. Alternativno, za veliko povezav
+bi bilo smiselno, da predstavljajo z "prednalaganjem" razmerja povezave, kar bi namigovalo na HTTP 2-združljiv
+spletni strežnik, kjer bi se morali povezani viri pretakati do klienta v pričakovanju naknadne zahteve.
 
-All of those cases are independent of the payload or encoding of the object. By providing a common interface
-to access such links, we enable generic handling of the links themselves regardless of the value object or
-domain object that is producing them.
+Vsi ti primeri so neodvisni od vsebine ali kodiranja objekta. Z zagotavljanjem skupnega vmesnika
+za dostop do takih povezav, omogočamo generično ravnanje samih povezav, ne glede na objekt vrednosti ali
+objekt domene, ki jih proizvaja.
 
 ## 4. Ljudje
 

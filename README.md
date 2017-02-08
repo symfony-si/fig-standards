@@ -1,8 +1,8 @@
-PHP-FIG Slovenian translation
+PHP-FIG Slovenian Translation
 =============================
 
-This is an unofficial Slovenian translation of the Standards approved by the
-Framework Interop Group.
+This is Slovenian translation of the Standards approved by the [Framework Interop
+Group](http://php-fig.org).
 
-Original English version can be found at the [fig-standards](https://github.com/php-fig/fig-standards)
-repository.
+Original English version can be found at the
+[fig-standards](https://github.com/php-fig/fig-standards) repository.
