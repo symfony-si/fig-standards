@@ -6,7 +6,7 @@ updated: "2017-01-11"
 slug: "psr-13-povezave"
 ---
 
-# Link definition interfaces
+# Vmesniki definicij povezav
 
 Hipermedijske povezave postajajo vedno pomembnejši del spleta, tako v kontekstu HTML
 kot v različnih kontekstih oblik API. Vendar ne obstaja posamezna skupna oblika hipermedijev,
@@ -14,21 +14,14 @@ niti ni na voljo skupnega načina za ponazoritev povezav med oblikami.
 
 Ta specifikacija cilja ponuditi PHP razvijalcem enostaven, skupni način predstavitve
 hipermedijskih povezav neodvisno od oblike serializacije, ki je uporabljena. To omogoča
-sistem za serializacijo odziva s hipermedijskimi povezavami v enega ali več povezljivih oblik neodvisno
+sistemu serializacijo odziva s hipermedijskimi povezavami v enega ali več povezljivih oblik neodvisno
 od procesa odločanja, katere povezave naj bi to bile.
 
-This specification aims to provide PHP developers with a simple, common way of representing a
-hypermedia link independently of the serialization format that is used. That in turn allows
-a system to serialize a response with hypermedia links into one or more wire formats independently
-of the process of deciding what those links should be.
+Ključne besede "MORA", "NE SME", "ZAHTEVA", "PRIPOROČA", "LAHKO" in "NEOBVEZNO"
+v tem dokumentu se tolmačijo, kot je navedeno v
+[RFC 2119](http://tools.ietf.org/html/rfc2119).
 
-
-
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
-
-### References
+### Reference
 
 - [RFC 2119](http://tools.ietf.org/html/rfc2119)
 - [RFC 4287](https://tools.ietf.org/html/rfc4287)
@@ -38,106 +31,106 @@ interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 - [Microformats Relations List](http://microformats.org/wiki/existing-rel-values#HTML5_link_type_extensions)
 
 
-## 1. Specification
+## 1. Specifikacija
 
-### 1.1 Basic links
+### 1.1 Osnovne povezave
 
-A Hypermedia Link consists of, at minimum:
-- A URI representing the target resource being referenced.
-- A relationship defining how the target resource relates to the source.
+Hipermedijska povezava sestoji iz vsaj:
+- URI-ja, ki predstavlja ciljni vir, na katerega se sklicuje.
+- Odnos, ki definira, kako se ciljni vir nanaša na izvor.
 
-Various other attributes of the Link may exist, depending on the format used. As additional attributes
-are not well-standardized or universal, this specification does not seek to standardize them.
+Obstajajo lahko različni ostali atributi povezave, odvisno od uporabljene oblike. Ker dodatni atributi
+niso dobro standardizirani ali univerzalni, ta specifikacija le-teh ne cilja standardizirati.
 
-For the purposes of this specification, the following definitions apply.
+Za namene te specifikacije veljajo sledeče definicije.
 
-*    **Implementing Object** -An object that implements one of the interfaces defined by this
-specification.
+*    **Objekt implementacije** - Objekt, ki implementira enega ali več vmesnikov definiranih v tej
+specifikaciji.
 
-*    **Serializer** - A library or other system that takes one or more Link objects and produces
-a serialized representation of it in some defined format.
+*    **Serializer** - Knjižnica ali drug sistem, ki vzame enega ali več objektov povezav in ustvari
+serializirano predstavitev le-tega v neki definirani obliki.
 
 
-### 1.2 Attributes
+### 1.2 Atributi
 
-All links MAY include zero or more additional attributes beyond the URI and relationship.
-There is no formal registry of the values that are allowed here, and validity of values
-is dependent on context and often on a particular serialization format.  Commonly supported
-values include 'hreflang', 'title', and 'type'.
+Vse povezave LAHKO vključujejo nobenega ali več dodatnih atributov onkraj URI-ja in odnosa.
+Formalni register dovoljenih vrednosti tu ni določen in veljavnost vrednosti
+je odvisna od konteksta in pogostokrat od posebne oblike serializacije. Pogostokrat podprte
+vrednosti vključujejo 'hreflang', 'title' in 'type'.
 
-Serializers MAY omit attributes on a link object if required to do so by the serialization
-format. However, serializers SHOULD encode all provided attributes possible in order to
-allow for user-extension unless prevented by a serialization format's definition.
+Serializatorji LAHKO izpustijo atribute na objektu povezave, če je to zahtevano od
+oblike serializacije. Vendar serializatorji MORAJO enkodirati vse možne podane atribute, da
+dovolijo uporabniško razširitev, razen če je definicija oblike serializacije to preprečuje.
 
-Some attributes (commonly `hreflang`) may appear more than once in their context. Therefore,
-an attribute value MAY be an array of values rather than a simple value. Serializers MAY
-encode that array in whatever format is appropriate for the serialized format (such
-as a space-separated list, comma-separated list, etc.). If a given attribute is not
-allowed to have multiple values in a particular context, serializers MUST use the first
-value provided and ignore all subsequent values.
+Nekateri atributi (pogostokrat `hreflang`), se lahko pojavijo večkrat v njihovem kontekstu. Zato
+je vrednost atributa LAHKO polje vrednosti namesto enostavne vrednosti. Serializatorji LAHKO
+enkodirajo to polje v katerokoli obliko ustrezno za obliko serializacije (kot so
+seznam ločen s presledki, seznam ločen z vejicami itd.). Če za dani atribut ni
+dovoljeno, da ima več vrednosti v določenem kontekstu, MORAJO serializatorji uporabiti
+prvo podano vrednost in ignorirati vse naknadne vrednosti.
 
-If an attribute value is boolean `true`, serializers MAY use abbreviated forms if appropriate
-and supported by a serialization format. For example, HTML permits attributes to
-have no value when the attribute's presence has a boolean meaning.  This rule applies
-if and only if the attribute is boolean `true`, not for any other "truthy" value
-in PHP such as integer 1.
+Če je vrednost atributa logični `true`, LAHKO serializatorji uporabijo skrajšane oblike, če je to ustrezno
+in podprto za obliko serializacije. Na primer, HTML dovoljuje, da atributi
+nimajo vrednosti, ko ima prisotnost atributa logični pomen. To pravilo velja
+le, če je atribut logični `true` in ne za katere koli druge "truthy" vrednosti
+v PHP, kot je na primer celo število 1.
 
-If an attribute value is boolean `false`, serializers SHOULD omit the attribute entirely
-unless doing so changes the semantic meaning of the result. This rule applies if
-and only if the attribute is boolean `false`, not for any other "falsey" value in PHP
-such as integer 0.
+Če je vrednost atributa logični `false`, MORA serializator izpustiti atribut v celoti,
+razen če to spremeni semantični pomen rezultata. To pravilo velja, le
+če je atribut logični `false`, in ne za katere koli ostale "falsey" vrednosti v PHP,
+kot je na primer celo število 0.
 
-### 1.3 Relationships
+### 1.3 Odnosi
 
-Link relationships are defined as strings, and are either a simple keyword in
-case of a publicly defined relationship or an absolute URI in the case of a
-private relationships.
+Odnosi povezav so definirani kot nizi in so bodisi enostavna ključna beseda v
+primeru javno definiranega odnosa ali absolutni URI v primeru
+zasebnega odnosa.
 
-In case a simple keyword is used, it SHOULD match one from the IANA registry at:
+V primeru, da je uporabljena enostavna ključna beseda, se MORA ujemati z eno izmed registra IANA:
 
 http://www.iana.org/assignments/link-relations/link-relations.xhtml
 
-Optionally the microformats.org registry MAY be used, but this may not be valid
-in every context:
+Opcijsko se LAHKO uporabi register microformats.org, vendar to lahko ni veljavno
+v vsakem kontekstu:
 
 http://microformats.org/wiki/existing-rel-values
 
-A relationship that is not defined in one of the above registries or a similar
-public registry is considered "private", that is, specific to a particular
-application or use case.  Such relationships MUST use an absolute URI.
+Odnos, ki ni definiran v enem izmed zgornjih registrov ali podobnem
+javnem registru, se smatra za "zasebnega", kar je posebno za določeno
+aplikacijo ali primer uporabe. Taki odnosi MORAJO uporabljati absolutni URI.
 
-## 1.4 Link Templates
+## 1.4 Predloge povezav
 
-[RFC 6570](https://tools.ietf.org/html/rfc6570) defines a format for URI templates, that is,
-a pattern for a URI that is expected to be filled in with values provided by a client
-tool.  Some hypermedia formats support templated links while others do not, and may
-have a special way to denote that a link is a template.  A Serializer for a format
-that does not support URI Templates MUST ignore any templated Links it encounters.
+[RFC 6570](https://tools.ietf.org/html/rfc6570) definira obliko za predloge URI-jev, kar je
+vzorec za URI, ki je pričakovan za vnos s vrednostmi podanimi od orodja
+klienta. Nekatere hipermedijske oblike podpirajo povezave s predlogami, medtem ko druge ne,
+in mnoge imajo poseben način označevanja, da je povezava predloga. Serializer za obliko,
+ki ne podpira predlog URI MORA ignorirati kakršnokoli povezavo s predlogo, na katero naleti.
 
-## 1.5 Evolvable providers
+## 1.5 Razvijajoči se ponudniki
 
-In some cases, a Link Provider may need the ability to have additional links
-added to it. In others, a link provider is necessarily read-only, with links
-derived at runtime from some other data source. For that reason, modifiable providers
-are a secondary interface that may optionally be implemented.
+V nekaterih primerih ponudnik povezave lahko potrebuje zmožnost imeti dodatne povezave,
+ki so dodane k njemu. V drugih ponudnik povezave je obvezno samo za branje s povezavami,
+ki izvirajo iz med izvajanjem iz drugega vira podatkov. Zato so spremenljivi ponudniki
+sekundarni vmesniki, ki se jih lahko opcijsko implementira.
 
-Additionally, some Link Provider objects, such as PSR-7 Response objects, are
-by design immutable.  That means methods to add links to them in-place would be
-incompatible. Therefore, the `EvolvableLinkProviderInterface`'s single method
-requires that a new object be returned, identical to the original but with
-an additional link object included.
+Dodatno so nekateri objekti ponudnika povezav, kot je PSR-7 objekt odziva,
+po načrtu nespremenljivi. To pomeni, da so lahko metode za dodajanje povezav k njemu na mestu
+nezdružljive. Zato posamezna metoda vmesnika `EvolvableLinkProviderInterface`
+zahteva, da je vrnjen novi objekt, ki je identičen prvotnemu vendar z
+dodanim dodatnim objektom povezave.
 
-## 1.6 Evolvable link objects
+## 1.6 Razvijajoči se objekti povezav
 
-Link objects are in most cases value objects. As such, allowing them to evolve
-in the same fashion as PSR-7 value objects is a useful option. For that reason,
-an additional EvolvableLinkInterface is included that provides methods to
-produce new object instances with a single change.  The same model is used by PSR-7
-and, thanks to PHP's copy-on-write behavior, is still CPU and memory efficient.
+Objekti povezav so v večini primerov objekti vrednosti. Kot taki jim omogočajo, da se razvijajo
+na enak način kot so uporabna možnost pri PSR-7 objektih vrednosti. Zato
+je dodan dodatni EvolvableLinkInterface, ki ponuja metode za
+izdelavo novih instanc objektov z eno samo spremembo. Enak model je uporabljen pri PSR-7
+in zahvaljujoč obnašanja PHP-ja kopiranja pri pisanju, je še vedno učinkovit za CPU in spomin.
 
-There is no evolvable method for templated, however, as the templated value of a
-link is based exclusively on the href value.  It MUST NOT be set independently, but
-derived from whether or not the href value is an RFC 6570 link template.
+Na voljo ni razvijajoče se metode za predloge, vendar kot je vrednost predloge
+povezave osnovana izključno na vrednosti href. NE SME biti nastavljena neodvisno, vendar
+mora izvirati glede na to, ali je vrednosti href predloga povezave RFC 6570 ali ne.
 
 ## 2. Paket
 
