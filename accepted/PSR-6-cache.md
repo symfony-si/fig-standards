@@ -66,7 +66,7 @@ knjižnica zaprosi, da je element shranjen vendar ne določa časa poteka ali
 določa čas poteka null ali TTL, izvedbena knjižnica LAHKO uporabi nastavljeno
 privzeto trajanje. Če privzeto trajanje ni bilo nastavljeno, MORA izvedbena knjižnica
 to prevesti kot zahtevek, ki predpomni element za vedno ali pa dokler to
-podpira spodnja implementacija.
+podpira implementacija podlage.
 
 *    **Ključ** - Niz vsaj enega znaka, ki unikatno identificira
 predpomnjeni element. Izvedbene knjižnice MORAJO podpirati ključe sestavljene iz
@@ -110,7 +110,7 @@ Izvedbene knjižnice MORAJO podpirati vse zaporednostne tipe PHP podatkov vklju�
 *    **Števili s plavajočo vejico** - Vse podpisane vrednosti števil s plavajočo vejico.
 *    **Logičnimi vrednostmi** - True in False.
 *    **Null** - Dejanska vrednost null.
-*    **Polji** - Indeksirana, asociativna in večdimenzijska polja arbitrarne globine.
+*    **Polja** - Indeksirana, asociativna in večdimenzijska polja arbitrarne globine.
 *    **Objekt** - Katerikoli objekt, ki podpira brezizgubno serializacijo in
 deserializacijo, tako da je $o == unserialize(serialize($o)). Objekti LAHKO
 uporabljajo PHP serializacijske objekte, `__sleep()` ali `__wakeup()` magični metodi,
