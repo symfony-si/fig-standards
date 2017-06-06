@@ -27,102 +27,102 @@ vmesnike/funkcionalnost.
 
 ## 1.1 Uvod
 
-Caching is a common way to improve the performance of any project, making
-caching libraries one of the most common features of many frameworks and
-libraries. Interoperability at this level means libraries can drop their
-own caching implementations and easily rely on the one given to them by the
-framework, or another dedicated cache library.
+Predpomnjenje je pogosti način izboljšanja zmogljivosti kateregakoli projekta, kar naredi
+predpomnilne knjižnice ene izmed najpogostejših lastnosti mnogih ogrodij in
+knjižnjic. Interoperabilnost na tem nivoju pomeni, da lahko knjižnica opusti svojo
+lastno implementacijo predpomnilnika in se enostavno zanaša na dano od
+ogrodja, ali druge namenske knjižnice predpomnilnika.
 
-PSR-6 solves this problem already, but in a rather formal and verbose way for
-what the most simple use cases need. This simpler approach aims to build a
-standardized streamlined interface for common cases.  It is independent of
-PSR-6 but has been designed to make compatibility with PSR-6 as straightforward
-as possible.
+PSR-6 že rešuje ta problem, vendar na nekoliko formalen in obširen način, kot
+je to potrebno pri veliko primerih uporabe. Ta enostavnejši način cilja zgraditi
+standardizirano racionalizacijo vmesnika za mnogo primerov. Je neodvisen
+od PSR-6, vendar je načrtovan, da naredi kompatibilnost s PSR-6, kar se da
+enostavno.
 
 ### 1.2 Definicije
 
-Definitions for Calling Library, Implementing Library, TTL, Expiration and Key
-are copied from PSR-6 as the same assumptions are true.
+Definicije za klicne knjižnice, izvedbene knjižnice, TTL, pretek in ključ
+so kopirani iz PSR-6, saj veljajo iste predpostavke.
 
-*    **Calling Library** - The library or code that actually needs the cache
-services. This library will utilize caching services that implement this
-standard's interfaces, but will otherwise have no knowledge of the
-implementation of those caching services.
+*    **Klicna knjižnica** - Knjižnica ali koda, ki dejansko potrebuje storitve
+predpomnilnika. Ta knjižnica bo uporabila storitve predpomnjenja, ki implementirajo
+vmesnik tega standarda, vendar drugače ne bo poznala
+implementacije teh storitev predpomnjenja.
 
-*    **Implementing Library** - This library is responsible for implementing
-this standard in order to provide caching services to any Calling Library. The
-Implementing Library MUST provide a class implementing the Psr\SimpleCache\CacheInterface interface.
-Implementing Libraries MUST support at minimum TTL functionality as described
-below with whole-second granularity.
+*    **Izvedbena knjižnica** - Ta knjižnica je odgovorna za izvedbo
+tega standarda, da zagotovi storitve predpomnjenja katerikoli klicni knjižnici.
+Izvedbena knjižnica MORA zagotoviti razred, ki implementira vmesnik Psr\SimpleCache\CacheInterface.
+Izvedbene knjižnice MORAJO podpirati najmanj funkcionalnost TTL, kot je opisano
+spodaj s celotno drugo razdrobljenostjo.
 
-*    **TTL** - The Time To Live (TTL) of an item is the amount of time between
-when that item is stored and it is considered stale. The TTL is normally defined
-by an integer representing time in seconds, or a DateInterval object.
+*    **TTL** - Življenska doba (TTL) elementa je količina časa medtem
+ko je ta element shranjen in se smatra za nesvežega. TTL je običajno definiran
+s celim številom, ki predstavlja čas v sekundah ali objektov DateInterval.
 
-*    **Expiration** - The actual time when an item is set to go stale. This is
-calculated by adding the TTL to the time when an object is stored.
+*    **Pretek** - Dejanski čas, ko je element nastavljen za potek. To je
+običajno izračunano z dodajanjem TTL času, ko je objekt shranjen.
 
-    An item with a 300 second TTL stored at 1:30:00 will have an expiration of 1:35:00.
+    Element s TTL 300 sekund, shranjen ob 1:30:00 bo imel pretek ob 1:35:00.
 
-    Implementing Libraries MAY expire an item before its requested Expiration Time,
-but MUST treat an item as expired once its Expiration Time is reached. If a calling
-library asks for an item to be saved but does not specify an expiration time, or
-specifies a null expiration time or TTL, an Implementing Library MAY use a configured
-default duration. If no default duration has been set, the Implementing Library
-MUST interpret that as a request to cache the item forever, or for as long as the
-underlying implementation supports.
+    Izvedbene knjižnice LAHKO potečejo element pred njegovim zahtevanim časom poteka,
+    vendar MORAJO obravnavati element kot potečen, ko je dosežen njegov čas poteka. Če klicna
+    knjižnica zaprosi, da je element shranjen vendar ne določa časa poteka ali
+    določa čas poteka null ali TTL, izvedbena knjižnica LAHKO uporabi nastavljeno
+    privzeto trajanje. Če privzeto trajanje ni bilo nastavljeno, MORA izvedbena knjižnica
+    to prevesti kot zahtevek, ki predpomni element za vedno ali pa dokler to
+    podpira implementacija podlage.
 
-    If a negative or zero TTL is provided, the item MUST be deleted from the cache
-if it exists, as it is expired already.
+    Če je podana negativna ali nična vrednost TTL, element MORA biti izbrisan iz predpomnilnika,
+    če že obstaja, kot je že razloženo.
 
-*    **Key** - A string of at least one character that uniquely identifies a
-cached item. Implementing libraries MUST support keys consisting of the
-characters `A-Z`, `a-z`, `0-9`, `_`, and `.` in any order in UTF-8 encoding and a
-length of up to 64 characters. Implementing libraries MAY support additional
-characters and encodings or longer lengths, but must support at least that
-minimum.  Libraries are responsible for their own escaping of key strings
-as appropriate, but MUST be able to return the original unmodified key string.
-The following characters are reserved for future extensions and MUST NOT be
-supported by implementing libraries: `{}()/\@:`
+*    **Ključ** - Niz vsaj enega znaka, ki unikatno identificira
+predpomnjeni element. Izvedbene knjižnice MORAJO podpirati ključe sestavljene iz
+znakov `A-Z`, `a-z`, `0-9`, `_` in `.` v kateremkoli vrstnem redu v kodiranju UTF-8 in
+dolžine do 64 znakov. Izvedbene knjižnice LAHKO podpirajo dodatne
+znake in kodiranja ali daljše dolžine, vendar morajo podpirati vsaj ta
+minimum. Knjižnice so odgovorne za svoje lastne ubežne znake ključev nizov
+kot je potrebno, vendar MORAJO biti sposobne vrniti prvotni nespremenjeni ključ niza.
+Sledeči znaki so rezervirani za prihodnje razširitve in NE SMEJO biti
+podprti v izvedbenih knjižnicah `{}()/\@:`
 
-*    **Cache** - An object that implements the `Psr\SimpleCache\CacheInterface` interface.
+*    **Cache** - Objekt, ki implementira vmesnik `Psr\SimpleCache\CacheInterface`.
 
-*    **Cache Misses** - A cache miss will return null and therefore detecting
-if one stored `null` is not possible. This is the main deviation from PSR-6's
-assumptions.
+*    **Zgrešitev predpomnilnika** - Zgrešitev predpomnilnika bo vrnila null in tako zaznala,
+če ena shranjena vrednost `null` ni moć+žna. To je glavno odstopanje od predpostavk
+PSR-6.
 
 ### 1.3 Predpomnilnik
 
-Implementations MAY provide a mechanism for a user to specify a default TTL
-if one is not specified for a specific cache item.  If no user-specified default
-is provided implementations MUST default to the maximum legal value allowed by
-the underlying implementation.  If the underlying implementation does not
-support TTL, the user-specified TTL MUST be silently ignored.
+Implementacije LAHKO ponudijo mehanizem za uporabnika, da določi privzeti TTL,
+če ni določen za posamezni element predpomnilnika. Če ni ponujene uporabniško določene privzete
+vrednosti, MORAJO implementacije privzeto nastaviti na največjo dovoljeno vrednost
+implementacije podlage. Če implementacija podlage ne
+podpira TTL, MORA biti uporabniško določena vrednost TTL tiho ignorirana.
 
 ### 1.4 Podatki
 
-Implementing libraries MUST support all serializable PHP data types, including:
+Izvedbene knjižnice MORAJO podpirati vse zaporednostne tipe PHP podatkov vključno z:
 
-*    **Strings** - Character strings of arbitrary size in any PHP-compatible encoding.
-*    **Integers** - All integers of any size supported by PHP, up to 64-bit signed.
-*    **Floats** - All signed floating point values.
-*    **Boolean** - True and False.
-*    **Null** - The null value (although it will not be distinguishable from a
-cache miss when reading it back out).
-*    **Arrays** - Indexed, associative and multidimensional arrays of arbitrary depth.
-*    **Object** - Any object that supports lossless serialization and
-deserialization such that $o == unserialize(serialize($o)). Objects MAY
-leverage PHP's Serializable interface, `__sleep()` or `__wakeup()` magic methods,
-or similar language functionality if appropriate.
+*    **Nizi** - Znakovni nizi arbitrarne velikosti v kateremkoli PHP-kompatibilnem kodiranju.
+*    **Celimi števili** - Vsa cela števila katerekoli velikosti, podprta s strani PHP do 64-bitno podpisanih.
+*    **Števili s plavajočo vejico** - Vse podpisane vrednosti števil s plavajočo vejico.
+*    **Logičnimi vrednostmi** - True in False.
+*    **Null** - Vrednost null (čeprav je ne bo možno razlikovati od
+zgrešitve predpomnilnika, ko se jo prebere povratno nazaj).
+*    **Polja** - Indeksirana, asociativna in večdimenzijska polja arbitrarne globine.
+*    **Objekt** - Katerikoli objekt, ki podpira brezizgubno serializacijo in
+deserializacijo, tako da je $o == unserialize(serialize($o)). Objekti LAHKO
+uporabljajo PHP serializacijske objekte, `__sleep()` ali `__wakeup()` magični metodi,
+ali podobne funkcionalnosti jezika, če je to ustrezno.
 
-All data passed into the Implementing Library MUST be returned exactly as
-passed. That includes the variable type. That is, it is an error to return
-(string) 5 if (int) 5 was the value saved.  Implementing Libraries MAY use PHP's
-serialize()/unserialize() functions internally but are not required to do so.
-Compatibility with them is simply used as a baseline for acceptable object values.
+Vsi podatki poslani v izvedbeno knjižnico MORAJO biti vrnjeni točno tako, kakor so
+poslani. To vključuje tip vrednosti. To pomeni, da napaka, ki vrne
+(string) 5 če je bila vrednost (int) 5 shranjena. Izvedbene knjižnice LAHKO uporabijo PHP-jeve
+funkcije serialize()/unserialize() interno, vendar to ni zahtevano.
+Združljivost z njimi je enostavno uporabljena kot osnova za sprejemljive vrednosti objektov.
 
-If it is not possible to return the exact saved value for any reason, implementing
-libraries MUST respond with a cache miss rather than corrupted data.
+Če ni možno vrniti točne shranjene vrednosti zaradi kakršnegakoli razloga, se MORAJO izvedbene
+knjižnice odzvati z zgrešitvijo predpomnilnika kot pa s pokvarjenimi podatki.
 
 
 2. Vmesniki
@@ -130,19 +130,19 @@ libraries MUST respond with a cache miss rather than corrupted data.
 
 ### 2.1 CacheInterface
 
-The cache interface defines the most basic operations on a collection of cache-entries, which
-entails basic reading, writing and deleting individual cache items.
+Vmesnik predpomnilnika definira najosnovnejše operacije na zbirki vnosov predpomnilnika, kar
+pomeni osnovno branje, pisanje in brisanje posameznih elementov predpomnilnika.
 
-In addition it has methods for dealing with multiple sets of cache entries such as writing, reading or
-deleting multiple cache entries at a time. This is useful when you have lots of cache reads/writes
-to perform, and lets you perform your operations in a single call to the cache server cutting down latency
-times dramatically.
+Dodatno ima metode za ravnanje z večimi nizi vnosov predpomnilnika, kot so pisanje, branje ali
+brisanje več vnosov predpomnilnika naenkrat. To je uporabno, ko imate za opraviti veliko branja/pisanja predpomnilnika
+in to vam omogoča izvršiti vaše operacije v enem klicu strežnika predpomnilnika, kar drastično zmanjša čas
+latence.
 
-An instance of CacheInterface corresponds to a single collection of cache items with a single key namespace,
-and is equivalent to a "Pool" in PSR-6.  Different CacheInterface instances MAY be backed by the same
-datastore, but MUST be logically independent.
+Instanca CacheInterface ustreza posamezni zbirki elementov predpomnilnika z enim ključem imenskega prostora
+in je enaka zalogi ("Pool") v PSR-6. Različne instance CacheInterface so LAHKO varnostno kopirane z isto
+shrambo podatkov, vendar MORAJO biti logčino neodvisne.
 
-~~~php
+```php
 <?php
 
 namespace Psr\SimpleCache;
@@ -257,11 +257,11 @@ interface CacheInterface
      */
     public function has($key);
 }
-~~~
+```
 
 ### 2.2 CacheException
 
-~~~php
+```php
 
 <?php
 namespace Psr\SimpleCache;
@@ -272,11 +272,11 @@ namespace Psr\SimpleCache;
 interface CacheException
 {
 }
-~~~
+```
 
 ### 2.3 InvalidArgumentException
 
-~~~php
+```php
 <?php
 
 namespace Psr\SimpleCache;
@@ -290,4 +290,4 @@ namespace Psr\SimpleCache;
 interface InvalidArgumentException extends CacheException
 {
 }
-~~~
+```
