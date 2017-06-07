@@ -1,84 +1,84 @@
-# Container Meta Document
+# Kontejner meta dokument
 
-## 1. Introduction
+## 1. Uvod
 
-This document describes the process and discussions that led to the Container PSR.
-Its goal is to explain the reasons behind each decision.
+Ta dokument opusuje proces in razprave, ki so vodile k PSR konterja.
+Njegov cilj je razložiti razloge za vsako odločitvijo.
 
-## 2. Why bother?
+## 2. Zakaj se truditi?
 
-There are dozens of dependency injection containers out there, and these
-DI containers have very different ways to store entries.
+Obstaja na ducate konejnerjev injiciranja odvisnosti in le ti
+DI kontejnerji imajo zelo različne načine shranjevanja vnosov.
 
-- Some are based on callbacks (Pimple, Laravel, ...)
-- Others are based on configuration (Symfony, ZF, ...), with various formats
-  (PHP arrays, YAML files, XML files...)
-- Some can leverage factories...
-- Some have a PHP API to build entries (PHP-DI, ZF, Symfony, Mouf...)
-- Some can do auto-wiring (Laravel, PHP-DI, ...)
-- Others can wire entries based on annotations (PHP-DI, JMS Bundle...)
-- Some have a graphical user interface (Mouf...)
-- Some can compile configuration files to PHP classes (Symfony, ZF...)
-- Some can do aliasing...
-- Some can use proxies to provide lazy loading of dependencies...
+- Nekateri temeljijo na povratnih klicih (Pimple, Laravel, ...)
+- Drugi so osnovani na nastavitvah (Symfony, ZF, ...), z različnimi oblikami
+  (polja PHP, datoteke YAML, datoteke XML...)
+- Nekateri lahko dopolnjujejo tovarne...
+- Nekateri imajo PHP API za izdelavo vnosov (PHP-DI, ZF, Symfony, Mouf...)
+- Nekateri lahko naredijo samodejno žičenje (Laravel, PHP-DI, ...)
+- Drugi lahko žičijo vnose na osnovi anotacij (PHP-DI, JMS Bundle...)
+- Nekateri imajo grafični uporabniški vmesnik (Mouf...)
+- Nekateri lahko prevedejo nastavitvene dtoteke v razrede PHP (Symfony, ZF...)
+- Nekateri lahko naredijo aliase...
+- Nekateri lahko uporabljajo proksije, da ponudijo leno nalaganje odvisnosti...
 
-So when you look at the big picture, there is a very large number of ways in
-which the DI problem can be tackled, and therefore a big number of different
-implementations. However, all the DI containers out there are answering the
-same need: they offer a way for the application to retrieve a set of
-configured objects (usually services).
+Torej, ko pogledate veliko sliko, je na voljo veliko število načinov, pri
+katerih se lahko problem DI rešuje in tako veliko število različnih
+implementacij. Vendar vsi kontejnerji DI, ki so na voljo, zadoščajo
+enakim potrebam: ponujajo način, da aplikacija pridobi skupek
+nastavljenih objektov (običajno storitev).
 
-By standardizing the way entries are fetched from a container, frameworks and
-libraries using the Container PSR could work with any compatible container.
-That would allow end users to choose their own container based on their own preferences.
+S standardizacijo načina, kako so vnosi zajeti iz kontejnerja, ogrodja in
+knjižnice, ki uporabljajo kontejner PSR, lahko delajo s kompatibilnim kontejnerjem.
+To bi omogočilo končnim uporabnikom izbrati njihov lastni kontejner na osnovi lastnih želja.
 
-## 3. Scope
-### 3.1. Goals
+## 3. Obseg
+### 3.1. Cillji
 
-The goal set by the Container PSR is to standardize how frameworks and libraries make use of a
-container to obtain objects and parameters.
+Zastavljeni cilj kontejnerja PSR je standardizacija, kako ogrodja in knjižnice uporabljajo
+kontejner za pridobitev objektov in parametrov.
 
-It is important to distinguish the two usages of a container:
+Pomembno je razlikovati med dvema uporabama kontejnerja:
 
-- configuring entries
-- fetching entries
+- nastavljanje vnosov
+- zajetje vnosov
 
-Most of the time, those two sides are not used by the same party.
-While it is often end users who tend to configure entries, it is generally the framework that fetches
-entries to build the application.
+Večino časa ti dve strani nista uporabljena pri isti stranki.
+Medtem ko pogostokrat končni uporabniki stremijo k nastavljanju vnosov, je v splošnem ogrodje tisto, ki zajame
+vnose za gradnjo aplikacije.
 
-This is why this interface focuses only on how entries can be fetched from a container.
+To je razlog zakaj se ta vmesnik osredotoča na to, kako se vnose lahko zajame iz kontejnerja.
 
-### 3.2. Non-goals
+### 3.2. Niso cilji
 
-How entries are set in the container and how they are configured is out of the
-scope of this PSR. This is what makes a container implementation unique. Some
-containers have no configuration at all (they rely on autowiring), others rely
-on PHP code defined via callback, others on configuration files... This standard
-only focuses on how entries are fetched.
+Kako so vnosi določeni v kontejnerju in kako so nastavljeni, je izven
+obsega tega PSR. To naredi implementacijo kontejnerja unikatno. Nekateri
+kontejnerji niti nimajo nastavitev (zanašajo se na samodejno žičenje), drugi se zanašajo
+na kodo PHP definirano preko povratnih klicev, drugi na nastavitvene datoteke... Ta standard
+se samo osredotoča na to, kako so vnosi zajeti.
 
-Also, naming conventions used for entries are not part of the scope of this
-PSR. Indeed, when you look at naming conventions, there are 2 strategies:
+Pravtako uporabljene konvencije poimenovanja niso del obsega tega
+PSR. Zagotovo, ko pogledate konvencije poimenovanja, obstajata 2 strategiji:
 
-- the identifier is the class name, or an interface name (used mostly
-  by frameworks with an autowiring capability)
-- the identifier is a common name (closer to a variable name), which is
-  mostly used by frameworks relying on configuration.
+- identifikator je ime razreda ali ime vmesnika (uporabljen večinoma
+  pri ogrodjih z zmožnostjo samodejnega žičenja)
+- identifikator je skupno ime (bližje imenu spremenljivke), kar je
+  večinoma uporabljeno pri ogrodjih, ki se zanašajo na nastavitve.
 
-Both strategies have their strengths and weaknesses. The goal of this PSR
-is not to choose one convention over the other. Instead, the user can simply
-use aliasing to bridge the gap between 2 containers with different naming strategies.
+Obe strategiji imata svoje prednosti in slabosti. Cilj tega PSR
+ni izbira ene konvencije napram drugi. Namesto tega lahko uporabnik enostavno
+uporabi aliase za premostitev razlike med dvema kontejnerjema z različnimi strategijami poimenovanja.
 
-## 4. Recommended usage: Container PSR and the Service Locator
+## 4. Priporočljiva uporaba: Kontejner PSR in lokator storitev
 
-The PSR states that:
+PSR trdi, da:
 
-> "users SHOULD NOT pass a container into an object, so the object
-> can retrieve *its own dependencies*. Users doing so are using the container as a Service Locator.
-> Service Locator usage is generally discouraged."
+> "uporabniki NE SMEJO podati kontejnerja v objekt, tako da lahko objekt
+> pridobi *svoje lastne odvisnosti*. Uporabniki, ki to naredijo, uporabljajo kontejner kot lokator storitev.
+> Uporaba lokatorja storitev se v splošnem odsvetuje.
 
 ```php
-// This is not OK, you are using the container as a service locator
+// To ni v redu, kontejner uporabljate kot lokator storitev
 class BadExample
 {
     public function __construct(ContainerInterface $container)
@@ -87,7 +87,7 @@ class BadExample
     }
 }
 
-// Instead, please consider injecting directly the dependencies
+// Namesto tega, premislite o direktnem injiciranju odvisnosti
 class GoodExample
 {
     public function __construct($db)
@@ -95,27 +95,27 @@ class GoodExample
         $this->db = $db;
     }
 }
-// You can then use the container to inject the $db object into your $goodExample object.
+// Nato lahko uporabite kontejner za injiciranje objekta $db v vaš objekt $goodExample.
 ```
 
-In the `BadExample` you should not inject the container because:
+Pri `BadExample` ne bi smeli injicirati kontejnerja ker:
 
-- it makes the code **less interoperable**: by injecting the container, you have
-  to use a container compatible with the Container PSR. With the other
-  option, your code can work with ANY container.
-- you are forcing the developer into naming its entry "db". This naming could
-  conflict with another package that has the same expectations for another service.
-- it is harder to test.
-- it is not directly clear from your code that the `BadExample` class will need
-  the "db" service. Dependencies are hidden.
+- to naredi kodo **manj interoperabilno**: z injiciranjem kontejnerja morate
+  uporabiti kontejner, ki je kompatibilen s kontejnerjem PSR. Z drugo
+  opcijo pa vaša koda dela s katerim koli kontejnerjem.
+- razvijalca silite, da poimenuje njegov vnos "db". To poimenovanje je lahko
+  v konfliktu z drugim paketom, ki ima enaka pričakovanja za drugo storitev.
+- težje je testirati.
+- iz vaše kode ni direktno jasno, da bo razred `BadExample` potreboval
+  storitev "db". Odvisnosti so skrite.
 
-Very often, the `ContainerInterface` will be used by other packages. As a end-user
-PHP developer using a framework, it is unlikely you will ever need to use containers
-or type-hint on the `ContainerInterface` directly.
+Zelo pogosto bo `ContainerInterface` uporabljen pri drugih paketih. Kot končni uporabnik
+PHP razvijalec uporablja ogrodje, je malo verjetno, da bo kdarkoli potreboval uporabiti kontejnerje
+ali namige tipov direktno na `ContainerInterface`.
 
-Whether using the Container PSR into your code is considered a good practice or not boils down to
-knowing if the objects you are retrieving are **dependencies** of the object referencing
-the container or not. Here are a few more examples:
+Bodisi je uporaba kontejnerja PSR v vaši kodi smatrana za dobro prakso ali ne, izvira iz
+poznavanja ali so objekti, ki jih pridobivate, **odvisnosti** objektov, na katere se sklicuje
+kontejner ali ne. Tu je nekaj primerov uporabe:
 
 ```php
 class RouterExample
@@ -138,14 +138,14 @@ class RouterExample
 }
 ```
 
-In this example, the router is transforming the URL into a controller entry name,
-then fetches the controller from the container. A controller is not really a
-dependency of the router. As a rule of thumb, if your object is *computing*
-the entry name among a list of entries that can vary, your use case is certainly legitimate.
+V tem primeru usmerjevalnik preoblikuje URL v ime vnosa krmilnika
+in nato zajame krmilnik iz kontejnerja. Krmilnik v resnici ni
+odvisnost za usmerjevalnik. Za pravilo palca, če je vaš objekt *računalniško*
+ime vnosa izmed seznama vnosov, ki se lahko spreminjajo, je vaš primer uporabe zagotovo ustrezen.
 
-As an exception, factory objects whose only purpose is to create and return new instances may use
-the service locator pattern. The factory must then implement an interface so that it can itself
-be replaced by another factory using the same interface.
+Kot izjema objekti tovarne, katerih edini pomen je ustvariti in vrniti novo instanco lahko uporabijo
+vzorec lokatorja storitev. Tovarna mora potem implementirati vmesnik, da lahko zamenja
+samo sebe z drugo tovarno, ki uporablja isti vmesnik.
 
 ```php
 // ok: a factory interface + implementation to create an object
@@ -170,23 +170,23 @@ class ExampleFactory implements FactoryInterface
 }
 ```
 
-## 5. History
+## 5. Zgodovina
 
-Before submitting the Container PSR to the PHP-FIG, the `ContainerInterface` was
-first proposed in a project named [container-interop](https://github.com/container-interop/container-interop/).
-The goal of the project was to provide a test-bed for implementing the `ContainerInterface`,
-and to pave the way for the Container PSR.
+Pred pošiljanjem PSR kontejnerja PHP-FIG-u, je bil `ContainerInterface`
+prvič predlagan v projektu imenovanem [container-interop](https://github.com/container-interop/container-interop/).
+Cilj projekta je bilo ponuditi testno podlago za implementacijo `ContainerInterface`
+in utreti način za PSR kontejnerja.
 
-In the rest of this meta document, you will see frequent references to
+V nadaljevanju tega meta dokumenta boste videli pogosta sklicevanja na
 `container-interop.`
 
-## 6. Interface name
+## 6. Ime vmesnika
 
-The interface name is the same as the one discussed for `container-interop`
-(only the namespace is changed to match the other PSRs).
-It has been thoroughly discussed on `container-interop` [[4]](#link_naming_discussion) and was decided by a vote [[5]](#link_naming_vote).
+Ime vmesnika je enako kot že je razpravljano za `container-interop`
+(spremenjen je samo imenski prostor, da se ujema z drugimi PSR-ji).
+O `container-interop` je bilo temeljito razpravljano [[4]](#link_naming_discussion) in odločilo se je z glasovanjem [[5]](#link_naming_vote)
 
-The list of options considered with their respective votes are:
+Seznam možnosti za katere se smatra z njihovimi ustreznimi glasovi je:
 
 - `ContainerInterface`: +8
 - `ProviderInterface`: +2
@@ -197,97 +197,97 @@ The list of options considered with their respective votes are:
 - `ObjectStore`: -8
 - `ConsumerInterface`: -9
 
-## 7. Interface methods
+## 7. Metode vmesnika
 
-The choice of which methods the interface would contain was made after a statistical analysis of existing containers. [[6]](#link_statistical_analysis).
+Izbira katere metode naj vmesnik vsebuje, je bila narejena po statistični analizi obstoječih kontejnerjev. [[6]](#link_statistical_analysis).
 
-The summary of the analysis showed that:
+Povzetek analize kaže, da:
 
-- all containers offer a method to get an entry by its id
-- a large majority name such method `get()`
-- for all containers, the `get()` method has 1 mandatory parameter of type string
-- some containers have an optional additional argument for `get()`, but it doesn't have the same purpose between containers
-- a large majority of the containers offer a method to test if it can return an entry by its id
-- a majority name such method `has()`
-- for all containers offering `has()`, the method has exactly 1 parameter of type string
-- a large majority of the containers throw an exception rather than returning null when an entry is not found in `get()`
-- a large majority of the containers don't implement `ArrayAccess`
+- vsi kontejnerji ponujajo metodo za pridobivanje vnosa glede na njegov id
+-  velika večina poimenuje tako metodo `get()`
+- za vse kontejnerje ima metoda `get()` 1 obvezen parameter tipa niz
+- nekateri kontejnerji imajo opcijsko dodatni argument za `get()`, vendar med kontejnerji nima enakega namena
+- velika večina kontejnerjev ponuja metodo za testiranje, če lahko vrne vnos glede na njegov id
+- velika večina poimenuje tako metodo `has()`
+- za vse kontejnerje, ki ponujajo `has()`, ima metoda točno 1 parameter tipa niz
+- velika večina kontejnerjev vrže izjemo namesto vračanja null, ko vnosa ni mogoče najti v `get()`
+- velika večina kontejnerjev ne implementira `ArrayAccess`
 
-The question of whether to include methods to define entries has been discussed at the very start of the container-interop project [[4]](#link_naming_discussion).
-It has been judged that such methods do not belong in the interface described here because it is out of its scope
-(see the "Goal" section).
+Vprašanje ali vključiti metode za definicijo vnosov, je bilo razpravljano na samem začetku projekta container-interop [[4]](#link_naming_discussion).
+Odločeno je bilo, da take metode ne pripadajo vmesniku opisanem tukaj, ker je izven tega obsega
+(glejte sekcijo "Cilji").
 
-As a result, the `ContainerInterface` contains two methods:
+Kot rezultat `ContainerInterface` vsebuje dve metodi:
 
-- `get()`, returning anything, with one mandatory string parameter. Should throw an exception if the entry is not found.
-- `has()`, returning a boolean, with one mandatory string parameter.
+- `get()`, ki vrne karkoli, z enim obveznim parametrom niza. Mora vreči izjemo, če vnosa ni mogoče najti.
+- `has()`, ki vrne logično vrednost, z enim obveznim parametrom niza.
 
-### 7.1. Number of parameters in `get()` method
+### 7.1. Število parametrov v metodi `get()`
 
-While `ContainerInterface` only defines one mandatory parameter in `get()`, it is not incompatible with
-existing containers that have additional optional parameters. PHP allows an implementation to offer more parameters
-as long as they are optional, because the implementation *does* satisfy the interface.
+Medtem ko `ContainerInterface` samo definira en obvezen parameter v `get()`, ni kompatibilen z
+obstoječimi kontejnerji, ki imajo dodatne opcijske parametre. PHP dovoljuje implementaciji, da ponudi več parametrov
+dokler so opcijski, ker implementacija *ne* zadosti vmesniku.
 
-Difference with container-interop: [The container-interop spec](https://github.com/container-interop/container-interop/blob/master/docs/ContainerInterface.md) stated that:
+Razlika med container-interop [Specifikacija container-interop](https://github.com/container-interop/container-interop/blob/master/docs/ContainerInterface.md) trdi:
 
-> While `ContainerInterface` only defines one mandatory parameter in `get()`, implementations MAY accept additional optional parameters.
+> Medtem ko `ContainerInterface` samo definira en obvezen parameter v `get()`, LAHKO implementacije sprejmejo dodatne opcijske parametre.
 
-This sentence was removed from PSR-11 because:
+Ta stavek je bil odstranjen iz PSR-11 ker:
 
-- It is something that stems from OO principles in PHP, so this is not directly related to PSR-11
-- We do not want to encourage implementors to add additional parameters as we recommend coding against the interface and not the implementation
+- Je nekaj, kar izhaja iz OO principov v PHP, tako da to ni direktno povezano s PSR-11
+- Implementatorje ne želimo spodbujati, da dodajo dodatne parametre, saj priporočamo kodiranje napram vmesniku in ne implementaciji
 
-However, some implementations have extra optional parameters; that's technically legal. Such implementations are compatible with PSR-11. [[11]](#link_get_optional_parameters)
+Vseeno določene implementacije imajo dodatne opcijske parametre; to je tehnično ustrezno. Take implementacije so kompatibilne s PSR-11 [[11]](#link_get_optional_parameters).
 
-### 7.2. Type of the `$id` parameter
+### 7.2. Tip parametra `$id`
 
-The type of the `$id` parameter in `get()` and `has()` has been discussed in the container-interop project.
+O tipu parametra `$id` v `get()` in `has()` je bilo razpravljano v projektu container-interop.
 
-While `string` is used in all the containers that were analyzed, it was suggested that allowing
-anything (such as objects) could allow containers to offer a more advanced query API.
+Medtem ko je `string` uporabljen pri vseh analiziranih kontejnerjih, je bilo predlagano, da se dovoli
+karkoli (kot na primer objekte), kar lahko dovoljuje kontejnerjem ponuditi bolj napredne poizvedbe API-ja.
 
-An example given was to use the container as an object builder. The `$id` parameter would then be an
-object that would describe how to create an instance.
+Kot podani primer je bilo uporabiti kontejner kot graditelja objekta. Parameter `$id` bi bil potem
+objekt, ki opisuje, kako ustvariti instanco.
 
-The conclusion of the discussion [[7]](#link_method_and_parameters_details) was that this was beyond the scope of getting entries from a container without
-knowing how the container provided them, and it was more fit for a factory.
+Zaključek razprave [[7]](#link_method_and_parameters_details) je bil, da je to izven obsega pridobivanja vnosov iz kontejnerja brez
+vedenja, kako jih je kontejner ponudil in je bolj ustrezno za tovarno.
 
-### 7.3. Exceptions thrown
+### 7.3. Vržene izjeme
 
-This PSR provides 2 interfaces meant to be implemented by container exceptions.
+Ta PSR ponuja dva vmesnika mišljena za implementacijo izjem kontejnerja.
 
-#### 7.3.1 Base exception
+#### 7.3.1 Osnovna izjema
 
-The `Psr\Container\ContainerExceptionInterface` is the base interface. It SHOULD be implemented by custom exceptions thrown directly by the container.
+`Psr\Container\ContainerExceptionInterface` je osnovni vmesnik. MORA biti implementiran pri izjema po meri, ki jih vrže direktno kontejner.
 
-It is expected that any exception that is part of the domain of the container implements the `ContainerExceptionInterface`. A few examples:
+Pričakuje se, da katerakoli izjema, ki je del domene kontejnerja, implementira `ContainerExceptionInterface`. Nekaj primerov:
 
-- if a container relies on a configuration file and if that configuration file is flawed, the container might throw an `InvalidFileException` implementing the `ContainerExceptionInterface`.
-- if a cyclic dependency is detected between dependencies, the container might throw an `CyclicDependencyException` implementing the `ContainerExceptionInterface`.
+- če se kontejner zanaša na nastavitveno datoteko in če je ta nastavitvena datoteka pomankljiva, kontejner lahko vrže `InvalidFileException`, ki implementira `ContainerExceptionInterface`.
+- če je med odvisnostmi zaznana ciklična odvisnost, kontejner lahko vrže `CyclicDependencyException`, ki implementira `ContainerExceptionInterface`.
 
-However, if the exception is thrown by some code out of the container's scope (for instance an exception thrown while instantiating an entry), the container is not required to wrap this exception in a custom exception implementing the `ContainerExceptionInterface`.
+Vendar če isto izjemo vrže neka koda izven obsega kontejnerja (na primer, vržena izjema med instantizacijo vnosa), za kontejner ni obvezno, da ovije to izjemo v izjemo po meri, ki implementira `ContainerExceptionInterface`.
 
-The usefulness of the base exception interface was questioned: it is not an exception one would typically catch [[8]](#link_base_exception_usefulness).
+Uporabnost vmesnika osnovne izjeme je bila vprašljiva: ni izjema, ki se jo bi običajno ujemalo [[8]](#link_base_exception_usefulness).
 
-However, most PHP-FIG members considered it to be a best practice. Base exception interface are implemented in previous PSRs and several member projects. The base exception interface was therefore kept.
+Vendar večina članov PHP-FIG je smatrala, da je to najboljša praksa. Vmesnik osnovne izjeme je implementiran v prejšnjih PSR-jih in mnogih članskih projektih. Zato se je obdržalo vmesnik osnovne izjeme.
 
-#### 7.3.2 Not found exception
+#### 7.3.2 Izjema za ni najdeno
 
-A call to the `get` method with a non-existing id must throw an exception implementing the `Psr\Container\NotFoundExceptionInterface`.
+Klic metode `get` z neobstoječim id mora vreči izjemo, ki implementira `Psr\Container\NotFoundExceptionInterface`.
 
-For a given identifier:
+Za dani identifikator:
 
-- if the `has` method returns `false`, then the `get` method MUST throw a `Psr\Container\NotFoundExceptionInterface`.
-- if the `has` method returns `true`, this does not mean that the `get` method will succeed and throw no exception. It can even throw a `Psr\Container\NotFoundExceptionInterface` if one of the dependencies of the requested entry is missing.
+- če metoda `has` vrne `false`, potem MORA metoda `get` vreči `Psr\Container\NotFoundExceptionInterface`.
+- če metoda `has` vrne `true`, potem to ne pomeni, da bo metoda `get` uspešna in ne vrže nobene izjeme. Lahko celo vrže `Psr\Container\NotFoundExceptionInterface`, če ena izmed odvisnosti zahtevanega vnosa manjka.
 
-Therefore, when a user catches the `Psr\Container\NotFoundExceptionInterface`, it has 2 possible meanings [[9]](#link_not_found_behaviour):
+Zatorej, ko uporabnik ujema `Psr\Container\NotFoundExceptionInterface`, ima dva možna pomena [[9]](#link_not_found_behaviour):
 
-- the requested entry does not exist (bad request)
-- or a dependency of the requested entry does not exist (i.e. the container is misconfigured)
+- zahtevani vnos ne obstaja (slab zahtevek)
+- ali odvisnost zahtevanega vnosa ne obstaja (t.j. da je kontejner napačno nastavljen)
 
-The user can however easily make a distinction with a call to `has`.
+Uporabnik lahko enostavno ugotovi razliko s klicem `has`.
 
-In pseudo-code:
+V psevdo-kodi:
 
 ```php
 if (!$container->has($id)) {
@@ -301,12 +301,12 @@ try {
 }
 ```
 
-8. Implementations
-------------------
+8. Implementacije
+-----------------
 
-At the time of writing, the following projects already implement and/or consume the `container-interop` version of the interface.
+V času pisanja sledeči projekti že implementirajo in/ali uporabljajo `container-interop` verzijo vmesnika.
 
-### Implementors
+### Implementorji
 - [Acclimate](https://github.com/jeremeamia/acclimate-container)
 - [Aura.DI](https://github.com/auraphp/Aura.Di)
 - [dcp-di](https://github.com/estelsmith/dcp-di)
@@ -322,7 +322,7 @@ At the time of writing, the following projects already implement and/or consume 
 - [Alias-Container](https://github.com/thecodingmachine/alias-container)
 - [Prefixer-Container](https://github.com/thecodingmachine/prefixer-container)
 
-### Consumers
+### Uporabniki
 - [Behat](https://github.com/Behat/Behat)
 - [interop.silex.di](https://github.com/thecodingmachine/interop.silex.di)
 - [mindplay/middleman](https://github.com/mindplay-dk/middleman)
@@ -333,24 +333,24 @@ At the time of writing, the following projects already implement and/or consume 
 - [Splash](http://mouf-php.com/packages/mouf/mvc.splash-common/version/8.0-dev/README.md)
 - [Zend Expressive](https://github.com/zendframework/zend-expressive)
 
-This list is not comprehensive and should be only taken as an example showing that there is considerable interest in the PSR.
+Ta seznam ni celovit in je na voljo samo kot primer, ki prikazuje, da je za PSR precej zanimanja.
 
 
-9. People
+9. Ljudje
 ---------
-### 9.1 Editors
+### 9.1 Uredniki
 
 * [Matthieu Napoli](https://github.com/mnapoli)
 * [David Négrier](https://github.com/moufmouf)
 
-### 9.2 Sponsors
+### 9.2 Sponzorji
 
 * [Matthew Weier O'Phinney](https://github.com/weierophinney) (Coordinator)
 * [Korvin Szanto](https://github.com/KorvinSzanto)
 
-### 9.3 Contributors
+### 9.3 Prispevali so
 
-Are listed here all people that contributed in the discussions or votes (on container-interop and during migration to PSR-11), by alphabetical order:
+Tu so abecedno zabeleženi vsi ljudje, ki so prispevali razpravam ali glasovanju (glede interoperabilnosti kontejnerja in med migracijo k PSR-11):
 
 * [Alexandru Pătrănescu](https://github.com/drealecs)
 * [Amy Stephen](https://github.com/AmyStephen)
@@ -368,15 +368,15 @@ Are listed here all people that contributed in the discussions or votes (on cont
 * [Stephan Hochdörfer](https://github.com/shochdoerfer)
 * [Taylor Otwell](https://github.com/taylorotwell)
 
-## 10. Relevant links
+## 10. Pomembne povezave
 
-1. [Discussion about the container PSR and the service locator](https://groups.google.com/forum/#!topic/php-fig/pyTXRvLGpsw)
-1. [Container-interop's `ContainerInterface.php`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php)
-1. [List of all issues](https://github.com/container-interop/container-interop/issues?labels=ContainerInterface&milestone=&page=1&state=closed)
-1. <a name="link_naming_discussion"></a>[Discussion about the interface name and container-interop scope](https://github.com/container-interop/container-interop/issues/1)
-1. <a name="link_naming_vote"></a>[Vote for the interface name](https://github.com/container-interop/container-interop/wiki/%231-interface-name:-Vote)
-1. <a name="link_statistical_analysis"></a>[Statistical analysis of existing containers method names](https://gist.github.com/mnapoli/6159681)
-1. <a name="link_method_and_parameters_details"></a>[Discussion about the method names and parameters](https://github.com/container-interop/container-interop/issues/6)
-1. <a name="link_base_exception_usefulness"></a>[Discussion about the usefulness of the base exception](https://groups.google.com/forum/#!topic/php-fig/_vdn5nLuPBI)
-1. <a name="link_not_found_behaviour"></a>[Discussion about the `NotFoundExceptionInterface`](https://groups.google.com/forum/#!topic/php-fig/I1a2Xzv9wN8)
-1. <a name="link_get_optional_parameters"></a>Discussion about get optional parameters [in container-interop](https://github.com/container-interop/container-interop/issues/6) and on the [PHP-FIG mailing list](https://groups.google.com/forum/#!topic/php-fig/zY6FAG4-oz8)
+1. [Razprava o kontejnerju PSR in lokatorju storitev](https://groups.google.com/forum/#!topic/php-fig/pyTXRvLGpsw)
+1. [Container-interop `ContainerInterface.php`](https://github.com/container-interop/container-interop/blob/master/src/Interop/Container/ContainerInterface.php)
+1. [Seznam vseh težav](https://github.com/container-interop/container-interop/issues?labels=ContainerInterface&milestone=&page=1&state=closed)
+1. <a name="link_naming_discussion"></a>[Razprava o imenu vmesnika in obsegu container-interop](https://github.com/container-interop/container-interop/issues/1)
+1. <a name="link_naming_vote"></a>[Glsovanje za ime vmesnika](https://github.com/container-interop/container-interop/wiki/%231-interface-name:-Vote)
+1. <a name="link_statistical_analysis"></a>[Statistična analiza obstoječih imen metod kontejnerjev](https://gist.github.com/mnapoli/6159681)
+1. <a name="link_method_and_parameters_details"></a>[Razprava o imenih metod in parametrov](https://github.com/container-interop/container-interop/issues/6)
+1. <a name="link_base_exception_usefulness"></a>[Razprava o uporabnosti osnovne izjeme](https://groups.google.com/forum/#!topic/php-fig/_vdn5nLuPBI)
+1. <a name="link_not_found_behaviour"></a>[Razprava o `NotFoundExceptionInterface`](https://groups.google.com/forum/#!topic/php-fig/I1a2Xzv9wN8)
+1. <a name="link_get_optional_parameters"></a>Razprave o pridobivanju opcijskih parametrov [v container-interop](https://github.com/container-interop/container-interop/issues/6) in na [PHP-FIG e-poštnem seznamu](https://groups.google.com/forum/#!topic/php-fig/zY6FAG4-oz8)
