@@ -4,7 +4,6 @@ description: "Namen tega vodiča je zmanjšanje kognitivnega trenja pri skeniran
 read_time: "5 min"
 updated: "2016-06-20"
 slug: "psr-2-vodic-kodnega-standarda-meta"
-file: "PSR-2-coding-style-guide-meta.md"
 ---
 
 PSR-2 meta dokument
@@ -53,4 +52,3 @@ $app->get('/hello/{name}', function ($name) use ($app) {
 
 Ko razširjate več vmesnikov, bi moral seznam `razširitev` bi obravnavan enako kot seznam
 `implementacij`, kot je deklarirano v Sekciji 4.1.
-

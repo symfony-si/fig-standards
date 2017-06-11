@@ -1,8 +1,8 @@
 ---
 title: "PSR-13: Povezave"
-description: ""
+description: "Hipermedijske povezave postajajo vedno pomembnejši del spleta, tako v kontekstu HTML kot v različnih kontekstih oblik API. Vendar ne obstaja posamezna skupna oblika hipermedijev, niti ni na voljo skupnega načina za ponazoritev povezav med oblikami."
 read_time: "5 min"
-updated: "2017-01-11"
+updated: "2017-06-11"
 slug: "psr-13-povezave"
 ---
 

@@ -1,3 +1,11 @@
+---
+title: "PSR-11: Kontejner meta dokument"
+description: "Ta dokument opusuje proces in razprave, ki so vodile k PSR konterja. Njegov cilj je razložiti razloge za vsako odločitvijo."
+read_time: "5 min"
+updated: "2017-06-11"
+slug: "psr-11-kontejner-meta-dokument"
+---
+
 # Kontejner meta dokument
 
 ## 1. Uvod

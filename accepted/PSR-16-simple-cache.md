@@ -1,8 +1,8 @@
 ---
 title: "PSR-16: Preprosti predpomnilnik"
-description: ""
+description: "Ta dokument opisuje enostaven a razširljiv vmesnik za element predpomnilnika in gonilnik predpomnilnika."
 read_time: "5 min"
-updated: "2017-01-11"
+updated: "2017-06-11"
 slug: "psr-16-preprosti-predpomnilnik"
 ---
 

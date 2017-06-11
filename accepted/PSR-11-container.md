@@ -1,3 +1,11 @@
+---
+title: "PSR-11: Vmesnik kontejnerja"
+description: "Ta dokument opisuje skupni vmesnik za kontejnerje injiciranja odvisnosti."
+read_time: "5 min"
+updated: "2017-06-11"
+slug: "psr-11-kontejner"
+---
+
 Vmesnik kontejnerja
 ===================
 

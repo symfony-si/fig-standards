@@ -1,8 +1,8 @@
 ---
 title: "PSR-16: Preprosti predpomnilnik meta dokument"
-description: ""
+description: "Predpomnenje je pogosti način izboljšanja zmogljivosti katerega koli projekta in mnoge knjižnice ga uporabljajo ali bi ga lahko uporabljale."
 read_time: "5 min"
-updated: "2017-01-11"
+updated: "2017-06-11"
 slug: "psr-16-preprosti-predpomnilnik-meta-dokument"
 ---
 
