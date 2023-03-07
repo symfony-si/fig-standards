@@ -309,8 +309,7 @@ try {
 }
 ```
 
-8. Implementacije
------------------
+## 8. Implementacije
 
 V času pisanja sledeči projekti že implementirajo in/ali uporabljajo `container-interop` verzijo vmesnika.
 
@@ -344,8 +343,8 @@ V času pisanja sledeči projekti že implementirajo in/ali uporabljajo `contain
 Ta seznam ni celovit in je na voljo samo kot primer, ki prikazuje, da je za PSR precej zanimanja.
 
 
-9. Ljudje
----------
+## 9. Ljudje
+
 ### 9.1 Uredniki
 
 * [Matthieu Napoli](https://github.com/mnapoli)
@@ -388,3 +387,29 @@ Tu so abecedno zabeleženi vsi ljudje, ki so prispevali razpravam ali glasovanju
 1. <a name="link_base_exception_usefulness"></a>[Razprava o uporabnosti osnovne izjeme](https://groups.google.com/forum/#!topic/php-fig/_vdn5nLuPBI)
 1. <a name="link_not_found_behaviour"></a>[Razprava o `NotFoundExceptionInterface`](https://groups.google.com/forum/#!topic/php-fig/I1a2Xzv9wN8)
 1. <a name="link_get_optional_parameters"></a>Razprave o pridobivanju opcijskih parametrov [v container-interop](https://github.com/container-interop/container-interop/issues/6) in na [PHP-FIG e-poštnem seznamu](https://groups.google.com/forum/#!topic/php-fig/zY6FAG4-oz8)
+
+## 11. Popravki napak
+
+## Dodatki tipov
+
+Izdaja 1.1 paketa `psr/container` vključuje skalarne tipe parametrov. Izdaja 2.0
+paketa vključuje povratne tipe. Ta struktura omogoča podporo kovariance PHP 7.2,
+kar omogoča postopen proces nadgradnje.
+
+Izvajalci LAHKO dodajo povratne tipe k svojim lastnim paketom po svoji presoji
+pod pogojem, da:
+
+- se povratni tip ujema s tistimi iz paketa 2.0.
+- izvedba določa najmanj PHP verzijo 7.2.0 ali novejše.
+
+Izvajalci LAHKO dodajo tipe parametrov k svojim lastnim paketom v večji izdaji,
+bodisi istočasno z dodajanjem povratnih tipov ali pa v ločeni izdaji pod
+pogojem, da:
+
+- se tipi parametrov ujemajo s tistimi iz paketa 1.1.
+- izvedba določa najmanjšo PHP verzijo 7.2.0 ali novejše.
+- izvedba zavisi od `"psr/container": "^1.1 || ^2.0"`, tako da se izključi
+  verzijo 1.0 brez tipov.
+
+Izvajalce se spodbuja, vendar od njih ni zahtevano, da njihovi paketi čimprej
+preidejo na verzijo 2.0.

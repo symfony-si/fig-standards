@@ -258,33 +258,33 @@ Za kliente HTTP, omogočajo uporabnikom zgraditi osnovni zahtevek s podatki kot
 so osnovni URI ali zahtevane glave, brez potrebe po gradnji novega
 zahtevka ali ponastavitvi stanja zahtevka za vsako sporočilo, ki ga klient pošlje:
 
-~~~php
+```php
 $uri = new Uri('http://api.example.com');
 $baseRequest = new Request($uri, null, [
     'Authorization' => 'Bearer ' . $token,
     'Accept'        => 'application/json',
-]);;
+]);
 
 $request = $baseRequest->withUri($uri->withPath('/user'))->withMethod('GET');
-$response = $client->send($request);
+$response = $client->sendRequest($request);
 
 // get user id from $response
 
 $body = new StringStream(json_encode(['tasks' => [
     'Code',
     'Coffee',
-]]));;
+]]));
 $request = $baseRequest
     ->withUri($uri->withPath('/tasks/user/' . $userId))
     ->withMethod('POST')
     ->withHeader('Content-Type', 'application/json')
     ->withBody($body);
-$response = $client->send($request)
+$response = $client->sendRequest($request)
 
 // No need to overwrite headers or body!
 $request = $baseRequest->withUri($uri->withPath('/tasks'))->withMethod('GET');
-$response = $client->send($request);
-~~~
+$response = $client->sendRequest($request);
+```
 
 Na strežniški strani bodo razvijalci morali:
 
@@ -307,17 +307,17 @@ spremembe potrebne v uporabi pravih objektov vrednosti so:
 
 Kot primer v Zend Framework 2, namesto sledečega:
 
-~~~php
+```php
 function (MvcEvent $e)
 {
     $response = $e->getResponse();
     $response->setHeaderLine('x-foo', 'bar');
 }
-~~~
+```
 
 bi se sedaj zapisalo:
 
-~~~php
+```php
 function (MvcEvent $e)
 {
     $response = $e->getResponse();
@@ -325,7 +325,7 @@ function (MvcEvent $e)
         $response->withHeader('x-foo', 'bar')
     );
 }
-~~~
+```
 
 Zgornje kombinira dodelitev in obvestilo v enem klicu.
 
@@ -383,11 +383,11 @@ kot sta `isReadable()` in `isWritable()` itd. Ta pristop je uporabljen v Python-
 V nekaterih primerih boste morda želeli vrniti datoteko iz datotečnega sistema. Običajni
 način, da to naredite v PHP je eden izmed sledečih:
 
-~~~php
+```php
 readfile($filename);
 
 stream_copy_to_stream(fopen($filename, 'r'), fopen('php://output', 'w'));
-~~~
+```
 
 Bodite pozorni, da ima zgornje opuščeno pošiljanje ustreznih glav `Content-Type` in
 `Content-Lenght`; razvijalec bi moral poslati te pred
@@ -398,7 +398,7 @@ ki sprejema ime datoteke in/ali vir toka ter ponuja
 to instanci odziva. Celoten primer, vključno z nastavitvijo ustreznih
 glav:
 
-~~~php
+```php
 // where Stream is a concrete StreamInterface:
 $stream   = new Stream($filename);
 $finfo    = new finfo(FILEINFO_MIME);
@@ -406,7 +406,7 @@ $response = $response
     ->withHeader('Content-Type', $finfo->file($filename))
     ->withHeader('Content-Length', (string) filesize($filename))
     ->withBody($stream);
-~~~
+```
 
 Pošiljanje tega odziva bo poslalo datoteko klientu.
 
@@ -421,7 +421,7 @@ primeru](https://github.com/phly/psr7examples#direct-output). Ovijte katerokoli 
 ki pošilja izhod direktno v povratni klic, pošljite to k ustrezni
 implementaciji `StreamInterface` in ga ponudite telesu sporočila:
 
-~~~php
+```php
 $output = new CallbackStream(function () use ($request) {
     printf("The requested URI was: %s<br>\n", $request->getUri());
     return '';
@@ -429,7 +429,7 @@ $output = new CallbackStream(function () use ($request) {
 return (new Response())
     ->withHeader('Content-Type', 'text/html')
     ->withBody($output);
-~~~
+```
 
 #### Kaj, če želim uporabiti iterator za vsebino?
 
@@ -504,11 +504,11 @@ vrednost polje s sledečimi razlogi:
 Glavni argument je, da če so parametri telesa polje, imajo razvijalci
 predvidljiv dostop do vrednosti:
 
-~~~php
+```php
 $foo = isset($request->getBodyParams()['foo'])
     ? $request->getBodyParams()['foo']
     : null;
-~~~
+```
 
 Argument za uporabo "parsed body" je bil izdelan s preučitvijo domene. Sporočilo
 telesa lahko vsebuje dobesedno karkoli. Medtem ko tradicionalne spletne aplikacije uporabljajo
@@ -527,7 +527,7 @@ prevedenega telesa. To lahko vključuje:
 
 Končni rezultat je, da mora razvijalec sedaj pogledati na več lokacij:
 
-~~~php
+```php
 $data = $request->getBodyParams();
 if (isset($data['__parsed__']) && is_object($data['__parsed__'])) {
     $data = $data['__parsed__'];
@@ -538,20 +538,20 @@ $data = $request->getBodyParams();
 if ($request->hasAttribute('__body__')) {
     $data = $request->getAttribute('__body__');
 }
-~~~
+```
 
 Predstavljena rešitev je uporaba terminologije "ParsedBody", ki implicira na to,
 da so vrednosti rezultati prevedenega telesa sporočila. To tudi pomeni, da
 _bo_ vrnjena vrednost dvoumna; vendar ker je to atribut
 domene, je tudi to pričakovano. Kot taka bo uporaba postala:
 
-~~~php
+```php
 $data = $request->getParsedBody();
 if (! $data instanceof \stdClass) {
     // raise an exception!
 }
 // otherwise, we have what we expected
-~~~
+```
 
 Ta pristop odstranjuje omejitve siljenja polja na račun
 dvoumnosti vrnjene vrednosti. Če upoštevamo, da druge predlagane rešitve —
@@ -629,7 +629,7 @@ temi vrednostmi glav, bodisi za namene obdelave ali generiranja. Uporabniki lahk
 nato uporabijo te knjižnice, ko potrebujejo delati s temi vrednostmi.
 Primeri te prakse že obstajajo v knjižnicah kot je
 [willdurand/Negotiation](https://github.com/willdurand/Negotiation) in
-[aura/accept](https://github.com/pmjones/Aura.Accept). Dokler ima objekt
+[Aura.Accept](https://github.com/auraphp/Aura.Accept). Dokler ima objekt
 funkcionalnost za vlogo vrednosti nizu, so te objekti lahko
 uporabljeni za zapolnitev glav sporočila HTTP.
 
@@ -654,3 +654,47 @@ uporabljeni za zapolnitev glav sporočila HTTP.
 * Anton Serdyuk
 * Phil Sturgeon
 * Chris Wilkinson
+
+## 7. Popravki
+
+### 7.1 Potrjevanje imen glav in vrednosti
+
+Nekateri posebni znaki znotraj imena ali vrednosti glave HTTP lahko vplivajo na
+razčlenjevanje serijskega sporočila na način, da se vsebina nesorodnih glav
+spremeni. Ta napačna razčlenitev lahko odpre aplikacijo za varnostne
+ranljivosti. Pogosta vrsta ranljivosti je vstavljanje CRLF, kar omogoča
+napadalcu, da vstavi dodatne glave ali prekine seznam glav.
+
+Iz tega razloga BI MORALI razredi, ki implementirajo `MessageInterface`,
+preverjati imena in vsebine glav v skladu s trenutno najnovejšo HTTP
+specifikacijo ([RFC 7230#3.2][1] v času pisanja). Implementacija BI MORALA
+zavrniti neveljavne vrednosti in NE SME poskušati samodejno popraviti podanih
+vrednosti.
+
+Minimalno sposoben validacijski sistem naj zavrne imena glav, ki vsebujejo
+naslednje znake:
+
+- NUL (0x00)
+- `\r` (0x0D)
+- `\n` (0x0A)
+- Katerikoli znak manjši ali enak 0x20.
+
+Dodatni znaki ali zaporedja v imenih glav naj bodo zavrnjeni v skladu s
+specifikacijo HTTP.
+
+Minimalno sposoben validacijski sistem naj zavrne vrednosti glav, ki vsebujejo
+naslednje znake:
+
+- NUL (0x00)
+- `\r` (0x0D)
+- `\n` (0x0A)
+
+Če želimo združljivost z starejšimi sistemi, LAHKO zaporedje `\r\n` (0x0D0A)
+znotraj vrednosti glave velja samo, če mu takoj sledi presledek (0x20) ali `\t`
+(0x09). Celotno zaporedje BI SE MORALO nato notranje normalizirati v en sam
+presledek (0x20).
+
+Dodatni znaki ali zaporedja vrednosti glav naj bodo zavrnjeni v skladu s
+specifikacijo HTTP.
+
+[1]: https://datatracker.ietf.org/doc/html/rfc7230#section-3.2

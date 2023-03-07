@@ -6,7 +6,7 @@ updated: "2017-01-11"
 slug: "psr-6-predpomnilnik"
 ---
 
-## Uvod
+# Vmesnik predpomnilnika
 
 Predpomnjenje je pogosti način izboljšanja zmogljivosti kateregakoli projekta, kar naredi
 predpomnilne knjižnice ene izmed najpogostejših lastnosti mnogih ogrodij in
@@ -34,7 +34,6 @@ Cilj tega PSR-ja je omogočiti razvijalcem, da izdelajo predpomnilno zavedne knj
 se lahko integrirajo v obstoječa ogrodja in sisteme brez potrebe po
 razvoju po meri.
 
-
 ## Definicije
 
 *    **Klicna knjižnica** - Knjižnica ali koda, ki dejansko potrebuje storitve
@@ -45,7 +44,7 @@ implementacije teh storitev predpomnjenja.
 *    **Izvedbena knjižnica** - Ta knjižnica je odgovorna za izvedbo
 tega standarda, da zagotovi storitve predpomnjenja katerikoli klicni knjižnici.
 Izvedbena knjižnica MORA zagotoviti razrede, ki implementirajo
-vmesnika Cache\CacheItemPoolInterface in Cache\CacheItemInterface.
+vmesnika Cache\CacheItemPoolInterface in `Cache\CacheItemInterface`.
 Izvedbene knjižnice MORAJO podpirati najmanj funkcionalnost TTL, kot je opisano
 spodaj s celotno drugo razdrobljenostjo.
 
@@ -55,18 +54,15 @@ s celim številom, ki predstavlja čas v sekundah ali objektov DateInterval.
 
 *    **Pretek** - Dejanski čas, ko je element nastavljen za potek. To je
 običajno izračunano z dodajanjem TTL času, ko je objekt shranjen, vendar
-je lahko tudi eksplicitno nastavljen z objektom DateTime.
-
-    Element s TTL 300 sekund, shranjen ob 1:30:00 bo imel pretek ob
-    1:35:00.
-
-    Izvedbene knjižnice LAHKO potečejo element pred njegovim zahtevanim časom poteka,
-vendar MORAJO obravnavati element kot potečen, ko je dosežen njegov čas poteka. Če klicna
+je lahko tudi eksplicitno nastavljen z objektom DateTime. Element s TTL 300
+sekund, shranjen ob 1:30:00 bo imel pretek ob 1:35:00. Izvedbene knjižnice LAHKO
+potečejo element pred njegovim zahtevanim časom poteka, vendar MORAJO
+obravnavati element kot potečen, ko je dosežen njegov čas poteka. Če klicna
 knjižnica zaprosi, da je element shranjen vendar ne določa časa poteka ali
 določa čas poteka null ali TTL, izvedbena knjižnica LAHKO uporabi nastavljeno
-privzeto trajanje. Če privzeto trajanje ni bilo nastavljeno, MORA izvedbena knjižnica
-to prevesti kot zahtevek, ki predpomni element za vedno ali pa dokler to
-podpira implementacija podlage.
+privzeto trajanje. Če privzeto trajanje ni bilo nastavljeno, MORA izvedbena
+knjižnica to prevesti kot zahtevek, ki predpomni element za vedno ali pa dokler
+to podpira implementacija podlage.
 
 *    **Ključ** - Niz vsaj enega znaka, ki unikatno identificira
 predpomnjeni element. Izvedbene knjižnice MORAJO podpirati ključe sestavljene iz
@@ -100,7 +96,6 @@ elemente, kot je destruktor objekta, pridobitev vsega pri save(), časovna omeji
 preverjanje največjega števila elementov ali katerakoli druga ustrezna logika. Zahtevki za predpomnjeni element,
 ki je bil posredovan MORA vrniti posrednega vendar še ne pridobljenega elementa.
 
-
 ## Podatki
 
 Izvedbene knjižnice MORAJO podpirati vse zaporednostne tipe PHP podatkov vključno z:
@@ -112,14 +107,14 @@ Izvedbene knjižnice MORAJO podpirati vse zaporednostne tipe PHP podatkov vklju�
 *    **Null** - Dejanska vrednost null.
 *    **Polja** - Indeksirana, asociativna in večdimenzijska polja arbitrarne globine.
 *    **Objekt** - Katerikoli objekt, ki podpira brezizgubno serializacijo in
-deserializacijo, tako da je $o == unserialize(serialize($o)). Objekti LAHKO
+deserializacijo, tako da je `$o == unserialize(serialize($o))`. Objekti LAHKO
 uporabljajo PHP serializacijske objekte, `__sleep()` ali `__wakeup()` magični metodi,
 ali podobne funkcionalnosti jezika, če je to ustrezno.
 
 Vsi podatki poslani v izvedbeno knjižnico MORAJO biti vrnjeni točno tako, kakor so
 poslani. To vključuje tip vrednosti. To pomeni, da napaka, ki vrne
 (string) 5 če je bila vrednost (int) 5 shranjena. Izvedbene knjižnice LAHKO uporabijo PHP-jeve
-funkcije serialize()/unserialize() interno, vendar to ni zahtevano.
+funkcije `serialize()/unserialize()` interno, vendar to ni zahtevano.
 Združljivost z njimi je enostavno uporabljena kot osnova za sprejemljive vrednosti objektov.
 
 Če ni možno vrniti točne shranjene vrednosti zaradi kakršnegakoli razloga, se MORAJO izvedbene
@@ -163,21 +158,21 @@ pogoj napake.
 CacheItemInterface definira element znotraj sistema predpomnilnika. Vsak objekt element
 MORA biti povezan z določenim ključem, ki je lahko nastavljen glede na
 sistem implementacije in je običajno podan od objekta
-Cache\CacheItemPoolInterface.
+`Cache\CacheItemPoolInterface`.
 
-Objekt Cache\CacheItemInterface zaobjema shrambo in pridobitev
-elementov predpomnilnika. Vsak Cache\CacheItemInterface je generiran z objektom
+Objekt `Cache\CacheItemInterface` zaobjema shrambo in pridobitev
+elementov predpomnilnika. Vsak `Cache\CacheItemInterface` je generiran z objektom
 Cache\CacheItemPoolInterface, ki je odgovoren za kakršnekoli zahtevano
 nastavitev kot tudi povezani objekt z unikatnim ključem.
-Cache\CacheItemInterface objekti MORAJO biti zmožni shraniti in vrniti katerikoli tip
+`Cache\CacheItemInterface` objekti MORAJO biti zmožni shraniti in vrniti katerikoli tip
 definiranih vrednosti PHP v sekciji podatkov tega dokumenta.
 
 Klicne knjižnice NE SMEJO sprožiti objektov elementov same. Lahko so samo
-zahtevane iz objekta Pool preko metode getItem(). Klicne knjižnice
+zahtevane iz objekta Pool preko metode `getItem()`. Klicne knjižnice
 NE BI SMELE predpostavljati, da je element ustvarjen z eno implementirano knjižnico
 združljiv z zalogo iz druge knjižnice.
 
-~~~php
+```php
 <?php
 
 namespace Psr\Cache;
@@ -268,17 +263,17 @@ interface CacheItemInterface
     public function expiresAfter($time);
 
 }
-~~~
+```
 
 ### CacheItemPoolInterface
 
 Glavni namen Cache\CacheItemPoolInterface je sprejeti ključ iz
-klicane knjižnice in vrniti povezani objekt Cache\CacheItemInterface.
+klicane knjižnice in vrniti povezani objekt `Cache\CacheItemInterface`.
 Glavna točka interakcije s celotno zbirko predpomnilnika.
 Vse nastavitve in sprožitev zaloge (Pool) so prepuščene implementirani
 knjižnici.
 
-~~~php
+```php
 <?php
 
 namespace Psr\Cache;
@@ -371,7 +366,7 @@ interface CacheItemPoolInterface
      *
      * @param string[] $keys
      *   An array of keys that should be removed from the pool.
-
+     *
      * @throws InvalidArgumentException
      *   If any of the keys in $keys are not a legal value a \Psr\Cache\InvalidArgumentException
      *   MUST be thrown.
@@ -411,7 +406,7 @@ interface CacheItemPoolInterface
      */
     public function commit();
 }
-~~~
+```
 
 ### CacheException
 
@@ -421,7 +416,7 @@ predpomnilnika ali so podane neveljavne poverilnice.
 
 Katerakoli izjema, ki jo vrže implementirana knjižnica, MORA implementirati ta vmesnik.
 
-~~~php
+```php
 <?php
 
 namespace Psr\Cache;
@@ -432,11 +427,11 @@ namespace Psr\Cache;
 interface CacheException
 {
 }
-~~~
+```
 
 ### InvalidArgumentException
 
-~~~php
+```php
 <?php
 
 namespace Psr\Cache;
@@ -450,4 +445,10 @@ namespace Psr\Cache;
 interface InvalidArgumentException extends CacheException
 {
 }
-~~~
+```
+
+Od [psr/cache verzije 2.0](https://packagist.org/packages/psr/cache#2.0.0) so
+bili zgornji vmesniki posodobljeni z dodatkom namigov tipov argumentov.
+Od [psr/cache verzije 3.0](https://packagist.org/packages/psr/cache#3.0.0) so
+bili zgornji vmesniki posodobljeni z dodatkom namigov povratnih tipov. Reference
+na `array|\Traversable` so bile zamenjane z `iterable`.

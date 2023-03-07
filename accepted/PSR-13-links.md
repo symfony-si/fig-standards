@@ -128,8 +128,8 @@ je dodan dodatni EvolvableLinkInterface, ki ponuja metode za
 izdelavo novih instanc objektov z eno samo spremembo. Enak model je uporabljen pri PSR-7
 in zahvaljujoč obnašanja PHP-ja kopiranja pri pisanju, je še vedno učinkovit za CPU in spomin.
 
-Na voljo ni razvijajoče se metode za predloge, vendar kot je vrednost predloge
-povezave osnovana izključno na vrednosti href. NE SME biti nastavljena neodvisno, vendar
+Na voljo ni razvijajoče se metode za vrednosti predlog, vendar kot vrednost predloge
+povezave je osnovana izključno na vrednosti href. NE SME biti nastavljena neodvisno, vendar
 mora izvirati glede na to, ali je vrednosti href predloga povezave RFC 6570 ali ne.
 
 ## 2. Paket
@@ -340,7 +340,7 @@ interface EvolvableLinkProviderInterface extends LinkProviderInterface
     public function withLink(LinkInterface $link);
 
     /**
-     * Returns an instance with the specifed link removed.
+     * Returns an instance with the specified link removed.
      *
      * If the specified link is not present, this method MUST return normally
      * without errors. The link is present if $link is === identical to a link
@@ -353,3 +353,9 @@ interface EvolvableLinkProviderInterface extends LinkProviderInterface
     public function withoutLink(LinkInterface $link);
 }
 ```
+
+Od [psr/link verzije 1.1](https://packagist.org/packages/psr/link#1.1.0) so bili
+zgornji vmesniki posodobljeni z dodatkom namigov tipov argumentov.
+Od [psr/link verzije 2.0](https://packagist.org/packages/psr/link#2.0.0) so bili
+zgornji vmesniki posodobljeni z dodatkom namigov povratnih tipov. Reference na
+`array|\Traversable` so bile zamenjane z `iterable`.

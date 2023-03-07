@@ -6,8 +6,7 @@ updated: "2017-06-11"
 slug: "psr-11-kontejner"
 ---
 
-Vmesnik kontejnerja
-===================
+# Vmesnik kontejnerja
 
 Ta dokument opisuje skupni vmesnik za kontejnerje injiciranja odvisnosti.
 
@@ -25,8 +24,7 @@ Uporabniki kontejnerjev injiciranja odvisnosti (DIC) se imenujejo `uporabniki`.
 
 [RFC 2119]: http://tools.ietf.org/html/rfc2119
 
-1. Specifikacija
-----------------
+## 1. Specifikacija
 
 ### 1.1 Osnove
 
@@ -66,8 +64,7 @@ ki je vzorec, ki se ga v sploščnem odsvetuje.
 
 Prosimo, sklicujte se na sekcijo 4 dokumenta META za več podrobnosti.
 
-2. Paket
---------
+## 2. Paket
 
 Opisani vmesniki in razredi ter pomembne izjeme so dodane kot del
 paketa [psr/container](https://packagist.org/packages/psr/container).
@@ -76,13 +73,12 @@ Paketi, ki ponujajo implementacijo PSR kontejnerja bi morali deklarirati, da pon
 
 Projekti, ki uporabljajo implementacijo, bi morali zahtevati `psr/container-implementation` `1.0.0`.
 
-3. Vmesniki
------------
+## 3. Vmesniki
 
 <a name="container-interface"></a>
 ### 3.1. `Psr\Container\ContainerInterface`
 
-~~~php
+```php
 <?php
 namespace Psr\Container;
 
@@ -116,12 +112,19 @@ interface ContainerInterface
      */
     public function has($id);
 }
-~~~
+```
+
+Od [psr/container verzije 1.1](https://packagist.org/packages/psr/container#1.1.0)
+naprej so bili vmesniki posodobljeni z dodajo tipov argumentov.
+
+Od [psr/container verzije 2.0](https://packagist.org/packages/psr/container#2.0.0)
+je zgornji vmesnik posodobljen z dodatkom namigov povratnih tipov (vendar samo
+pri metodi `has()`).
 
 <a name="container-exception"></a>
 ### 3.2. `Psr\Container\ContainerExceptionInterface`
 
-~~~php
+```php
 <?php
 namespace Psr\Container;
 
@@ -131,12 +134,12 @@ namespace Psr\Container;
 interface ContainerExceptionInterface
 {
 }
-~~~
+```
 
 <a name="not-found-exception"></a>
 ### 3.3. `Psr\Container\NotFoundExceptionInterface`
 
-~~~php
+```php
 <?php
 namespace Psr\Container;
 
@@ -146,4 +149,4 @@ namespace Psr\Container;
 interface NotFoundExceptionInterface extends ContainerExceptionInterface
 {
 }
-~~~
+```

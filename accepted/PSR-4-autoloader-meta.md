@@ -6,19 +6,16 @@ updated: "2016-06-20"
 slug: "psr-4-avtomatski-nalagalnik-meta-dokument"
 ---
 
-PSR-4 meta dokument
-===================
+# PSR-4 meta dokument
 
-1. Povzetek
------------
+## 1. Povzetek
 
 Namen je določiti pravila za interoperabilni PHP avtomatski nalagalnik, ki
 preslika imenske prostore v poti datotečnega sistema in da lahko so-obstoja s katerim koli ostalim SPL
 registriranim avtomatskim nalagalnikom. To bi bil dodatek in ne zamenjava za
 PSR-0.
 
-2. Zakaj se truditi?
---------------------
+## 2. Zakaj se truditi?
 
 ### Zgodovina PSR-0
 
@@ -128,9 +125,7 @@ PSR-0, vendar kot se gleda njihovo prisotnost v tistem dokumentu je v referencu
 k premiku stran od PHP 5.2 in predhodnih pseudo-imenskih prostorov, tako da jih je
 sprejemljivo odstraniti tudi tukaj.
 
-
-3. Obseg
---------
+## 3. Obseg
 
 ### 3.1 Cilji
 
@@ -149,9 +144,7 @@ sprejemljivo odstraniti tudi tukaj.
 
 - Ponuditi splošni pretvorbeni algoritem za vire ne-razredov
 
-
-4. Pristopi
------------
+## 4. Pristopi
 
 ### 4.1 Izbrani pristop
 
@@ -190,7 +183,6 @@ Slabosti:
   določa, kje je v datotečnem sistemu (konvencija "razred-v-datoteko"
   podedovana iz Horde/PEAR).
 
-
 ### 4.2 Alternativa: Ostanite pri samo PSR-0
 
 Ostati samo s PSR-0 je sicer razumno in nas pusti z relativno
@@ -206,7 +198,6 @@ Slabosti:
 
 - Pusti nas s podčrtaji v imenu razreda, kar se časti kot ločila
   direktorijev
-
 
 ### 4.3 Alternativa: Razdelitev avtomatskega nalagalnika in pretvorb
 
@@ -242,9 +233,7 @@ PHP verzije pred 5.3.3 ne izolirajo vodilnih ločil imenskega prostora, tako da
 je odgovornost na to paziti padla na implementacijo. Neuspešna
 izolacija vodilnih ločil imenskega prostora bi lahko vodila k nepričakovanim obnašanjem.
 
-
-5. Ljudje
----------
+## 5. Ljudje
 
 ### 5.1 Urednik
 
@@ -265,9 +254,7 @@ izolacija vodilnih ločil imenskega prostora bi lahko vodila k nepričakovanim o
 - Paul Dragoonis
 - In mnogi ostali, ki jih je preveč, da bi jih poimensko naštevali in imenovali
 
-
-6. Glasovi
-----------
+## 6. Glasovi
 
 - **Uvodno glasovanje:** <https://groups.google.com/d/msg/php-fig/_LYBgfcEoFE/ZwFTvVTIl4AJ>
 
@@ -275,15 +262,13 @@ izolacija vodilnih ločil imenskega prostora bi lahko vodila k nepričakovanim o
 
     - 1. poskus: <https://groups.google.com/forum/#!topic/php-fig/Ua46E344_Ls>,
       predstavljen pred novim načinom dela; prekinjen zaradi naključne spremembe predloga
-      
+
     - 2. poskus: <https://groups.google.com/forum/#!topic/php-fig/NWfyAeF7Psk>,
       preklican pri diskretnosti sponzorja <https://groups.google.com/forum/#!topic/php-fig/t4mW2TQF7iE>
-    
+
     - 3. poskus: Bo še določen
 
-
-7. Ustrezne povezave
---------------------
+## 7. Ustrezne povezave
 
 - [Avtomatski nalagalnik, 4. krog](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/lpmJcmkNYjM)
 - [ANKETA: Avtomatski nalagalnik: Razdelitev ali kombiniranje?](https://groups.google.com/forum/#!topicsearchin/php-fig/autoload/php-fig/fGwA6XHlYhI)

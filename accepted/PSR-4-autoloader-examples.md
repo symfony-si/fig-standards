@@ -6,15 +6,13 @@ updated: "2016-06-20"
 slug: "psr-4-avtomatski-nalagalnik-primeri"
 ---
 
-Primeri izvedbe PSR-4
-=====================
+# Primeri izvedbe PSR-4
 
 Sledeči primeri ponazarjajo PSR-4 skladno kodo:
 
-Primer zaprtja - Closure
-------------------------
+## Primer zaprtja - Closure
 
-~~~php
+```php
 <?php
 /**
  * An example of a project-specific implementation.
@@ -56,15 +54,14 @@ spl_autoload_register(function ($class) {
         require $file;
     }
 });
-~~~
+```
 
-Primer razreda
---------------
+## Primer razreda
 
 Sledeči primer je izvedba razreda, ki obravnava več
 imenskih prostorov:
 
-~~~php
+```php
 <?php
 namespace Example;
 
@@ -252,13 +249,13 @@ class Psr4AutoloaderClass
         return false;
     }
 }
-~~~
+```
 
 ### Testi enot
 
 Sledeči primer je eden izmed načinov testiranja enot za zgornji nalagalni razred:
 
-~~~php
+```php
 <?php
 namespace Example\Tests;
 
@@ -355,4 +352,4 @@ class Psr4AutoloaderClassTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 }
-~~~
+```

@@ -6,11 +6,9 @@ updated: "2016-06-20"
 slug: "psr-6-predpomnilnik-meta-dokument"
 ---
 
-PSR predpomnilnik meta dokument
-===============================
+# PSR predpomnilnik meta dokument
 
-1. Povzetek
------------
+## 1. Povzetek
 
 Predpomnjenje je pogosti način izboljšanja zmogljivosti kateregakoli projekta, kar naredi
 predpomnilne knjižnice ene izmed najpogostejših lastnosti mnogih ogrodij in
@@ -21,9 +19,7 @@ ponujajo funkcionalnosti, ki jih potrebujejo. Poleg tega se razvijalci predpomni
 knjižnic sami soočajo z izbiro med samo podpiranjem omejenega števila
 ogrodij ali izdelavo velikega števila razredov adapterjev.
 
-
-2. Zakaj se truditi?
---------------------
+## 2. Zakaj se truditi?
 
 Skupni vmesnik za predpomnilne sisteme bi rešil te probleme. Razvijalci knjižnic in
 ogrodij se lahko zanašajo na to, da sistem predpomnjenja deluje tako, kot
@@ -50,24 +46,22 @@ ni narejena kot bi morala biti. Vendar verjamemo, da je predpomnjenje področje,
 preplavljeno s produkti, kjer možnost razširitve ponujena tu blaži
 kakršnokoli tveganje stagnacije.
 
-3. Obseg
---------
+## 3. Obseg
 
-## 3.1 Cilji
+### 3.1 Cilji
 
 * Skupen vmesnik za osnovni in vmesni nivo potreb predpomnjenja.
 * Jasen mehanizem za razširitev specifikacije, da podpira napredne lastnosti,
 tako v prihodnjih PSR-jih ali pri individualnih implementacijah. Ta mehanizem mora dovoljevati
 več neodvisnih razširitev brez trkov.
 
-## 3.2 Niso cilji
+### 3.2 Niso cilji
 
 * Arhitekturna združljivost z vsemi obstoječimi implementacijami predpomnilnikov.
 * Napredne predpomnilne lastnosti, kot so imenski prostori ali označevanje, ki je uporabljeno pri
 manjšini uporabnikov.
 
-4. Pristopi
------------
+## 4. Pristopi
 
 ### 4.1 Izbrani pristop
 
@@ -100,7 +94,7 @@ Primeri:
 Nekateri pogosti vzorci uporabe so prikazani spodaj. Ti so ne-normativni, vendar bi
 morali prikazati aplikacijo nekih načrtovalskih odločitev.
 
-~~~php
+```php
 /**
  * Gets a list of available widgets.
  *
@@ -118,9 +112,9 @@ function get_widget_list()
     }
     return $item->get();
 }
-~~~
+```
 
-~~~php
+```php
 /**
  * Caches a list of available widgets.
  *
@@ -134,9 +128,9 @@ function save_widget_list($list)
     $item->set($list);
     $pool->save($item);
 }
-~~~
+```
 
-~~~php
+```php
 /**
  * Clears the list of available widgets.
  *
@@ -148,9 +142,9 @@ function clear_widget_list()
     $pool = get_cache_pool('widgets');
     $pool->deleteItems(['widget_list']);
 }
-~~~
+```
 
-~~~php
+```php
 /**
  * Clears all widget information.
  *
@@ -162,9 +156,9 @@ function clear_widget_cache()
     $pool = get_cache_pool('widgets');
     $pool->clear();
 }
-~~~
+```
 
-~~~php
+```php
 /**
  * Load widgets.
  *
@@ -201,9 +195,9 @@ function load_widgets(array $ids)
 
     return $widgets;
 }
-~~~
+```
 
-~~~php
+```php
 /**
  * This examples reflects functionality that is NOT included in this
  * specification, but is shown as an example of how such functionality MIGHT
@@ -236,7 +230,7 @@ function set_widget(TaggablePoolInterface $pool, Widget $widget)
     $item->set($widget);
     $pool->save($item);
 }
-~~~
+```
 
 ### 4.2 Alternativa: Pristop "šibkega elementa"
 
@@ -284,8 +278,7 @@ privzetim krmiljenjem informacij je vse nemogoče) in ker je trivialno,
 da določene implementacije vključijo kot dodatek, če je to
 potrebno.
 
-5. Ljudje
----------
+## 5. Ljudje
 
 ### 5.1 Urednik
 
@@ -296,14 +289,11 @@ potrebno.
 * Paul Dragoonis, PPI Framework (Coordinator)
 * Robert Hafner, Stash
 
-6. Glasovanje
--------------
+## 6. Glasovanje
 
 [Glasovanje sprejeto na e-poštnem seznamu](https://groups.google.com/forum/#!msg/php-fig/dSw5IhpKJ1g/O9wpqizWAwAJ)
 
-
-7. Ustrezne povezave
---------------------
+## 7. Ustrezne povezave
 
 _**Opomba:** Vrstni red kronološko padajoče._
 
@@ -314,3 +304,74 @@ _**Opomba:** Vrstni red kronološko padajoče._
 [1]: https://docs.google.com/spreadsheet/ccc?key=0Ak2JdGialLildEM2UjlOdnA4ekg3R1Bfeng5eGlZc1E#gid=0
 [2]: https://docs.google.com/spreadsheet/ccc?key=0AsMrMKNHL1uGdDdVd2llN1kxczZQejZaa3JHcXA3b0E#gid=0
 [3]: https://docs.google.com/spreadsheet/ccc?key=0AsMrMKNHL1uGdEE3SU8zclNtdTNobWxpZnFyR0llSXc#gid=1
+
+## 8. Popravki
+
+### 8.1 Ravnanje z nepravilnimi vrednostmi DateTime v expiresAt()
+
+Parameter `$expiration` metode `CacheItemInterface::expiresAt()` nima tipa v
+vmesniku, vendar je v docbloku določek kot `\DateTimeInterface`. Namen je, da
+je bodisi objekt `\DateTime` ali `\DateTimeImmutable` dovoljen. Vendar
+`\DateTimeInterface` in `\DateTimeImmutable` sta bila dodana v PHP 5.5 in
+avtorji ne rabijo vsiljevati trdih sintaktičnih zahtev za PHP 5.5 v
+specifikaciji.
+
+Kljub temu MORAJO izvajalci sprejeti samo `\DateTimeInterface` ali kompatibilne
+tipe (kot sta `\DateTime` in `\DateTimeImmutable`) kakor da je metoda
+eksplicitnega tipa. (Bodite pozorni, da pravila variance za parameter s tipom
+lahko odstopajo med verzijami jezika.)
+
+Simuliranje spodletelega preverjanja tipa se na žalost spreminja med verzijami
+PHP in tako ni priporočljivo. Namesto tega bi izvajalci MORALI vreči instanco
+`\Psr\Cache\InvalidArgumentException`. Sledeči primer kode je priporočljiv za
+uveljavljanje preverjanja tipa na metodi expiresAt():
+
+```php
+
+class ExpiresAtInvalidParameterException implements Psr\Cache\InvalidArgumentException {}
+
+// ...
+
+if (! (
+        null === $expiration
+        || $expiration instanceof \DateTime
+        || $expiration instanceof \DateTimeInterface
+)) {
+    throw new ExpiresAtInvalidParameterException(sprintf(
+        'Argument 1 passed to %s::expiresAt() must be an instance of DateTime or DateTimeImmutable; %s given',
+        get_class($this),
+        is_object($expiration) ? get_class($expiration) : gettype($expiration)
+    ));
+}
+```
+
+### 8.2 Dodatki tipov
+
+Izdaja 2.0 paketa `psr/cache` vključuje skalarne parametre tipov. Izdaja 3.0
+paketa vključuje povratne tipe. Ta struktura izkorišča PHP 7.2 podporo
+kovariance PHP 7.2, kar omogoča postopen proces nadgradnje, vendar zahteva
+PHP 8.0 za kompatibilnost tipov.
+
+Verzija 2.0 vsebuje tudi zgornji popravek 8.1, kar ponuja pravilno namigovanje
+tipov za parameter `$expiration` metode `CacheItemInterface::expiresAt()`. To
+pomeni manjšo spremembo v vrženi napaki pri neveljavnem vnosu; kljub temu, da je
+še vedno usodno nedovoljen primer, FIG smatra to za sprejemljivo majhen prelom
+združljivosti za nazaj, da se lahko izkoristi pravilne avtohtone tipe.
+
+Izvajalci LAHKO dodajo povratne tipe k svojim lastnim paketom po svoji presoji
+pod pogojem, da:
+
+* se povratni tip ujema s tistimi iz paketa 3.0.
+* izvedba določa najmanj PHP verzijo 8.0.0 ali novejše.
+
+Izvajalci LAHKO dodajo tipe parametrov k svojim lastnim paketom v večji izdaji,
+bodisi istočasno z dodajanjem povratnih tipov ali pa v ločeni izdaji pod
+pogojem, da:
+
+* se tipi parametrov ujemajo s tistimi iz paketa 2.0.
+* izvedba določa najmanjšo PHP verzijo 8.0.0 ali novejše.
+* izvedba zavisi od `"psr/cache": "^2.0 || ^3.0"`, tako da se izključi verzijo
+  1.0 brez tipov.
+
+Izvajalce se spodbuja, vendar od njih ni zahtevano, da njihovi paketi čimprej
+preidejo na verzijo 3.0.

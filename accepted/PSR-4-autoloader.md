@@ -12,14 +12,12 @@ Ključne besede "MORA", "NE SME", "ZAHTEVA", "PRIPOROČA", "LAHKO" in "NEOBVEZNO
 v tem dokumentu se tolmačijo, kot je navedeno v
 [RFC 2119](http://tools.ietf.org/html/rfc2119).
 
-
 ## 1. Pregled
 
 Ta PSR opisuje specifikacijo za [avtomatsko nalaganje][autoloading] razredov iz poti
 datotek. Je polno interoperabilen in je lahko uporabljen kot dodatek h katerim koli ostalim
 specifikacijam avtomatskega nalagalnika, vključno s [PSR-0][]. Ta PSR tudi opisuje, kam
 dati datoteke, ki bodo avtomatsko naložene glede na specifikacijo.
-
 
 ## 2. Specifikacija
 
@@ -63,7 +61,6 @@ dati datoteke, ki bodo avtomatsko naložene glede na specifikacijo.
 
 4. Implementacije avtomatskega nalagalnika NE SMEJO vreči izjem, NE SMEJO dvigniti napak
    katerega koli nivoja in NE BI SMELE vrniti vrednosti.
-
 
 ## 3. Primeri
 

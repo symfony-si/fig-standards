@@ -25,12 +25,12 @@ ustvarjanje zahtevka k API-ju HTTP ali upravljanje prihajajočega zahtevka.
 
 Vsako sporočilo zahtevka HTTP ima določeno obliko:
 
-~~~http
+```http
 POST /path HTTP/1.1
 Host: example.com
 
 foo=bar&baz=bat
-~~~
+```
 
 Prva vrstica zahtevka je t.i. "vrstica zahtevka" in vsebuje v vrstnem redu
 metodo zahtevka HTTP, cilj zahtevka (običajno bodisi absolutni URI ali
@@ -39,12 +39,12 @@ ali več glav HTTP, prazna vrstica in telo sporočila.
 
 Sporočila odziva HTTP imajo podobno strukturo:
 
-~~~http
+```http
 HTTP/1.1 200 OK
 Content-Type: text/plain
 
 This is the response body
-~~~
+```
 
 Prva vrstica je "vrstica stanja" in vsebuje v vrstnem redu verzijo protokola
 HTTP, kodo stanja HTTP in "frazo razloga", berljivi
@@ -65,7 +65,6 @@ v tem dokumentu se tolmačijo, kot je navedeno v
 - [RFC 7230](http://tools.ietf.org/html/rfc7230)
 - [RFC 7231](http://tools.ietf.org/html/rfc7231)
 
-
 ## 1. Specifikacija
 
 ### 1.1 Sporočila
@@ -84,6 +83,8 @@ ko se sklicuje na te vmesnike.
 
 ### 1.2 Glave HTTP
 
+[glej [popravki](PSR-7-http-message-meta#71-potrjevanje-imen-glav-in-vrednosti)]
+
 #### Imena polj glave z neobčutljivo velikostjo črk
 
 Sporočila HTTP vključujejo imena polj glave z neobčutljivo velikostjo črk. Glave so vzpostavljene
@@ -92,7 +93,7 @@ Na primer, vzpostavitev glave `foo` bo vrnilo enak rezultat kot
 vzpostavitev glave `FoO`. Podobno, nastavitev glave `Foo` bo prepisalo
 katerokoli prej nastavljeno vrednost glave `foo`.
 
-~~~php
+```php
 $message = $message->withHeader('foo', 'bar');
 
 echo $message->getHeaderLine('foo');
@@ -104,7 +105,7 @@ echo $message->getHeaderLine('FOO');
 $message = $message->withHeader('fOO', 'baz');
 echo $message->getHeaderLine('foo');
 // Outputs: baz
-~~~
+```
 
 Klub temu, da so glave lahko vzpostavljene z neobčutljivo velikostjo črk, prvotna velikost črk
 MORA biti ohranjena v implementaciji, še posebej ko je vzpostavljena z
@@ -124,7 +125,7 @@ vrednosti glave od glave z neobčutljivo velikostjo črk z imenom združenim z v
 Uporabite `getHeader()` za vpostavitev polja vseh vrednosti glav za
 določeno glavo z neobčutljivo velikostjo črk po imenu.
 
-~~~php
+```php
 $message = $message
     ->withHeader('foo', 'bar')
     ->withAddedHeader('foo', 'baz');
@@ -134,7 +135,7 @@ $header = $message->getHeaderLine('foo');
 
 $header = $message->getHeader('foo');
 // ['bar', 'baz']
-~~~
+```
 
 Opomba: Ne vse vrednosti glav so lahko združene z uporabo vejice (npr.,
 `Set-Cookie`). Ko delate s takimi glavami, se BI MORALI uporabniki
@@ -259,18 +260,18 @@ Klicanje te metode ne vpliva na URI kot je vrnjen iz `getUri`().
 
 Na primer, uporabnik želi narediti zahtevek asterisk-form na strežnik:
 
-~~~php
+```php
 $request = $request
     ->withMethod('OPTIONS')
     ->withRequestTarget('*')
     ->withUri(new Uri('https://example.org/'));
-~~~
+```
 
 Ta primer lahko ultimativno rezultira v zahtevek HTTP, ki izgleda takole:
 
-~~~http
+```http
 OPTIONS * HTTP/1.1
-~~~
+```
 
 Vendar klient HTTP bo zmožen uporabiti efektivni URL (iz `getUri()`)
 za določitev protokola, imena gostitelja in porta TCP.
@@ -337,7 +338,7 @@ vnosnih datotek. Kot primer, če imate obrazec, ki pošlje polje datotek
 — npr. ime vnosa "files", pošiljanje `files[0]` in `files[1]` — PHP bo
 predstavil to kot:
 
-~~~php
+```php
 array(
     'files' => array(
         'name' => array(
@@ -351,11 +352,11 @@ array(
         /* etc. */
     ),
 )
-~~~
+```
 
 namesto pričakovanega:
 
-~~~php
+```php
 array(
     'files' => array(
         0 => array(
@@ -370,7 +371,7 @@ array(
         ),
     ),
 )
-~~~
+```
 
 Rezultat je, da morajo uporabniki vedeti to podrobnost implementacije jezika,
 in pisati kodo za pridobivanje podatkov za dano nalaganje.
@@ -405,13 +406,13 @@ poslane.
 
 V najenostavnejšem primeru je to lahko eno poimenovanje elementa obrazca poslanega kot:
 
-~~~html
+```html
 <input type="file" name="avatar" />
-~~~
+```
 
 V tem primeru bi struktura v `$_FILES` izgledala takole:
 
-~~~php
+```php
 array(
     'avatar' => array(
         'tmp_name' => 'phpUxcOty',
@@ -421,43 +422,59 @@ array(
         'error' => 0,
     ),
 )
-~~~
+```
 
 Normalizirana oblika vrnjega od `getUploadedFiles()` bi bila:
 
-~~~php
+```php
 array(
     'avatar' => /* UploadedFileInterface instance */
 )
-~~~
+```
 
 V primeru vnosa z uporabo zapisa polja za ime:
 
-~~~html
+```html
 <input type="file" name="my-form[details][avatar]" />
-~~~
+```
 
 `$_FILES` na koncu izgleda takole:
 
-~~~php
-array(
-    'my-form' => array(
-        'details' => array(
-            'avatar' => array(
-                'tmp_name' => 'phpUxcOty',
-                'name' => 'my-avatar.png',
-                'size' => 90996,
-                'type' => 'image/png',
-                'error' => 0,
+```php
+array (
+    'my-form' => array (
+        'name' => array (
+            'details' => array (
+                'avatar' => 'my-avatar.png',
+            ),
+        ),
+        'type' => array (
+            'details' => array (
+                'avatar' => 'image/png',
+            ),
+        ),
+        'tmp_name' => array (
+            'details' => array (
+                'avatar' => 'phpmFLrzD',
+            ),
+        ),
+        'error' => array (
+            'details' => array (
+                'avatar' => 0,
+            ),
+        ),
+        'size' => array (
+            'details' => array (
+                'avatar' => 90996,
             ),
         ),
     ),
 )
-~~~
+```
 
 In pripadajoče drevo vrnjeno z `getUploadedFiles()` bi moralo biti:
 
-~~~php
+```php
 array(
     'my-form' => array(
         'details' => array(
@@ -465,14 +482,14 @@ array(
         ),
     ),
 )
-~~~
+```
 
 V nekaterih primerih lahko določite polje datotek:
 
-~~~html
-Upload an avatar: <input type="file" "name="my-form[details][avatars][]" />
-Upload an avatar: <input type="file" "name="my-form[details][avatars][]" />
-~~~
+```html
+Upload an avatar: <input type="file" name="my-form[details][avatars][]" />
+Upload an avatar: <input type="file" name="my-form[details][avatars][]" />
+```
 
 (Kot primer, JavaScript kontrole lahko dodajo dodatne vnose nalaganja datotek, da
 omogočijo nalaganje večih datotek naenkrat.)
@@ -481,46 +498,62 @@ V takem primeru, mora biti implementacije specifikacije sestavljena iz vseh info
 ki se tičejo datoteke na danem indeksu. Razlog je, ker `$_FILES` odstopa
 od svoje normalne strukture v takih primerih:
 
-~~~php
-array(
-    'my-form' => array(
-        'details' => array(
-            'avatars' => array(
-                'tmp_name' => array(
-                    0 => '...',
-                    1 => '...',
-                    2 => '...',
+```php
+array (
+    'my-form' => array (
+        'name' => array (
+            'details' => array (
+                'avatars' => array (
+                    0 => 'my-avatar.png',
+                    1 => 'my-avatar2.png',
+                    2 => 'my-avatar3.png',
                 ),
-                'name' => array(
-                    0 => '...',
-                    1 => '...',
-                    2 => '...',
+            ),
+        ),
+        'type' => array (
+            'details' => array (
+                'avatars' => array (
+                    0 => 'image/png',
+                    1 => 'image/png',
+                    2 => 'image/png',
                 ),
-                'size' => array(
-                    0 => '...',
-                    1 => '...',
-                    2 => '...',
+            ),
+        ),
+        'tmp_name' => array (
+            'details' => array (
+                'avatars' => array (
+                    0 => 'phpmFLrzD',
+                    1 => 'phpV2pBil',
+                    2 => 'php8RUG8v',
                 ),
-                'type' => array(
-                    0 => '...',
-                    1 => '...',
-                    2 => '...',
+            ),
+        ),
+        'error' => array (
+            'details' => array (
+                'avatars' => array (
+                    0 => 0,
+                    1 => 0,
+                    2 => 0,
                 ),
-                'error' => array(
-                    0 => '...',
-                    1 => '...',
-                    2 => '...',
+            ),
+        ),
+        'size' => array (
+            'details' => array (
+                'avatars' => array (
+                    0 => 90996,
+                    1 => 90996,
+                    3 => 90996,
                 ),
             ),
         ),
     ),
 )
-~~~
+```
 
 Zgornje polje `$_FILES` bi ustrezalo sledeči strukturi kot
 je vrnjena z `getUploadedFiles()`:
 
-~~~php
+```php
 array(
     'my-form' => array(
         'details' => array(
@@ -532,13 +565,13 @@ array(
         ),
     ),
 )
-~~~
+```
 
 Uporabniki bi dostopali do indeksa `1` vgnezdenega polja z uporabo:
 
-~~~php
+```php
 $request->getUploadedFiles()['my-form']['details']['avatars'][1];
-~~~
+```
 
 Ker so podatki naloženih datotek derivati (pridobljeni iz `$_FILES`) ali
 telesa zahtevka), je metoda mutatorja `ẁithUploadedFiles()` tudi prisotna v
@@ -546,7 +579,7 @@ vmesniku, kar omogoča delegiranje normalizacije drugemu procesu.
 
 V primeru prvotnih primerov, uproaba odraža sledeče:
 
-~~~php
+```php
 $file0 = $request->getUploadedFiles()['files'][0];
 $file1 = $request->getUploadedFiles()['files'][1];
 
@@ -557,7 +590,7 @@ printf(
 );
 
 // "Received the files file0.txt and file1.html"
-~~~
+```
 
 Ta predlog tudi prepoznava, da implementacije lahko operirajo v ne-SAPI
 okoljih. Kot take `UploadedFileInterface` ponujajo metode za zagotavljanje
@@ -574,7 +607,7 @@ operacij, ki bodo delovale ne glede na okolje. Še posebej:
 
 Kot primeri:
 
-~~~
+```
 // Move a file to an upload directory
 $filename = sprintf(
     '%s.%s',
@@ -589,7 +622,7 @@ $file0->moveTo(DATA_DIR . '/' . $filename);
 // StreamWrapper.
 $stream = new Psr7StreamWrapper($file1->getStream());
 stream_copy_to_stream($stream, $s3wrapper);
-~~~
+```
 
 ## 2. Paket
 
@@ -600,7 +633,7 @@ paketa [psr/http-message](https://packagist.org/packages/psr/http-message).
 
 ### 3.1 `Psr\Http\Message\MessageInterface`
 
-~~~php
+```php
 <?php
 namespace Psr\Http\Message;
 
@@ -788,11 +821,11 @@ interface MessageInterface
      */
     public function withBody(StreamInterface $body);
 }
-~~~
+```
 
 ### 3.2 `Psr\Http\Message\RequestInterface`
 
-~~~php
+```php
 <?php
 namespace Psr\Http\Message;
 
@@ -921,11 +954,11 @@ interface RequestInterface extends MessageInterface
      */
     public function withUri(UriInterface $uri, $preserveHost = false);
 }
-~~~
+```
 
 #### 3.2.1 `Psr\Http\Message\ServerRequestInterface`
 
-~~~php
+```php
 <?php
 namespace Psr\Http\Message;
 
@@ -1186,11 +1219,11 @@ interface ServerRequestInterface extends RequestInterface
      */
     public function withoutAttribute($name);
 }
-~~~
+```
 
 ### 3.3 `Psr\Http\Message\ResponseInterface`
 
-~~~php
+```php
 <?php
 namespace Psr\Http\Message;
 
@@ -1258,11 +1291,11 @@ interface ResponseInterface extends MessageInterface
      */
     public function getReasonPhrase();
 }
-~~~
+```
 
 ### 3.4 `Psr\Http\Message\StreamInterface`
 
-~~~php
+```php
 <?php
 namespace Psr\Http\Message;
 
@@ -1420,11 +1453,11 @@ interface StreamInterface
      */
     public function getMetadata($key = null);
 }
-~~~
+```
 
 ### 3.5 `Psr\Http\Message\UriInterface`
 
-~~~php
+```php
 <?php
 namespace Psr\Http\Message;
 
@@ -1749,11 +1782,11 @@ interface UriInterface
      */
     public function __toString();
 }
-~~~
+```
 
 ### 3.6 `Psr\Http\Message\UploadedFileInterface`
 
-~~~php
+```php
 <?php
 namespace Psr\Http\Message;
 
@@ -1876,4 +1909,4 @@ interface UploadedFileInterface
      */
     public function getClientMediaType();
 }
-~~~
+```

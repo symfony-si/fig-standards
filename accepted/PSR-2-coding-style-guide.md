@@ -6,8 +6,7 @@ updated: "2017-01-11"
 slug: "psr-2-vodic-kodnega-standarda"
 ---
 
-Vodič stila kode
-================
+# Vodič stila kode
 
 Ta vodič podaljšuje in razširja [PSR-1], osnovni kodni standard.
 
@@ -29,9 +28,7 @@ v tem dokumentu se tolmačijo, kot je navedeno v
 [PSR-0]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 
-
-1. Pregled
-----------
+## 1. Pregled
 
 - Koda MORA slediti "vodiču stila kode" PSR [[PSR-1]].
 
@@ -66,7 +63,7 @@ v tem dokumentu se tolmačijo, kot je navedeno v
 
 Ta primer zajema nekaj pravil spodaj za hiter pregled:
 
-~~~php
+```php
 <?php
 namespace Vendor\Package;
 
@@ -92,10 +89,9 @@ class Foo extends Bar implements FooInterface
         // method body
     }
 }
-~~~
+```
 
-2. Splošno
-----------
+## 2. Splošno
 
 ### 2.1. Osnovni kodni standard
 
@@ -143,10 +139,7 @@ PHP konstante `true`, `false` in `null` MORAJO biti v malih črkah.
 
 [ključne besede]: http://php.net/manual/en/reserved.keywords.php
 
-
-
-3. Deklaraciji namespace in use
--------------------------------
+## 3. Deklaraciji namespace in use
 
 Ko je prisotna, MORA biti ena prazna vrstica za `namespace` deklaracijo.
 
@@ -159,7 +152,7 @@ Biti MORA ena prazna vrstica za blokom `use`.
 
 Na primer:
 
-~~~php
+```php
 <?php
 namespace Vendor\Package;
 
@@ -169,11 +162,9 @@ use OtherVendor\OtherPackage\BazClass;
 
 // ... additional PHP code ...
 
-~~~
+```
 
-
-4. Razredi, lastnosti in metode
--------------------------------
+## 4. Razredi, lastnosti in metode
 
 Izraz "razred" se sklicuje na vse razrede, vmesnike in lastnosti - traits.
 
@@ -185,7 +176,7 @@ ime razreda.
 Odpiralni zaviti oklepaj za razred MORA iti na svojo vrstico; zapiralni zaviti oklepaj
 za razred MORA iti na naslednjo vrstico za telesom.
 
-~~~php
+```php
 <?php
 namespace Vendor\Package;
 
@@ -197,13 +188,13 @@ class ClassName extends ParentClass implements \ArrayAccess, \Countable
 {
     // constants, properties, methods
 }
-~~~
+```
 
 Seznami z `implements` so LAHKO razdeljeni po večih vrsticah, kjer je vsaka
 naknadna vrstica enkrat zamaknjena. Ko se to dela, prvi element v seznamu
 MORA iti na naslednjo vrstico in torej MORA biti samo en vmesnik na vrstico.
 
-~~~php
+```php
 <?php
 namespace Vendor\Package;
 
@@ -218,7 +209,7 @@ class ClassName extends ParentClass implements
 {
     // constants, properties, methods
 }
-~~~
+```
 
 ### 4.2. Lastnosti
 
@@ -233,7 +224,7 @@ t.i. protected ali private vidnosti.
 
 Deklaracija lastnosti izgleda kot sledeče.
 
-~~~php
+```php
 <?php
 namespace Vendor\Package;
 
@@ -241,7 +232,7 @@ class ClassName
 {
     public $foo = null;
 }
-~~~
+```
 
 ### 4.3. Metode
 
@@ -258,7 +249,7 @@ oklepajem in NE SME biti presledka za zapiralnim oklepajem.
 Deklaracija metode izgleda sledeče. Bodite pozorni na postavitev
 oklepajec, vejic, presledkov in zavitih oklepajev:
 
-~~~php
+```php
 <?php
 namespace Vendor\Package;
 
@@ -269,7 +260,7 @@ class ClassName
         // method body
     }
 }
-~~~
+```
 
 ### 4.4. Argumenti metode
 
@@ -279,7 +270,7 @@ MORA biti en presledek za vsako vejico.
 Argumenti metode s privzetimi vrednostmi MORAJO iti na konec seznama
 argumentov.
 
-~~~php
+```php
 <?php
 namespace Vendor\Package;
 
@@ -290,7 +281,7 @@ class ClassName
         // method body
     }
 }
-~~~
+```
 
 Seznami argumentov so LAHKO razdeljeni med več vrstic, kjer je vsaka naknadna vrstica
 enkrat zamaknjena. Ko se dela to, MORA biti prvi element v seznamu na
@@ -300,7 +291,7 @@ Ko je seznam argumentov razdeljen med več vrstic, MORATA biti zapiralni oklepaj
 in odpiralni zaviti oklepaj dana skupaj na svojo vrstico z enim presledkom
 med njima.
 
-~~~php
+```php
 <?php
 namespace Vendor\Package;
 
@@ -314,7 +305,7 @@ class ClassName
         // method body
     }
 }
-~~~
+```
 
 ### 4.5. `abstract`, `final` in `static`
 
@@ -324,7 +315,7 @@ deklaracijo vidnosti.
 Ko je prisotna, MORA biti deklaracija `static` za deklaracijo
 vidnosti.
 
-~~~php
+```php
 <?php
 namespace Vendor\Package;
 
@@ -339,7 +330,7 @@ abstract class ClassName
         // method body
     }
 }
-~~~
+```
 
 ### 4.6. Klicanje metod in funkcij
 
@@ -349,28 +340,27 @@ za odpiralnim oklepajem in NE SME biti presledka pred
 zapiralnim oklepajem. V seznamu argumentov ne sme biti presledka pred
 vsako vejico in MORA biti en presledek za vsako vejico.
 
-~~~php
+```php
 <?php
 bar();
 $foo->bar($arg1);
 Foo::bar($arg2, $arg3);
-~~~
+```
 
 Seznami argumentov so LAHKO razdeljeni v več vrstic, kjer je vsaka naknadna vrstica
 enkrat zamaknjena. Ko to delate, MORA biti prvi element v seznamu v
 naslednji vrstici in biti MORA samo en argument na vrstico.
 
-~~~php
+```php
 <?php
 $foo->bar(
     $longArgument,
     $longerArgument,
     $muchLongerArgument
 );
-~~~
+```
 
-5. Kontrolne strukture
-----------------------
+## 5. Kontrolne strukture
 
 Splošni stil pravil za kontrolne strukture je, kot sledi:
 
@@ -386,14 +376,13 @@ Telo vsake strukture MORA biti zaprto z zavitimi oklepaji. To standardizira, kak
 struktura izgleda in zmanjšuje verjetnost uvajanje napak, ko se dodaja nove
 vrstice v telo.
 
-
 ### 5.1. `if`, `elseif`, `else`
 
 Struktura `if` izgleda sleče. Bodite pozorni na postavitev oklepajev,
 presledkov in zavitih oklepajev; ter na to, da sta `else` in `elseif` v isti vrstici kot
 zaviti zaklepaj iz predhodnega telesa.
 
-~~~php
+```php
 <?php
 if ($expr1) {
     // if body
@@ -402,11 +391,10 @@ if ($expr1) {
 } else {
     // else body;
 }
-~~~
+```
 
 Ključna beseda `elseif` BI MORALA biti uporabljena namesto `else if`, da vse kontrolne
 ključne besede izgledajo kot enojne besede.
-
 
 ### 5.2. `switch`, `case`
 
@@ -416,7 +404,7 @@ od `switch` in `break` ključnih besed (ali ostalih zaključnih ključnih besed)
 zamaknjen na enakem nivoju, kot je telo `case`. Biti MORA komentar, kot je
 `// no break`, ko je prehajanje naprej namensko v nepraznem `case` telesu.
 
-~~~php
+```php
 <?php
 switch ($expr) {
     case 0:
@@ -434,61 +422,60 @@ switch ($expr) {
         echo 'Default case';
         break;
 }
-~~~
-
+```
 
 ### 5.3. `while`, `do while`
 
 Stavek `while` izgleda, kot sledi. Bodite pozorni na postavitev
 oklepajev, presledkov in zavitih oklepajev.
 
-~~~php
+```php
 <?php
 while ($expr) {
     // structure body
 }
-~~~
+```
 
 Podobno stavek `do while` izgleda sledeče. Bodite pozorni
 na oklepaje, presledke in zavite oklepaje.
 
-~~~php
+```php
 <?php
 do {
     // structure body;
 } while ($expr);
-~~~
+```
 
 ### 5.4. `for`
 
 Stavek `for` izgleda, kot sledi. Bodite pozorni na oklepaje,
 presledke in zavite oklepaje.
 
-~~~php
+```php
 <?php
 for ($i = 0; $i < 10; $i++) {
     // for body
 }
-~~~
+```
 
 ### 5.5. `foreach`
 
 Stavek `foreach` izgleda, kot sledi. Bodite pozorni na postavitev
 oklepajev, presledkov in zavitih oklepajev.
 
-~~~php
+```php
 <?php
 foreach ($iterable as $key => $value) {
     // foreach body
 }
-~~~
+```
 
 ### 5.6. `try`, `catch`
 
 Blok `try catch` izgleda, kot sledi. Bodite pozorni na postavitev
 oklepajev, presledkov in zavitih oklepajev.
 
-~~~php
+```php
 <?php
 try {
     // try body
@@ -497,10 +484,9 @@ try {
 } catch (OtherExceptionType $e) {
     // catch body
 }
-~~~
+```
 
-6. Zaprtja
-----------
+## 6. Zaprtja
 
 Zaprtja MORAJO biti deklarirana s presledkom za ključno besedo `function` in
 presledkom pred in za ključno besedo `use`.
@@ -521,7 +507,7 @@ argumentov.
 Deklaracija zaprtja izgleda, kot sledi. Bodite pozorni na postavitev
 oklepajev, vejic, presledkov in zavitih oklepajev:
 
-~~~php
+```php
 <?php
 $closureWithArgs = function ($arg1, $arg2) {
     // body
@@ -530,7 +516,7 @@ $closureWithArgs = function ($arg1, $arg2) {
 $closureWithArgsAndVars = function ($arg1, $arg2) use ($var1, $var2) {
     // body
 };
-~~~
+```
 
 Seznami argumentov in seznami spremenljivk so LAHKO razdeljeni po večih vrsticah, kjer
 je vsaka naknadna vrstica enkrat zamaknjena. Ko to delate, MORA biti prvi element v
@@ -544,7 +530,7 @@ skupaj na svojo vrstico z enim presledkom med njima.
 Sledijo primeri zaprtij z ali brez seznama argumentov in
 seznama spremenljivk na večih vrsticah.
 
-~~~php
+```php
 <?php
 $longArgs_noVars = function (
     $longArgument,
@@ -589,12 +575,12 @@ $shortArgs_longVars = function ($arg) use (
 ) {
     // body
 };
-~~~
+```
 
 Bodite pozorni, da pravila oblikovanja tudi veljajo, ko je zaprtje direktno uporabljeno
 v klicu funkcije ali metode kot argument.
 
-~~~php
+```php
 <?php
 $foo->bar(
     $arg1,
@@ -603,11 +589,9 @@ $foo->bar(
     },
     $arg3
 );
-~~~
+```
 
-
-7. Zaključek
-------------
+## 7. Zaključek
 
 Mnogo elementov sloga in praks je namerno izpuščenih v tem
 vodiču. Te vključujejo, vendar niso omejeni na:
@@ -629,9 +613,7 @@ vodiču. Te vključujejo, vendar niso omejeni na:
 Prihodnje priporočila LAHKO revidirajo in razširjajo ta vodič, da naslovijo te ali
 ostale elemente sloga in praks.
 
-
-Priloga A. Raziskava
---------------------
+## Priloga A. Raziskava
 
 Pri pisanju tega vodiča stila je skupina izvedla raziskavo projektov članov za
 ugotovitev skupnih praks. Raziskava je dana tu za ponazoritev.

@@ -89,3 +89,51 @@ objekt domene, ki jih proizvaja.
 
 * [Kaj je v povezavi?](http://evertpot.com/whats-in-a-link/) by Evert Pot
 * [Seznam delovne skupine FIG Link](https://groups.google.com/forum/#!forum/php-fig-link)
+
+## 7. Popravki
+
+### 7.1 Dodatki tipov
+
+Izdaja paketa `psr/link` 1.1 vključuje skalarni tip parametrov. Izdaja paketa
+2.0 vključuje tipe povratnih tipov. Ta struktura omogoča podporo kovariance PHP
+7.2 za postopno nadgradnjo, vendar zahteva PHP 8.0 za združljivost tipov.
+
+Izvajalci LAHKO po lastni presoji dodajo tipe povratnih tipov v svoje lastne
+pakete, če:
+
+* povratni tipi ustrezajo tistim v paketu 2.0.
+* implementacija določa minimalno različico PHP 8.0.0 ali novejšo.
+
+Izvajalci LAHKO dodajo tipe parametrov v svoje lastne pakete v novi glavni
+različici, bodisi istočasno z dodajanjem povratnih tipov ali v kasnejši izdaji,
+če:
+
+* se tipi parametrov ujemajo s tistimi v paketu 1.1.
+* implementacija določa minimalno različico PHP 8.0.0 ali novejšo.
+* je implementacija odvisna od `"psr/link": "^1.1 || ^2.0"`, da izključi
+  ne-tipizirano različico 1.0.
+
+Izvajalce se spodbuja, vendar od njih ni zahtevano, da njihovi paketi čimprej
+preidejo na verzijo 2.0.
+
+## 7.2 Obdelava tipov atributov
+
+Izvirna specifikacija je vsebovala neusklajenost glede vrednosti polj za
+atribute. Besedilo specifikacije v razdelku 1.2 navaja, da lahko vrednosti
+atributov (kot podane na `EvolvableLinkInterface::withAttribute()`)
+predstavljajo več vrst, nekatere od njih pa omogočajo posebno obdelavo (kot so
+booli ali polja). Vendar je bila specifikacija te metode zapisana z napako, saj
+je bil parameter `$value` določen kot niz.
+
+Da bi se rešili te težave, je bil v kasnejših izdajah vmesnik popravljen, da
+dovoljuje, da je `$value` tipa `string|\Stringable|int|float|bool|array`.
+Izvajalci NAJ obravnavajo `Stringable` objekt enako kot `string` parameter.
+Izvajalci LAHKO `int`, `float`, ali `bool` serializirajo na alternativne načine,
+ki upoštevajo tip, za določen format serializacije. Ostali tipi predmetov ali
+virov ostajajo nedovoljeni.
+
+Večkratni klici metode `withAttribute()` z istim `$name` MORAJO preglasiti prej
+določene vrednosti, kot že navaja specifikacija. Da se ponudi več vrednosti
+določenemu atributu, se lahko pošlje `array` z željenimi vrednostmi.
+
+Vse ostale smernice in zahteve v sekciji 1.2 ostajajo veljavne.

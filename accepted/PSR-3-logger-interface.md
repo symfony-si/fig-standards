@@ -6,8 +6,7 @@ updated: "2017-01-11"
 slug: "psr-3-vmesnik-dnevnika"
 ---
 
-Vmesnik dnevnika
-================
+# Vmesnik dnevnika
 
 Ta dokument opisuje skupne vmesnike za knjižnice dnevnika.
 
@@ -28,8 +27,7 @@ Uporabniki dnevnikov so navedeni kot `uporabnik`.
 
 [RFC 2119]: http://tools.ietf.org/html/rfc2119
 
-1. Specifikacija
-----------------
+## 1. Specifikacija
 
 ### 1.1 Osnove
 
@@ -72,7 +70,9 @@ Uporabniki dnevnikov so navedeni kot `uporabnik`.
   Sledi primer implementacije ogradne interpolacije
   ponujen samo za namene sklicevanja:
 
-  ~~~php
+  ```php
+  <?php
+
   /**
    * Interpolates context values into the message placeholders.
    */
@@ -81,7 +81,7 @@ Uporabniki dnevnikov so navedeni kot `uporabnik`.
       // build a replacement array with braces around the context keys
       $replace = array();
       foreach ($context as $key => $val) {
-          // check that the value can be casted to string
+          // check that the value can be cast to string
           if (!is_array($val) && (!is_object($val) || method_exists($val, '__toString'))) {
               $replace['{' . $key . '}'] = $val;
           }
@@ -99,7 +99,7 @@ Uporabniki dnevnikov so navedeni kot `uporabnik`.
 
   // echoes "User bolivar created"
   echo interpolate($message, $context);
-  ~~~
+  ```
 
 ### 1.3 Kontekst
 
@@ -140,23 +140,21 @@ Uporabniki dnevnikov so navedeni kot `uporabnik`.
 
 - `Psr\Log\LogLevel` razred zadržuje konstante za osem nivojev dnevnika.
 
-2. Paket
---------
+## 2. Paket
 
 Opisani ter tudi pomembni vmesniki, razredi izjem
 in komplet testov za pregledovanje vaše implementacije so ponujeni kot del
 paketa [psr/log](https://packagist.org/packages/psr/log).
 
-3. `Psr\Log\LoggerInterface`
-----------------------------
+## 3. `Psr\Log\LoggerInterface`
 
-~~~php
+```php
 <?php
 
 namespace Psr\Log;
 
 /**
- * Describes a logger instance
+ * Describes a logger instance.
  *
  * The message MUST be a string or object implementing __toString().
  *
@@ -177,7 +175,7 @@ interface LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return null
+     * @return void
      */
     public function emergency($message, array $context = array());
 
@@ -189,7 +187,7 @@ interface LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return null
+     * @return void
      */
     public function alert($message, array $context = array());
 
@@ -210,7 +208,7 @@ interface LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return null
+     * @return void
      */
     public function error($message, array $context = array());
 
@@ -231,7 +229,7 @@ interface LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return null
+     * @return void
      */
     public function notice($message, array $context = array());
 
@@ -242,7 +240,7 @@ interface LoggerInterface
      *
      * @param string $message
      * @param array $context
-     * @return null
+     * @return void
      */
     public function info($message, array $context = array());
 
@@ -265,41 +263,39 @@ interface LoggerInterface
      */
     public function log($level, $message, array $context = array());
 }
-~~~
+```
 
-4. `Psr\Log\LoggerAwareInterface`
----------------------------------
+## 4. `Psr\Log\LoggerAwareInterface`
 
-~~~php
+```php
 <?php
 
 namespace Psr\Log;
 
 /**
- * Describes a logger-aware instance
+ * Describes a logger-aware instance.
  */
 interface LoggerAwareInterface
 {
     /**
-     * Sets a logger instance on the object
+     * Sets a logger instance on the object.
      *
      * @param LoggerInterface $logger
      * @return null
      */
     public function setLogger(LoggerInterface $logger);
 }
-~~~
+```
 
-5. `Psr\Log\LogLevel`
----------------------
+## 5. `Psr\Log\LogLevel`
 
-~~~php
+```php
 <?php
 
 namespace Psr\Log;
 
 /**
- * Describes log levels
+ * Describes log levels.
  */
 class LogLevel
 {
@@ -312,4 +308,4 @@ class LogLevel
     const INFO      = 'info';
     const DEBUG     = 'debug';
 }
-~~~
+```

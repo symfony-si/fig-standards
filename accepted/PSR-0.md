@@ -12,7 +12,7 @@ Standard avtomatskega nalagalnika
 > **Opuščen** - Od 2014-10-21 je bil PSR-0 označen za opuščenega. [PSR-4] je sedaj priporočen
 kot alternativa.
 
-[PSR-4]: http://www.php-fig.org/psr/psr-4/
+[PSR-4]: https://www.php-fig.org/psr/psr-4/
 
 Sledeče opisuje obvezne zahteve, ki se jih morate držati
 za interoperabilnost avtomatskega nalagalnika.
@@ -59,7 +59,7 @@ Primer izvedbe
 Spodaj je primer funkcije, ki enostavno ponazarja, kako so zgoraj
 predlagani standardi avtomatsko naloženi.
 
-~~~php
+```php
 <?php
 
 function autoload($className)
@@ -77,7 +77,7 @@ function autoload($className)
     require $fileName;
 }
 spl_autoload_register('autoload');
-~~~
+```
 
 SplClassLoader izvedba
 ----------------------
@@ -87,4 +87,4 @@ naloži vaše razrede, če sledite zgoraj predlaganim standardom interoperabilno
 avtomatskega nalagalnika. Gre za trenutno priporočljivi način nalaganja PHP
 5.3 razredov, ki sledijo tem standardom.
 
-* [http://gist.github.com/221634](http://gist.github.com/221634)
+* [https://gist.github.com/221634](https://gist.github.com/221634)
