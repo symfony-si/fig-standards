@@ -1,4 +1,4 @@
-# Meta dokument dogodkovnega dodeljevalnika
+# Meta dokument odpremnika dogodkov
 
 ## 1. Povzetek
 
